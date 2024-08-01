@@ -7,10 +7,20 @@ drop table ListCream;
 drop table ListSweetener;
 drop table ShoppingList cascade constraints;
 drop table Sales cascade constraints;
+drop table AddToppings cascade constraints;
 drop table Toppings cascade constraints;
+drop table AddCream cascade constraints;
 drop table Cream cascade constraints;
+drop table AddSweetener cascade constraints;
 drop table Sweetener cascade constraints;
-drop table Espresso;
+drop table ListCoffee1 cascade constraints;
+drop table ListCoffee2 cascade constraints;
+drop table Decaf cascade constraints;
+drop table Caffeinated cascade constraints;
+drop table AddEspresso cascade constraints;
+drop table Espresso cascade constraints;
+drop table IcedCoffee cascade constraints;
+drop table Coffee cascade constraints;
 
 create table Delivery (
     trackingNum	int	primary key,
@@ -59,7 +69,6 @@ create table Fund (
     foreign key (salesDate) references Sales (salesDate) ON DELETE CASCADE);
 grant select on Fund to public;
 
-drop table Coffee;
 create table Coffee (
     coffeeName varchar(30),
     coffeeSize varchar(20),
@@ -80,27 +89,15 @@ create table ListToppings (
     foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE);
 grant select on ListToppings to public;
 
-create table AddToppings1 (
+create table AddToppings (
     toppingName varchar(30),
-    coffeeName varchar(30),
-    primary key (toppingName, coffeeName),
-    foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on AddToppings1 to public;
-
-create table AddToppings3 (
-    coffeeSize varchar(20),
-    coffeeName varchar(30),
-    primary key (coffeeSize, coffeeName),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on AddToppings3 to public;
-
-create table AddToppings4 (
-    coffeeSize varchar(20) primary key ,
     toppingAmount varchar(20),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on AddToppings4 to public;
+    coffeeName varchar(30),
+    coffeeSize varchar(20),
+    primary key (toppingName, coffeeName, coffeeSize),
+    foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE,
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on AddToppings to public;
 
 create table Cream (
     creamName varchar(30)  primary key ,
@@ -116,27 +113,15 @@ create table ListCream (
     foreign key (creamName) references Cream (creamName) ON DELETE CASCADE);
 grant select on ListCream to public;
 
-create table AddCream1 (
+create table AddCream (
     creamName varchar(30),
-    coffeeName varchar(30),
-    primary key (creamName, coffeeName),
-    foreign key (creamName) references Cream (creamName) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on AddCream1 to public;
-
-create table AddCream3 (
-    coffeeSize varchar(20),
-    coffeeName varchar(30),
-    primary key (coffeeSize, coffeeName),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on AddCream3 to public;
-
-create table AddCream4 (
-    coffeeSize varchar(20) primary key ,
     cupAmount varchar(20),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on AddCream4 to public;
+    coffeeName varchar(30),
+    coffeeSize varchar(20),
+    primary key (creamName, coffeeName, coffeeSize),
+    foreign key (creamName) references Cream (creamName) ON DELETE CASCADE,
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on AddCream to public;
 
 create table Sweetener (
     sweetName varchar(30) primary key ,
@@ -152,38 +137,30 @@ create table ListSweetener (
     foreign key (sweetName) references Sweetener (sweetName) ON DELETE CASCADE);
 grant select on ListSweetener to public;
 
-create table AddSweetener1 (
+create table AddSweetener (
     sweetName varchar(30),
-    coffeeName varchar(30),
-    primary key (sweetName, coffeeName),
-    foreign key (sweetName) references Sweetener (sweetName) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on AddSweetener1 to public;
-
-create table AddSweetener3 (
-    coffeeSize varchar(20),
-    coffeeName varchar(30),
-    primary key (coffeeSize, coffeeName),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on AddSweetener3 to public;
-
-create table AddSweetener4 (
-    coffeeSize varchar(20) primary key ,
     sweetenerAmount varchar(20),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on AddSweetener4 to public;
+    coffeeName varchar(30),
+    coffeeSize varchar(20),
+    primary key (sweetName, coffeeName, coffeeSize),
+    foreign key (sweetName) references Sweetener (sweetName) ON DELETE CASCADE,
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on AddSweetener to public;
 
-create table ListCoffee (
+create table ListCoffee1 (
     listDate date,
     coffeeName varchar(30),
     coffeeSize varchar(20),
-    coffeeQuant varchar(20),
     primary key (listDate, coffeeName, coffeeSize),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE,
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on ListCoffee to public;
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on ListCoffee1 to public;
+
+create table ListCoffee2 (
+    listDate date primary key ,
+    coffeeQuant varchar(20),
+    foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE);
+grant select on ListCoffee2 to public;
 
 create table Decaf (
     coffeeName varchar(30),
@@ -192,8 +169,7 @@ create table Decaf (
     beanType varchar(20),
     roastLevel varchar(20),
     primary key (coffeeName, coffeeSize),
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE,
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on Decaf to public;
 
 create table Caffeinated (
@@ -202,52 +178,33 @@ create table Caffeinated (
     coffeeInv varchar(20),
     beanType varchar(20),
     roastLevel varchar(20),
-    primary key (coffeeName, coffeeSize)
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE,
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on Caffeinated to public;
-
-create table AddEspresso1 (
-    coffeeName varchar(30),
-    numShots int,
-    strength varchar(20),
-    primary key (coffeeName, strength),
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE,
-    foreign key (strength) references Espresso (strength) ON DELETE CASCADE);
-grant select on AddEspresso1 to public;
-
-create table AddEspresso2 (
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
     primary key (coffeeName, coffeeSize),
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE,
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on AddEspresso2 to public;
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on Caffeinated to public;
 
 create table Espresso (
     strength varchar(20) primary key ,
     type varchar(30));
 grant select on Espresso to public;
 
-create table IcedCoffee1 (
-    coffeeName varchar(30) primary key ,
-    method varchar(30),
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on IcedCoffee1 to public;
-
-create table IcedCoffee3 (
-    coffeeSize varchar(20) primary key ,
-    iceAmount varchar(20),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE);
-grant select on IcedCoffee3 to public;
-
-create table IcedCoffee4 (
+create table AddEspresso (
+    coffeeName varchar(30),
     coffeeSize varchar(20),
+    numShots int,
+    strength varchar(20),
+    primary key (coffeeName, coffeeSize, strength),
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE,
+    foreign key (strength) references Espresso (strength) ON DELETE CASCADE);
+grant select on AddEspresso to public;
+
+create table IcedCoffee (
+    coffeeName varchar(30),
+    coffeeSize varchar(20),
+    method varchar(30),
     iceAmount varchar(20),
     primary key (coffeeSize, coffeeName),
-    foreign key (coffeeSize) references Coffee (coffeeSize) ON DELETE CASCADE,
-    foreign key (coffeeName) references Coffee (coffeeName) ON DELETE CASCADE);
-grant select on IcedCoffee4 to public;
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on IcedCoffee to public;
 
 
 insert into Delivery values (1234, to_date('2024-09-01','YYYY-MM-DD'));
@@ -310,23 +267,11 @@ insert into ListToppings values (to_date('2024-08-15','YYYY-MM-DD'), 'cinnamon',
 insert into ListToppings values (to_date('2024-08-20','YYYY-MM-DD'), 'icing sugar', '3 bottles');
 insert into ListToppings values (to_date('2024-08-10','YYYY-MM-DD'), 'cocoa powder', '4 bottles');
 
-insert into AddToppings1 values ('whipped cream', 'latte');
-insert into AddToppings1 values ('caramel drizzle', 'macchiato');
-insert into AddToppings1 values ('cinnamon', 'cappuccino');
-insert into AddToppings1 values ('icing sugar', 'drip coffee');
-insert into AddToppings1 values ('cocoa powder', 'flat white');
-
-insert into AddToppings3 values ('extra large', 'latte');
-insert into AddToppings3 values ('medium', 'macchiato');
-insert into AddToppings3 values ('small', 'cappuccino');
-insert into AddToppings3 values ('large', 'drip coffee');
-insert into AddToppings3 values ('short', 'flat white');
-
-insert into AddToppings4 values ('extra large', '5 tsp');
-insert into AddToppings4 values ('medium', '3 tsp');
-insert into AddToppings4 values ('small', '2 tsp');
-insert into AddToppings4 values ('large', '4 tsp');
-insert into AddToppings4 values ('short', '1 tsp');
+insert into AddToppings values ('whipped cream', '5 tsp', 'latte', 'extra large');
+insert into AddToppings values ('caramel drizzle', '3 tsp', 'macchiato', 'medium');
+insert into AddToppings values ('cinnamon', '2 tsp', 'cappuccino', 'small');
+insert into AddToppings values ('icing sugar', '4 tsp', 'drip coffee', 'large');
+insert into AddToppings values ('cocoa powder', '1 tsp', 'flat white', 'short');
 
 insert into Cream values ('half and half', 'low');
 insert into Cream values ('coconut', 'low');
@@ -340,23 +285,11 @@ insert into ListCream values (to_date('2024-08-15','YYYY-MM-DD'), 'oat', '4 cart
 insert into ListCream values (to_date('2024-08-20','YYYY-MM-DD'), 'almond', '3 cartons');
 insert into ListCream values (to_date('2024-08-10','YYYY-MM-DD'), 'soy', '2 cartons');
 
-insert into AddCream1 values ('half and half', 'latte');
-insert into AddCream1 values ('coconut', 'macchiato');
-insert into AddCream1 values ('oat', 'cappuccino');
-insert into AddCream1 values ('almond', 'drip coffee');
-insert into AddCream1 values ('soy', 'flat white');
-
-insert into AddCream3 values ('extra large', 'latte');
-insert into AddCream3 values ('medium', 'macchiato');
-insert into AddCream3 values ('small', 'cappuccino');
-insert into AddCream3 values ('large', 'drip coffee');
-insert into AddCream3 values ('short', 'flat white');
-
-insert into AddCream4 values ('extra large', '2 cups');
-insert into AddCream4 values ('medium', '1 cup');
-insert into AddCream4 values ('small', '1/2  cup');
-insert into AddCream4 values ('large', '1.5 cups');
-insert into AddCream4 values ('short', '1/3 cup');
+insert into AddCream values ('half and half', '2 cups', 'latte', 'extra large');
+insert into AddCream values ('coconut', '1 cup', 'macchiato', 'medium');
+insert into AddCream values ('oat', '1/2  cup', 'cappuccino', 'small');
+insert into AddCream values ('almond', '1.5 cups', 'drip coffee', 'large');
+insert into AddCream values ('soy', '1/3 cup', 'flat white', 'short');
 
 insert into Sweetener values ('honey', 'high');
 insert into Sweetener values ('cane sugar', 'low');
@@ -370,29 +303,23 @@ insert into ListSweetener values (to_date('2024-08-15','YYYY-MM-DD'), 'stevia', 
 insert into ListSweetener values (to_date('2024-08-20','YYYY-MM-DD'), 'vanilla syrup', '4 bottles');
 insert into ListSweetener values (to_date('2024-08-10','YYYY-MM-DD'), 'chocolate syrup', '1 bottle');
 
-insert into AddSweetener1 values ('honey', 'latte');
-insert into AddSweetener1 values ('cane sugar', 'macchiato');
-insert into AddSweetener1 values ('stevia', 'cappuccino');
-insert into AddSweetener1 values ('vanilla syrup', 'drip coffee');
-insert into AddSweetener1 values ('chocolate syrup', 'flat white');
+insert into AddSweetener values ('honey', '2 pump', 'latte', 'extra large');
+insert into AddSweetener values ('cane sugar', '3 spoons', 'macchiato', 'medium');
+insert into AddSweetener values ('stevia', '2 pumps', 'cappuccino', 'small');
+insert into AddSweetener values ('vanilla syrup', '1 pump', 'drip coffee', 'large');
+insert into AddSweetener values ('chocolate syrup', '3 pumps', 'flat white', 'short');
 
-insert into AddSweetener3 values ('extra large', 'latte');
-insert into AddSweetener3 values ('medium', 'macchiato');
-insert into AddSweetener3 values ('small', 'cappuccino');
-insert into AddSweetener3 values ('large', 'drip coffee');
-insert into AddSweetener3 values ('short', 'flat white');
+insert into ListCoffee1 values (to_date('2024-08-01','YYYY-MM-DD'), 'latte', 'extra large');
+insert into ListCoffee1 values (to_date('2024-08-11','YYYY-MM-DD'), 'macchiato', 'medium');
+insert into ListCoffee1 values (to_date('2024-08-15','YYYY-MM-DD'), 'cappuccino', 'small');
+insert into ListCoffee1 values (to_date('2024-08-20','YYYY-MM-DD'), 'drip coffee', 'large');
+insert into ListCoffee1 values (to_date('2024-08-10','YYYY-MM-DD'), 'flat white', 'short');
 
-insert into AddSweetener4 values ('extra large', 'latte');
-insert into AddSweetener4 values ('medium', 'macchiato');
-insert into AddSweetener4 values ('small', 'cappuccino');
-insert into AddSweetener4 values ('large', 'drip coffee');
-insert into AddSweetener4 values ('short', 'flat white');
-
-insert into ListCoffee values (to_date('2024-08-01','YYYY-MM-DD'), 'latte', '5 bottles');
-insert into ListCoffee values (to_date('2024-08-11','YYYY-MM-DD'), 'macchiato', '5 bottles');
-insert into ListCoffee values (to_date('2024-08-15','YYYY-MM-DD'), 'cappuccino', '2 bottles');
-insert into ListCoffee values (to_date('2024-08-20','YYYY-MM-DD'), 'drip coffee', '4 bottles');
-insert into ListCoffee values (to_date('2024-08-10','YYYY-MM-DD'), 'flat white', '1 bottle');
+insert into ListCoffee2 values (to_date('2024-08-01','YYYY-MM-DD'), '5 bottles');
+insert into ListCoffee2 values (to_date('2024-08-11','YYYY-MM-DD'), '5 bottles');
+insert into ListCoffee2 values (to_date('2024-08-15','YYYY-MM-DD'), '2 bottles');
+insert into ListCoffee2 values (to_date('2024-08-20','YYYY-MM-DD'), '4 bottles');
+insert into ListCoffee2 values (to_date('2024-08-10','YYYY-MM-DD'), '1 bottle');
 
 insert into Decaf values ('latte', 'extra large', 'low', 'Arabica', 'light');
 insert into Decaf values ('macchiato', 'medium', 'high', 'Liberica', 'light');
@@ -406,38 +333,20 @@ insert into Caffeinated values ('cappuccino', 'small', 'low', 'Arabica', 'medium
 insert into Caffeinated values ('drip coffee', 'large', 'high', 'Robusta', 'dark');
 insert into Caffeinated values ('flat white', 'short', 'low', 'Arabica', 'dark');
 
-insert into AddEspresso1 values ('latte', 4, 'extra strong');
-insert into AddEspresso1 values ('macchiato', 2, 'medium');
-insert into AddEspresso1 values ('cappuccino', 1, 'weak');
-insert into AddEspresso1 values ('drip coffee', 2, 'medium');
-insert into AddEspresso1 values ('flat white', 1, 'weak');
-
-insert into AddEspresso2 values ('latte', 4, 'extra large');
-insert into AddEspresso2 values ('macchiato', 2, 'medium');
-insert into AddEspresso2 values ('cappuccino', 1, 'small');
-insert into AddEspresso2 values ('drip coffee', 2, 'large');
-insert into AddEspresso2 values ('flat white', 1, 'short');
-
 insert into Espresso values ('weak', 'single shot');
 insert into Espresso values ('medium', 'double shot');
 insert into Espresso values ('strong', 'triple shot');
 insert into Espresso values ('extra strong', '4 shots');
 insert into Espresso values ('super strong', '5 shots');
 
-insert into IcedCoffee1 values ('latte', 'espresso machine');
-insert into IcedCoffee1 values ('macchiato', 'espresso machine');
-insert into IcedCoffee1 values ('cappuccino', 'espresso machine');
-insert into IcedCoffee1 values ('drip coffee', 'french press');
-insert into IcedCoffee1 values ('flat white' ,'espresso machine');
+insert into AddEspresso values ('latte', 'extra large', 4, 'extra strong');
+insert into AddEspresso values ('macchiato', 'medium', 2, 'medium');
+insert into AddEspresso values ('cappuccino', 'small', 1, 'weak');
+insert into AddEspresso values ('drip coffee', 'large', 2, 'medium');
+insert into AddEspresso values ('flat white', 'short', 1, 'weak');
 
-insert into IcedCoffee3 values ('extra large', '1 scoop');
-insert into IcedCoffee3 values ('medium', '2 scoops');
-insert into IcedCoffee3 values ('small', 'half scoop');
-insert into IcedCoffee3 values ('large', '2 scoops');
-insert into IcedCoffee3 values ('short', 'half scoop');
-
-insert into IcedCoffee4 values ('extra large', 'latte');
-insert into IcedCoffee4 values ('medium', 'macchiato');
-insert into IcedCoffee4 values ('small', 'cappuccino');
-insert into IcedCoffee4 values ('large', 'drip coffee');
-insert into IcedCoffee4 values ('short', 'flat white');
+insert into IcedCoffee values ('latte', 'extra large', 'iced', '1 scoop');
+insert into IcedCoffee values ('macchiato', 'medium', 'ice cap', '2 scoops');
+insert into IcedCoffee values ('cappuccino', 'small', 'iced', 'half scoop');
+insert into IcedCoffee values ('drip coffee', 'large', 'cold brew', '2 scoops');
+insert into IcedCoffee values ('flat white', 'short','ice cap', 'half scoop');
