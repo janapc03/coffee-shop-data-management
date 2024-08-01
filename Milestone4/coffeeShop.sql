@@ -30,7 +30,6 @@ drop table IcedCoffee1;
 drop table IcedCoffee3;
 drop table IcedCoffee4;
 
-
 create table Delivery (
     trackingNum	int	primary key,
     expectedDate date);
