@@ -23,185 +23,194 @@ drop table IcedCoffee cascade constraints;
 drop table Coffee cascade constraints;
 
 create table Delivery (
-    trackingNum	int	primary key,
-    expectedDate date);
+    trackingNum	int	not null,
+    expectedDate date not null,
+    primary key (trackingNum));
 grant select on Delivery to public;
 
 create table Supplier (
-    supName varchar(50) primary key,
-    address varchar(30));
+    supName varchar(50)	not null,
+    address varchar(30)	not null,
+    primary key (supName));
 grant select on Supplier to public;
 
 create table Deliver (
-    supName varchar(50),
-    trackingNum int,
+    supName varchar(50)	not null,
+    trackingNum int	not null,
     primary key (supName, trackingNum),
-    foreign key (supName) references Supplier (supName) ON DELETE CASCADE,
+    foreign key (supName) references Supplier (supName) ON DELETE CASCADE ,
     foreign key (trackingNum) references Delivery (trackingNum) ON DELETE CASCADE);
 grant select on Deliver to public;
 
 create table ShoppingList (
-    listDate date primary key ,
-    funds int);
+    listDate date not null,
+    funds int not null,
+    primary key (listDate));
 grant select on ShoppingList to public;
 
 create table Purchase (
-    supName varchar(50),
-    listDate date,
-    price int,
+    supName varchar(50) not null,
+    listDate date not null,
+    price int not null,
     primary key (supName, listDate),
     foreign key (supName) references Supplier (supName) ON DELETE CASCADE,
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE);
 grant select on Purchase to public;
 
 create table Sales (
-    salesDate date primary key ,
-    employeePay int,
-    cafeFunds int);
+    salesDate date not null,
+    employeePay int not null,
+    cafeFunds int not null,
+    primary key (salesDate));
 grant select on Sales to public;
 
 drop table Fund;
 create table Fund (
-    listDate date,
-    salesDate date,
+    listDate date not null,
+    salesDate date not null,
     primary key (listDate, salesDate),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
     foreign key (salesDate) references Sales (salesDate) ON DELETE CASCADE);
 grant select on Fund to public;
 
 create table Coffee (
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
     primary key (coffeeName, coffeeSize));
 grant select on Coffee to public;
 
 create table Toppings (
-    toppingName varchar(30) primary key,
-    toppingInv varchar(20));
+    toppingName varchar(30) not null,
+    toppingInv varchar(20) not null,
+    primary key (toppingName));
 grant select on Toppings to public;
 
 create table ListToppings (
-    listDate date,
-    toppingName varchar(30),
-    toppingQuant varchar(20),
+    listDate date not null,
+    toppingName varchar(30) not null,
+    toppingQuant varchar(20) not null,
     primary key (listDate, toppingName),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
     foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE);
 grant select on ListToppings to public;
 
 create table AddToppings (
-    toppingName varchar(30),
-    toppingAmount varchar(20),
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
+    toppingName varchar(30) not null,
+    toppingAmount varchar(20) not null,
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
     primary key (toppingName, coffeeName, coffeeSize),
     foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE,
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on AddToppings to public;
 
 create table Cream (
-    creamName varchar(30)  primary key ,
-    creamInv varchar(20));
+    creamName varchar(30) not null,
+    creamInv varchar(20) not null,
+    primary key (creamName));
 grant select on Cream to public;
 
 create table ListCream (
-    listDate date,
-    creamName varchar(30),
-    creamQuant varchar(20),
+    listDate date not null,
+    creamName varchar(30) not null,
+    creamQuant varchar(20) not null,
     primary key (listDate, creamName),
     foreign key (listDate) references ShoppingList (listdate) ON DELETE CASCADE,
     foreign key (creamName) references Cream (creamName) ON DELETE CASCADE);
 grant select on ListCream to public;
 
 create table AddCream (
-    creamName varchar(30),
-    cupAmount varchar(20),
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
+    creamName varchar(30) not null,
+    cupAmount varchar(20) not null,
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
     primary key (creamName, coffeeName, coffeeSize),
     foreign key (creamName) references Cream (creamName) ON DELETE CASCADE,
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on AddCream to public;
 
 create table Sweetener (
-    sweetName varchar(30) primary key ,
-    sweetenerInv varchar(20));
+    sweetName varchar(30) not null,
+    sweetenerInv varchar(20) not null,
+    primary key (sweetName));
 grant select on Sweetener to public;
 
 create table ListSweetener (
-    listDate date,
-    sweetName varchar(30),
-    sweetenerQuant varchar(20),
+    listDate date not null,
+    sweetName varchar(30) not null,
+    sweetenerQuant varchar(20) not null,
     primary key (listDate, sweetName),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
     foreign key (sweetName) references Sweetener (sweetName) ON DELETE CASCADE);
 grant select on ListSweetener to public;
 
 create table AddSweetener (
-    sweetName varchar(30),
-    sweetenerAmount varchar(20),
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
+    sweetName varchar(30) not null,
+    sweetenerAmount varchar(20) not null,
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
     primary key (sweetName, coffeeName, coffeeSize),
     foreign key (sweetName) references Sweetener (sweetName) ON DELETE CASCADE,
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on AddSweetener to public;
 
 create table ListCoffee1 (
-    listDate date,
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
+    listDate date not null,
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
     primary key (listDate, coffeeName, coffeeSize),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on ListCoffee1 to public;
 
 create table ListCoffee2 (
-    listDate date primary key ,
-    coffeeQuant varchar(20),
+    listDate date not null,
+    coffeeQuant varchar(20) not null,
+    primary key (listDate),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE);
 grant select on ListCoffee2 to public;
 
 create table Decaf (
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
-    coffeeInv varchar(20),
-    beanType varchar(20),
-    roastLevel varchar(20),
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
+    coffeeInv varchar(20) not null,
+    beanType varchar(20) not null,
+    roastLevel varchar(20) not null,
     primary key (coffeeName, coffeeSize),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on Decaf to public;
 
 create table Caffeinated (
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
-    coffeeInv varchar(20),
-    beanType varchar(20),
-    roastLevel varchar(20),
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
+    coffeeInv varchar(20) not null,
+    beanType varchar(20) not null,
+    roastLevel varchar(20) not null,
     primary key (coffeeName, coffeeSize),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on Caffeinated to public;
 
 create table Espresso (
-    strength varchar(20) primary key ,
-    type varchar(30));
+    strength varchar(20) not null,
+    type varchar(30) not null,
+    primary key (strength));
 grant select on Espresso to public;
 
 create table AddEspresso (
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
-    numShots int,
-    strength varchar(20),
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
+    numShots int not null,
+    strength varchar(20) not null,
     primary key (coffeeName, coffeeSize, strength),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE,
     foreign key (strength) references Espresso (strength) ON DELETE CASCADE);
 grant select on AddEspresso to public;
 
 create table IcedCoffee (
-    coffeeName varchar(30),
-    coffeeSize varchar(20),
-    method varchar(30),
-    iceAmount varchar(20),
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
+    method varchar(30) not null,
+    iceAmount varchar(20) not null,
     primary key (coffeeSize, coffeeName),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on IcedCoffee to public;
