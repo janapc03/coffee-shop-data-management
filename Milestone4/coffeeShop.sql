@@ -38,7 +38,7 @@ create table Deliver (
     supName varchar(50)	not null,
     trackingNum int	not null,
     primary key (supName, trackingNum),
-    foreign key (supName) references Supplier (supName) ON DELETE CASCADE ,
+    foreign key (supName) references Supplier (supName) ON DELETE CASCADE,
     foreign key (trackingNum) references Delivery (trackingNum) ON DELETE CASCADE);
 grant select on Deliver to public;
 

@@ -1,0 +1,95 @@
+
+
+#top {
+    text-align: center;
+    border: 3px solid rgb(0, 0, 0);
+    word-spacing: 30px;
+    font-size: 30px;
+
+    padding-top: 30px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+
+    margin: 10px;
+}
+
+
+
+.category {
+
+    float: left;
+    width: 15%; 
+
+    border: 2px solid rgb(0, 0, 0);
+    text-align: center;
+
+    word-spacing: 30px;
+    font-size: 20px;
+
+    padding: 5px;
+    margin: 5px;
+
+
+    
+}  
+
+.inventory {
+
+    width: 80%;
+    float: left;
+  
+    border: 2px solid rgb(0, 0, 0);
+
+
+    word-spacing: 30px;
+    font-size: 20px;
+
+    padding: 5px;
+    margin: 5px;
+    
+}  
+/*
+.inventory {
+    width: 68%;
+    float: left;
+    padding: 20px;
+    border: 2px solid rgb(0, 0, 0);
+
+    
+    font-size: 20px;
+
+    padding-top: 30px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+
+    margin: 10px;
+
+ 
+}
+
+*/
+
+
+
+th {
+    padding: 10px;
+}
+
+td {
+  
+    padding: 10px;
+}
+
+table, th, td {
+    border: 1px solid #000000;
+   
+    
+    
+}
+
+table {margin: 0 auto;}
+
+
+
