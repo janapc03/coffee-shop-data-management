@@ -1,20 +1,3 @@
-<!-- Test Oracle file for UBC CPSC304
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  Modified by Jessica Wong (2018-06-22)
-  Modified by Jason Hall (23-09-20)
-  This file shows the very basics of how to execute PHP commands on Oracle.
-  Specifically, it will drop a table, create a table, insert values update
-  values, and then query for values
-  IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
-
-  The script assumes you already have a server set up All OCI commands are
-  commands to the Oracle libraries. To get the file to work, you must place it
-  somewhere where your Apache server can run it, and you must rename it to have
-  a ".php" extension. You must also change the username and password on the
-  oci_connect below to be your ORACLE username and password
--->
-
 <?php
 // The preceding tag tells the web server to parse the following text as PHP
 // rather than HTML (the default)
@@ -44,22 +27,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <html>
 
 <head>
-	<title>CPSC 304 PHP/Oracle Demonstration</title>
+	<title>Coffee Shop</title>
 </head>
 
 <body>
-	<h2>Reset</h2>
-	<p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 
-	<form method="POST" action="listRecipes.php">
-		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
-		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-		<p><input type="submit" value="Reset" name="reset"></p>
-	</form>
+    <h1>Coffee Shop Recipes</h1>
 
-	<hr />
+    <hr />
 
-	<h2>Insert Values into Coffee</h2>
+	<h2>Insert New Caffeinated Coffee Recipes</h2>
 	<form method="POST" action="listRecipes.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 		Number: <input type="text" name="insNo"> <br /><br />
@@ -67,35 +44,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		<input type="submit" value="Insert" name="insertSubmit"></p>
 	</form>
-
 	<hr />
 
-	<h2>Update Name in DemoTable</h2>
-	<p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+	<h2>Insert New Decaf Coffee Recipes</h2>
+    <form method="POST" action="listRecipes.php">
+        <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
+        Number: <input type="text" name="insNo"> <br /><br />
+        Name: <input type="text" name="insName"> <br /><br />
 
-	<form method="POST" action="listRecipes.php">
-		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-		Old Name: <input type="text" name="oldName"> <br /><br />
-		New Name: <input type="text" name="newName"> <br /><br />
+        <input type="submit" value="Insert" name="insertSubmit"></p>
+    </form>
+    <hr />
 
-		<input type="submit" value="Update" name="updateSubmit"></p>
-	</form>
-
-	<hr />
-
-	<h2>Count the Tuples in DemoTable</h2>
+	<h2>Display Caffeinated Coffee Recipes</h2>
 	<form method="GET" action="listRecipes.php">
-		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
-		<input type="submit" name="countTuples"></p>
+		<input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
+		<input type="submit" name="displayCafTuples"></p>
 	</form>
 
 	<hr />
 
-	<h2>Display Tuples in DemoTable</h2>
-	<form method="GET" action="listRecipes.php">
-		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
-		<input type="submit" name="displayTuples"></p>
-	</form>
+	<h2>Display Deacf Coffee Recipes</h2>
+    <form method="GET" action="listRecipes.php">
+        <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
+        <input type="submit" name="displayDecafTuples"></p>
+    </form>
 
 
 	<?php
@@ -174,14 +147,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printResult($result)
 	{ //prints results from a select statement
-		echo "<br>Retrieved data from table Coffee:<br>";
+		echo "<br>Retrieved data from table Caffeinated:<br>";
 		echo "<table>";
-		echo "<tr><th>coffeeName</th><th>coffeeSize</th></tr>";
+		echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Bean Type</th><th>Roast Level</th></tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-		    echo "testPrint";
-			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td></tr>"; //or just use "echo $row[0]"
-			// echo $row[0];
+			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" .
+			$row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
 		}
 
 		echo "</table>";
@@ -216,30 +188,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_close($db_conn);
 	}
 
-	function handleUpdateRequest()
-	{
-		global $db_conn;
-
-		$old_name = $_POST['oldName'];
-		$new_name = $_POST['newName'];
-
-		// you need the wrap the old name and new name values with single quotations
-		executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
-		oci_commit($db_conn);
-	}
-
-	function handleResetRequest()
-	{
-		global $db_conn;
-		// Drop old table
-		executePlainSQL("DROP TABLE demoTable");
-
-		// Create new table
-		echo "<br> creating new table <br>";
-		executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
-		oci_commit($db_conn);
-	}
-
 	function handleInsertRequest()
 	{
 		global $db_conn;
@@ -258,36 +206,30 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleCountRequest()
+	function handleDisplayCafRequest()
 	{
 		global $db_conn;
-
-		$result = executePlainSQL("SELECT Count(*) FROM Coffee");
-
-		if (($row = oci_fetch_row($result)) != false) {
-			echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
-		}
-	}
-
-	function handleDisplayRequest()
-	{
-		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM Coffee");
+		$result = executePlainSQL("SELECT * FROM Caffeinated");
 		printResult($result);
 
 		oci_commit($db_conn);
 	}
+
+	function handleDisplayDecafRequest()
+    {
+        global $db_conn;
+        $result = executePlainSQL("SELECT * FROM Decaf");
+        printResult($result);
+
+        oci_commit($db_conn);
+    }
 
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('resetTablesRequest', $_POST)) {
-				handleResetRequest();
-			} else if (array_key_exists('updateQueryRequest', $_POST)) {
-				handleUpdateRequest();
-			} else if (array_key_exists('insertQueryRequest', $_POST)) {
+			if (array_key_exists('insertQueryRequest', $_POST)) {
 				handleInsertRequest();
 			}
 
@@ -300,19 +242,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('countTuples', $_GET)) {
-				handleCountRequest();
-			} elseif (array_key_exists('displayTuples', $_GET)) {
-				handleDisplayRequest();
-			}
+		    if (array_key_exists('displayCafTuples', $_GET)) {
+				handleDisplayCafRequest();
+			} else if (array_key_exists('displayDecafTuples', $_GET)) {
+                handleDisplayDecafRequest();
+            }
 
 			disconnectFromDB();
 		}
 	}
 
-	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest'])) {
+	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
 		handleGETRequest();
 	}
 
