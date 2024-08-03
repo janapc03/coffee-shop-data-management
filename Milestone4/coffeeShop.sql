@@ -364,3 +364,5 @@ insert into IcedCoffee values ('macchiato', 'medium', 'ice cap', '2 scoops');
 insert into IcedCoffee values ('cappuccino', 'small', 'iced', 'half scoop');
 insert into IcedCoffee values ('drip coffee', 'large', 'cold brew', '2 scoops');
 insert into IcedCoffee values ('flat white', 'short','ice cap', 'half scoop');
+
+commit;

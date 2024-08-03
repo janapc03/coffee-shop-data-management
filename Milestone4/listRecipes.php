@@ -38,21 +38,27 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	<h2>Insert New Caffeinated Coffee Recipes</h2>
 	<form method="POST" action="listRecipes.php">
-		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		Number: <input type="text" name="insNo"> <br /><br />
-		Name: <input type="text" name="insName"> <br /><br />
+		<input type="hidden" id="insertCafQueryRequest" name="insertCafQueryRequest">
+		Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+		Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
+		Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
+        Bean Type: <input type="text" name="inBeanType"> <br /><br />
+        Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
 
-		<input type="submit" value="Insert" name="insertSubmit"></p>
+		<input type="submit" value="Insert" name="insertCafSubmit"></p>
 	</form>
 	<hr />
 
 	<h2>Insert New Decaf Coffee Recipes</h2>
     <form method="POST" action="listRecipes.php">
-        <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-        Number: <input type="text" name="insNo"> <br /><br />
-        Name: <input type="text" name="insName"> <br /><br />
+        <input type="hidden" id="insertDecafQueryRequest" name="insertDecafQueryRequest">
+        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+        Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
+        Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
+        Bean Type: <input type="text" name="inBeanType"> <br /><br />
+        Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
 
-        <input type="submit" value="Insert" name="insertSubmit"></p>
+        <input type="submit" value="Insert" name="insertDecafSubmit"></p>
     </form>
     <hr />
 
@@ -147,13 +153,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printResult($result)
 	{ //prints results from a select statement
-		echo "<br>Retrieved data from table Caffeinated:<br>";
 		echo "<table>";
 		echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Bean Type</th><th>Roast Level</th></tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" .
-			$row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
 		}
 
 		echo "</table>";
@@ -188,21 +192,38 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_close($db_conn);
 	}
 
-	function handleInsertRequest()
+	function handleInsertRequest($table)
 	{
 		global $db_conn;
 
 		//Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['insNo'],
-			":bind2" => $_POST['insName']
+			":bind1" => $_POST['inCoffeeName'],
+			":bind2" => $_POST['inCoffeeSize'],
+			":bind3" => $_POST['inCoffeeInv'],
+			":bind4" => $_POST['inBeanType'],
+			":bind5" => $_POST['inRoastLevel']
 		);
 
 		$alltuples = array(
 			$tuple
 		);
 
-		executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+		$coffeetuple = array(
+            ":bind11" => $_POST['inCoffeeName'],
+            ":bind12" => $_POST['inCoffeeSize'],
+        );
+
+        $parenttuples = array(
+            $coffeetuple
+        );
+
+		executeBoundSQL("insert into coffee values (:bind11, :bind12)", $parenttuples);
+
+		oci_commit($db_conn);
+
+        executeBoundSQL("insert into $table values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
+
 		oci_commit($db_conn);
 	}
 
@@ -229,8 +250,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('insertQueryRequest', $_POST)) {
-				handleInsertRequest();
+			if (array_key_exists('insertCafQueryRequest', $_POST)) {
+			    $table = 'caffeinated';
+				handleInsertRequest($table);
+			} else if (array_key_exists('insertDecafQueryRequest', $_POST)) {
+			    $table = 'decaf';
+			    handleInsertRequest($table);
 			}
 
 			disconnectFromDB();
@@ -245,14 +270,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		    if (array_key_exists('displayCafTuples', $_GET)) {
 				handleDisplayCafRequest();
 			} else if (array_key_exists('displayDecafTuples', $_GET)) {
-                handleDisplayDecafRequest();
-            }
+			    handleDisplayDecafRequest();
+			}
 
 			disconnectFromDB();
 		}
 	}
 
-	if (isset($_POST['updateSubmit'])) {
+	if (isset($_POST['insertCafSubmit']) || isset($_POST['insertDecafSubmit']) ) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
 		handleGETRequest();
