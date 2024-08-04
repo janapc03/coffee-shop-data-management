@@ -42,23 +42,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              float: right;
              width: 80%;
              background-color: #f1f1f1;
-             height: 800px;
+             height: 600px;
              }
 
         .order {
             float: left;
             width: 70%;
-            height: 600px;
+            height: 590px;
             border: 2px solid black;
-            padding: 10px 10px 10px 10px;
+            padding: 0px 10px 10px 10px;
             }
 
         .shoppingCart {
             float: right;
             width: 25%;
-            height: 400px;
+            height: 590px;
             border: 2px solid black;
-            padding: 10px 10px 10px 10px;
+            padding: 0px 10px 10px 10px;
             }
 
         .items-table-container {
@@ -67,27 +67,26 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         nav {
             float: left;
-            border: 2px solid black;
             width: 18%;
-            height: 650px;
+            height: 600px;
             }
 
         .displaySales {
              box-sizing: border-box;
              -moz-box-sizing: border-box;
              -webkit-box-sizing: border-box;
-             height: 420px;
+             height: 360px;
              border: 2px solid black;
-             padding: 10px 10px 10px 10px;
+             padding: 0px 10px 10px 10px;
              }
 
         .categories {
             box-sizing: border-box;
              -moz-box-sizing: border-box;
              -webkit-box-sizing: border-box;
-             height: 200px;
+             height: 240px;
              border: 2px solid black;
-             padding: 10px 10px 10px 10px;
+             padding: 0px 10px 10px 10px;
              }
 
 
@@ -107,15 +106,37 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <?php include("homebar.php"); ?>
 <section class="container">
   <nav class="salesAndCategories">
+      <div class="categories">
+           <p><b> <u>Categories</u></b> </p>
+           <form method="GET" action="order.php">
+                 <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
+                 <input type="submit" value="Toppings" name="displayToppingsTuples"> </p>
+
+                 <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
+                 <input type="submit" value="Cream" name="displayCreamTuples"> </p>
+
+                 <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
+                 <input type="submit" value="Sweetener" name="displaySweetenerTuples"> </p>
+
+                 <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
+                 <input type="submit" value="Caffeinated Beans" name="displayCafTuples"> </p>
+
+                 <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
+                 <input type="submit" value="Decaffeinated Beans" name="displayDecafTuples"> </p>
+                 </form>
+
+
+           </div>
+
       <div class="displaySales">
 
-        <p> <u>Sales</u> </p>
+        <p><b><u>Sales</u></b> </p>
         <div class="sales-table-container">
         <form method="GET" action="order.php">
             <input type="hidden" id="displaySalesTuplesRequest" name="displaySalesTuplesRequest">
             </form>
         </div>
-
+        <p> Update Sales Info:</p>
             <form method="POST" action="order.php">
                        <input type="hidden" id="updateFundsQueryRequest" name="updateFundsQueryRequest">
                        Cafe Funds: <input type="text" name="cafeFunds"> <br /><br />
@@ -125,32 +146,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                        </form>
             </div>
 
-        <div class="categories">
-
-                    <form method="GET" action="order.php">
-                        <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
-                        <input type="submit" value="Toppings" name="displayToppingsTuples"> </p>
-
-                        <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
-                        <input type="submit" value="Cream" name="displayCreamTuples"> </p>
-
-                        <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
-                        <input type="submit" value="Sweetener" name="displaySweetenerTuples"> </p>
-
-                        <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
-                        <input type="submit" value="Caffeinated Beans" name="displayCafTuples"> </p>
-
-                        <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
-                        <input type="submit" value="Decaffeinated Beans" name="displayDecafTuples"> </p>
-                    </form>
-
-
-            </div>
         </nav>
 
     <article>
         <div class="order">
-            <h2> Inventory: </h2>
+            <h2> Shop: </h2>
 
             <div class="items-table-container">
                     <form method="GET" action="order.php">
@@ -173,7 +173,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             </div>
 
     <div class="shoppingCart">
-        <p> <u>Shopping Cart</u> </p>
+        <p><b><u>Shopping Cart</u></b> </p>
         </div>
 
         </article>
@@ -344,6 +344,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 function handleDisplayItemsRequest($table, $name, $inv)
 {
     global $db_conn;
+    $result = executePlainSQL("SELECT * FROM Sales");
+        printSalesResult($result);
+
     $result = executePlainSQL("SELECT * FROM " . $table . "");
     printItemsResult($result, $name, $inv);
 
