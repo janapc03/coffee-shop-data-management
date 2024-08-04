@@ -32,59 +32,68 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 <body>
 
+    <?php include("homebar.php"); ?>
+
     <h1>Coffee Shop Recipes</h1>
 
     <hr />
 
-	<h2>Insert New Caffeinated Coffee Recipes</h2>
-	<form method="POST" action="listRecipes.php">
-		<input type="hidden" id="insertCafQueryRequest" name="insertCafQueryRequest">
-		Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-		Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-		Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
-        Bean Type: <input type="text" name="inBeanType"> <br /><br />
-        Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
+    <div style="width:99%; margin:auto">
+        <div style="display:inline-block; width:33%;">
+        <h2>Insert New Caffeinated Coffee Recipes</h2>
+        <form method="POST" action="listRecipes.php">
+            <input type="hidden" id="insertCafQueryRequest" name="insertCafQueryRequest">
+            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
+            Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
+            Bean Type: <input type="text" name="inBeanType"> <br /><br />
+            Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
 
-		<input type="submit" value="Insert" name="insertCafSubmit"></p>
-	</form>
-	<hr />
+            <input type="submit" value="Insert" name="insertCafSubmit"></p>
+        </form>
+        </div>
 
-	<h2>Insert New Decaf Coffee Recipes</h2>
-    <form method="POST" action="listRecipes.php">
-        <input type="hidden" id="insertDecafQueryRequest" name="insertDecafQueryRequest">
-        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-        Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-        Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
-        Bean Type: <input type="text" name="inBeanType"> <br /><br />
-        Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
+        <div style="display:inline-block; width:33%;">
+        <h2>Insert New Decaf Coffee Recipes</h2>
+        <form method="POST" action="listRecipes.php">
+            <input type="hidden" id="insertDecafQueryRequest" name="insertDecafQueryRequest">
+            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
+            Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
+            Bean Type: <input type="text" name="inBeanType"> <br /><br />
+            Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
 
-        <input type="submit" value="Insert" name="insertDecafSubmit"></p>
-    </form>
+            <input type="submit" value="Insert" name="insertDecafSubmit"></p>
+        </form>
+        </div>
+
+        <div style="display:inline-block; width:33%;">
+        <h2>Delete Coffee Recipe</h2>
+        <form method="POST" action="listRecipes.php">
+            <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+
+            <input type="submit" value="Delete" name="deleteSubmit"></p>
+        </form>
+        <hr />
+
+        <h2>Display Caffeinated Coffee Recipes</h2>
+        <form method="GET" action="listRecipes.php">
+            <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
+            <input type="submit" value="Display Recipes" name="displayCafTuples"></p>
+        </form>
+
+        <hr />
+
+        <h2>Display Decaf Coffee Recipes</h2>
+        <form method="GET" action="listRecipes.php">
+            <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
+            <input type="submit" value="Display Recipes" name="displayDecafTuples"></p>
+        </form>
+        </div>
+    </div>
+
     <hr />
-
-    <h2>Delete Coffee Recipe</h2>
-    <form method="POST" action="listRecipes.php">
-        <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
-        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-
-        <input type="submit" value="Delete" name="deleteSubmit"></p>
-    </form>
-    <hr />
-
-	<h2>Display Caffeinated Coffee Recipes</h2>
-	<form method="GET" action="listRecipes.php">
-		<input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
-		<input type="submit" name="displayCafTuples"></p>
-	</form>
-
-	<hr />
-
-	<h2>Display Deacf Coffee Recipes</h2>
-    <form method="GET" action="listRecipes.php">
-        <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
-        <input type="submit" name="displayDecafTuples"></p>
-    </form>
-
 
 	<?php
 	// The following code will be parsed as PHP
@@ -131,6 +140,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		parsed once and you can reuse the statement. This is also very useful in protecting against SQL injection.
 		See the sample code below for how this function is used */
 
+		// basically execute statement with multiple vars given
+
 		global $db_conn, $success;
 		$statement = oci_parse($db_conn, $cmdstr);
 
@@ -151,9 +162,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
-				echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			    echo "<br>INVALID INPUT, PLEASE TRY AGAIN<br>";
+				//echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
-				echo htmlentities($e['message']);
+				//echo htmlentities($e['message']);
 				echo "<br>";
 				$success = False;
 			}
@@ -231,15 +243,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		oci_commit($db_conn);
 
-        executeBoundSQL("insert into $table values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
+		if ($success) {
+	        executeBoundSQL("insert into $table values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
 
-		oci_commit($db_conn);
+    		oci_commit($db_conn);
+		}
 	}
 
 	function handleDisplayCafRequest()
 	{
 		global $db_conn;
 		$result = executePlainSQL("SELECT * FROM Caffeinated");
+		echo "<h3>Caffeinated Coffee Recipes</h3>";
 		printResult($result);
 
 		oci_commit($db_conn);
@@ -249,6 +264,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
         $result = executePlainSQL("SELECT * FROM Decaf");
+        echo "<h3>Decaf Coffee Recipes</h3>";
         printResult($result);
 
         oci_commit($db_conn);
