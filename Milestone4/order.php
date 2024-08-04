@@ -368,7 +368,6 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
 	{
 		if (connectToDB()) {
 			if (array_key_exists('insertCartQueryRequest', $_POST)) {
-			    $table = ''
 				handleInsertRequest();
 			}
 

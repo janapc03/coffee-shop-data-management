@@ -22,64 +22,98 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
+// !!! Make UpdateFundsQueryRequest()
 ?>
+
 
 <html>
 
 <head>
-	<title>Past Purchases</title>
+	<title>Coffee Shop</title>
+
+	<style>
+        section::after {
+            content: "";
+            display: table;
+            clear: both;
+          }
+
+        article {
+             float: right;
+             width: 80%;
+             background-color: #f1f1f1;
+             height: 600px;
+             }
+
+        .order {
+            float: left;
+            width: 70%;
+            height: 590px;
+            border: 2px solid black;
+            padding: 0px 10px 10px 10px;
+            }
+
+        .shoppingCart {
+            float: right;
+            width: 25%;
+            height: 590px;
+            border: 2px solid black;
+            padding: 0px 10px 10px 10px;
+            }
+
+        .items-table-container {
+            width: 90%;
+            }
+
+        nav {
+            float: left;
+            width: 18%;
+            height: 600px;
+            }
+
+        .displaySales {
+             box-sizing: border-box;
+             -moz-box-sizing: border-box;
+             -webkit-box-sizing: border-box;
+             height: 360px;
+             border: 2px solid black;
+             padding: 0px 10px 10px 10px;
+             }
+
+        .categories {
+            box-sizing: border-box;
+             -moz-box-sizing: border-box;
+             -webkit-box-sizing: border-box;
+             height: 240px;
+             border: 2px solid black;
+             padding: 0px 10px 10px 10px;
+             }
+
+
+         .sales-table-container {
+             position: absolute;
+             top: 2px;
+             left: 2px;
+             width: auto;
+             padding: 2px;
+         }
+
+    </style>
+
 </head>
 
 <body>
     <?php include("homebar.php"); ?>
-	<h2>GUI Currently in progress</h2>
-	<p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+<section class="container">
+  <nav class="salesAndCategories">
+      <p> GUI in progress</p>
 
-	<form method="POST" action="oracle-template.php">
-		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
-		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-		<p><input type="submit" value="Reset" name="reset"></p>
-	</form>
+        </nav>
 
-	<hr />
+    <article>
 
-	<h2>Insert Values into DemoTable</h2>
-	<form method="POST" action="oracle-template.php">
-		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		Number: <input type="text" name="insNo"> <br /><br />
-		Name: <input type="text" name="insName"> <br /><br />
-
-		<input type="submit" value="Insert" name="insertSubmit"></p>
-	</form>
-
-	<hr />
-
-	<h2>Update Name in DemoTable</h2>
-	<p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-
-	<form method="POST" action="oracle-template.php">
-		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-		Old Name: <input type="text" name="oldName"> <br /><br />
-		New Name: <input type="text" name="newName"> <br /><br />
-
-		<input type="submit" value="Update" name="updateSubmit"></p>
-	</form>
-
-	<hr />
-
-	<h2>Count the Tuples in DemoTable</h2>
-	<form method="GET" action="oracle-template.php">
-		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
-		<input type="submit" name="countTuples"></p>
-	</form>
-
-	<hr />
-
-	<h2>Display Tuples in DemoTable</h2>
-	<form method="GET" action="oracle-template.php">
-		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
-		<input type="submit" name="displayTuples"></p>
-	</form>
+        </article>
+    </section>
 
 
 	<?php
@@ -96,7 +130,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function executePlainSQL($cmdstr)
 	{ //takes a plain (no bound variables) SQL command and executes it
-		//echo "<br>running ".$cmdstr."<br>";
 		global $db_conn, $success;
 
 		$statement = oci_parse($db_conn, $cmdstr);
@@ -147,27 +180,46 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
-				echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			    echo "<br>INVALID INPUT, PLEASE TRY AGAIN<br>";
+				//echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
-				echo htmlentities($e['message']);
+				//echo htmlentities($e['message']);
 				echo "<br>";
 				$success = False;
 			}
 		}
 	}
 
-	function printResult($result)
-	{ //prints results from a select statement
-		echo "<br>Retrieved data from table demoTable:<br>";
-		echo "<table>";
-		echo "<tr><th>ID</th><th>Name</th></tr>";
+    function printSalesResult($result)
+        	{ //prints results from a select statement
+        		echo '<br /><table class="sales-table">';
+        		echo "<thead><tr><th>Sales Date</th><th>Employee Pay</th><th>Funds</th></tr><tbody>";
 
-		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-		}
+        		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
 
-		echo "</table>";
-	}
+        			echo "<tr>";
+                        echo "<td>" . $row['SALESDATE'] . "</td>";
+                        echo "<td>" . $row['EMPLOYEEPAY'] . "</td>";
+                        echo "<td>" . $row['CAFEFUNDS'] . "</td>";
+                        echo "</tr>"; //or just use "echo $row[0]"
+        		}
+
+        		echo "</tbody></table>";
+        	}
+
+        function printItemsResult($result, $name, $inv)
+                	{ //prints results from a select statement
+                		echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
+                		echo "<tr><th>Name</th><th>Inventory</th></tr>";
+
+
+                            while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+                                echo "<tr><td>" . $row[$name]  . "</td><td>" . $row[$inv]  . "</td></tr>";
+                            }
+
+                            echo "</table>";
+                	}
+
 
 	function connectToDB()
 	{
@@ -198,38 +250,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_close($db_conn);
 	}
 
-	function handleUpdateRequest()
-	{
-		global $db_conn;
-
-		$old_name = $_POST['oldName'];
-		$new_name = $_POST['newName'];
-
-		// you need the wrap the old name and new name values with single quotations
-		executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
-		oci_commit($db_conn);
-	}
-
-	function handleResetRequest()
-	{
-		global $db_conn;
-		// Drop old table
-		executePlainSQL("DROP TABLE demoTable");
-
-		// Create new table
-		echo "<br> creating new table <br>";
-		executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
-		oci_commit($db_conn);
-	}
-
 	function handleInsertRequest()
 	{
 		global $db_conn;
 
 		//Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['insNo'],
-			":bind2" => $_POST['insName']
+			":bind1" => $_POST['inItemName'],
+			":bind2" => $_POST['inItemQty']
 		);
 
 		$alltuples = array(
@@ -240,34 +268,42 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleCountRequest()
+	function handleDisplaySalesRequest()
 	{
 		global $db_conn;
+		$result = executePlainSQL("SELECT * FROM Sales");
+		printSalesResult($result);
 
-		$result = executePlainSQL("SELECT Count(*) FROM demoTable");
-
-		if (($row = oci_fetch_row($result)) != false) {
-			echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
-		}
+		oci_commit($db_conn);
 	}
 
-	function handleDisplayRequest()
-	{
-		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM demoTable");
-		printResult($result);
-	}
+function handleDisplayItemsRequest($table, $name, $inv)
+{
+    global $db_conn;
+    $result = executePlainSQL("SELECT * FROM Sales");
+        printSalesResult($result);
+
+    $result = executePlainSQL("SELECT * FROM " . $table . "");
+    printItemsResult($result, $name, $inv);
+
+    oci_commit($db_conn);
+}
+
+function handleDisplayCoffeeRequest($table, $name, $inv)
+{
+    global $db_conn;
+    $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
+    printItemsResult($result, $name, $inv);
+
+    oci_commit($db_conn);
+}
 
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('resetTablesRequest', $_POST)) {
-				handleResetRequest();
-			} else if (array_key_exists('updateQueryRequest', $_POST)) {
-				handleUpdateRequest();
-			} else if (array_key_exists('insertQueryRequest', $_POST)) {
+			if (array_key_exists('insertCartQueryRequest', $_POST)) {
 				handleInsertRequest();
 			}
 
@@ -280,20 +316,49 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('countTuples', $_GET)) {
-				handleCountRequest();
-			} elseif (array_key_exists('displayTuples', $_GET)) {
-				handleDisplayRequest();
-			}
+                if (array_key_exists('displayToppingsTuples', $_GET)) {
+                    $table = 'toppings';
+                    $name = 'TOPPINGNAME';
+                    $inv = 'TOPPINGINV';
+                    handleDisplayItemsRequest($table, $name, $inv);
+                } else if (array_key_exists('displayCreamTuples', $_GET)) {
+                    $table = 'cream';
+                    $name = 'CREAMNAME';
+                    $inv= 'CREAMINV';
+                    handleDisplayItemsRequest($table, $name, $inv);
+                } else if (array_key_exists('displaySweetenerTuples', $_GET)) {
+                    $table = 'sweetener';
+                    $name = 'SWEETNAME';
+                    $inv= 'SWEETENERINV';
+                    handleDisplayItemsRequest($table, $name, $inv);
+                } else if (array_key_exists('displayCafTuples', $_GET)) {
+                    $table = 'caffeinated';
+                    $name = 'BEANTYPE';
+                    $inv= 'COFFEEINV';
+                    handleDisplayCoffeeRequest($table, $name, $inv);
+                } else if (array_key_exists('displayDecafTuples', $_GET)) {
+                    $table = 'decaf';
+                    $name = 'BEANTYPE';
+                    $inv= 'COFFEEINV';
+                    handleDisplayCoffeeRequest($table, $name, $inv);
+                }
 
 			disconnectFromDB();
 		}
 	}
 
-	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest'])) {
-		handleGETRequest();
+	} else if (isset($_GET['displayToppingsTuplesRequest']) ||
+               isset($_GET['displayCreamTuplesRequest']) ||
+               isset($_GET['displaySweetenerTuplesRequest']) ||
+               isset($_GET['displayCafTuplesRequest']) ||
+               isset($_GET['displayDecafTuplesRequest'])) {
+               handleGetRequest();
+	} else {
+	if (connectToDB())
+	    handleDisplaySalesRequest();
+	    disconnectFromDB();
 	}
 
 	// End PHP parsing and send the rest of the HTML content
@@ -301,3 +366,4 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </body>
 
 </html>
+
