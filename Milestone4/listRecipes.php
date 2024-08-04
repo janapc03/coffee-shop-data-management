@@ -95,6 +95,29 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <hr />
 
+    <h2>Display Iced Coffee Recipes</h2>
+    <form method="GET" action="listRecipes.php">
+        <input type="hidden" id="displayIceTuplesRequest" name="displayIceTuplesRequest">
+        <input type="submit" value="Display Recipes" name="displayIceTuples"></p>
+    </form>
+    <hr />
+    <h2>Select Recipe to Ice</h2>
+    <form method="POST" action="listRecipes.php">
+        <input type="hidden" id="insertIceQueryRequest" name="insertIceQueryRequest">
+        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+        Ice Amount: <input type="text" ice="inIce"> <br /><br />
+        Method of Iced Coffee: <input type="text" method="inMethod"> <br /><br />
+
+        <input type="submit" value="Delete" name="insertIceSubmit"></p>
+    </form>
+    <h2>Remove Iced Recipe</h2>
+    <form method="POST" action="listRecipes.php">
+        <input type="hidden" id="deleteIceQueryRequest" name="deleteIceQueryRequest">
+        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+
+        <input type="submit" value="Delete" name="deleteIceSubmit"></p>
+    </form>
+
 	<?php
 	// The following code will be parsed as PHP
 
@@ -184,6 +207,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "</table>";
 	}
 
+	function printIceResult($result)
+    { //prints results from a select statement
+        echo "<table>";
+        echo "<tr><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory</th><th>Coffee Bean</th><th>Roast Level</th></tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['METHOD'] . "</td><td>" . $row['ICEAMOUNT'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+
+        echo "</table>";
+    }
+
 	function connectToDB()
 	{
 		global $db_conn;
@@ -243,29 +278,29 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		oci_commit($db_conn);
 
-		if ($success) {
-	        executeBoundSQL("insert into $table values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
+        executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
 
-    		oci_commit($db_conn);
-		}
+        oci_commit($db_conn);
 	}
 
-	function handleDisplayCafRequest()
+	function handleDisplayRequest($table)
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM Caffeinated");
-		echo "<h3>Caffeinated Coffee Recipes</h3>";
+		$result = executePlainSQL("SELECT * FROM " . $table ."");
 		printResult($result);
 
 		oci_commit($db_conn);
 	}
 
-	function handleDisplayDecafRequest()
+    function handleDisplayIceRequest()
     {
         global $db_conn;
-        $result = executePlainSQL("SELECT * FROM Decaf");
-        echo "<h3>Decaf Coffee Recipes</h3>";
-        printResult($result);
+        $result = executePlainSQL("SELECT DISTINCT * FROM icedcoffee i, caffeinated c WHERE i.coffeeName = c.coffeeName AND i.coffeeSize = c.coffeeSize");
+        echo "<h3>Iced Coffee Recipes</h3>";
+        printIceResult($result);
+        echo "<h3>Iced Decaf Coffee Recipes</h3>";
+        $result = executePlainSQL("SELECT DISTINCT * FROM icedcoffee i, decaf d WHERE i.coffeeName = d.coffeeName AND i.coffeeSize = d.coffeeSize");
+        printIceResult($result);
 
         oci_commit($db_conn);
     }
@@ -293,6 +328,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			    handleInsertRequest($table);
 			} else if (array_key_exists('deleteQueryRequest', $_POST)) {
                 handleDeleteRequest();
+            } else if (array_key_exists('insertIceQueryRequest', $_POST)) {
+                handleInsertRequest();
+            } else if (array_key_exists('deleteIceQueryRequest', $_POST)) {
+                handleDeleteRequest();
             }
 
 			disconnectFromDB();
@@ -305,18 +344,26 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	{
 		if (connectToDB()) {
 		    if (array_key_exists('displayCafTuples', $_GET)) {
-				handleDisplayCafRequest();
+		        $table = 'caffeinated';
+		        echo "<h3>Caffeinated Coffee Recipes</h3>";
+				handleDisplayRequest($table);
 			} else if (array_key_exists('displayDecafTuples', $_GET)) {
-			    handleDisplayDecafRequest();
+			    $table = 'decaf';
+			    echo "<h3>Decaf Coffee Recipes</h3>";
+			    handleDisplayRequest($table);
+			} else if (array_key_exists('displayIceTuples', $_GET)) {
+			    handleDisplayIceRequest();
 			}
 
 			disconnectFromDB();
 		}
 	}
 
-	if (isset($_POST['insertCafSubmit']) || isset($_POST['insertDecafSubmit']) || isset($_POST['deleteSubmit'])) {
+	if (isset($_POST['insertCafSubmit']) || isset($_POST['insertDecafSubmit']) || isset($_POST['deleteSubmit']) ||
+	    isset($_POST['insertIceSubmit']) || isset($_POST['deleteIceSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
+	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest']) ||
+	            isset($_GET['displayIceTuplesRequest'])) {
 		handleGETRequest();
 	}
 
