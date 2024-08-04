@@ -94,9 +94,16 @@ create table ListToppings (
     foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE);
 grant select on ListToppings to public;
 
-create table AddToppings (
-    toppingName varchar(30) not null,
+create table AddToppings1 (
     toppingAmount varchar(20) not null,
+    coffeeName varchar(30) not null,
+    coffeeSize varchar(20) not null,
+    primary key (coffeeName, coffeeSize),
+    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
+grant select on AddToppings to public;
+
+create table AddToppings2 (
+    toppingName varchar(30) not null,
     coffeeName varchar(30) not null,
     coffeeSize varchar(20) not null,
     primary key (toppingName, coffeeName, coffeeSize),
