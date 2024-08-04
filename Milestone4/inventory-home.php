@@ -5,8 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Database access configuration
-$config["dbuser"] = "ora_jbarlesc";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a43974147";	// change to 'a' + your student number
+$config["dbuser"] = "ora_miaodan";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a92389279";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -29,6 +29,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
     <input type="submit" name="displayToppingsTuples"> </p>
 </form>
+
+<h2>Update Inventory of Toppings</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
+    Toppings name: <input type="text" name="name"> <br /><br />
+    Updated inventory: <input type="text" name="inv"> <br /><br />
+
+    <input type="submit" value="Update" name="updateToppingsSubmit"></p>
+</form>
+
 <hr/>
 
 <h1>Inventory of creams</h1>
@@ -36,12 +46,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
     <input type="submit" name="displayCreamTuples"> </p>
 </form>
+
+<h2>Update Inventory of Creams</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
+    Cream name: <input type="text" name="name"> <br /><br />
+    Updated inventory: <input type="text" name="inv"> <br /><br />
+
+    <input type="submit" value="Update" name="updateCreamSubmit"></p>
+</form>
+
 <hr/>
 
 <h1>Inventory of sweeteners</h1>
 <form method="GET" action="inventory-home.php">
     <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
     <input type="submit" name="displaySweetenerTuples"> </p>
+</form>
+
+<h2>Update Inventory of Sweeteners</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
+    Sweetener name: <input type="text" name="name"> <br /><br />
+    Updated inventory: <input type="text" name="inv"> <br /><br />
+
+    <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
 </form>
 
 <?php
@@ -159,6 +188,19 @@ function disconnectFromDB()
     oci_close($db_conn);
 }
 
+function handleUpdateRequest($table, $inv, $name)
+{
+    global $db_conn;
+
+    $itemName = $_POST['name'];
+    $updatedItemInv = $_POST['inv'];
+
+    // you need the wrap the old name and new name values with single quotations
+    executePlainSQL("UPDATE " . $table . " SET " . $inv . " ='" . $updatedItemInv . "' WHERE " . $name . " ='" . $itemName . "'");
+    //executePlainSQL("UPDATE toppings SET toppingInv = 'low' WHERE toppingName = 'whipped cream'");
+    oci_commit($db_conn);
+}
+
 function handleDisplayRequest($table, $name, $inv)
 {
     global $db_conn;
@@ -168,6 +210,30 @@ function handleDisplayRequest($table, $name, $inv)
     oci_commit($db_conn);
 }
 
+// HANDLE ALL POST ROUTES
+	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
+	function handlePostRequest()
+	{
+		if (connectToDB()) {
+			if (array_key_exists('updateToppingsRequest', $_POST)) {
+			    $table = 'toppings';
+			    $inv = 'toppingInv';
+			    $name = 'toppingName';
+				handleUpdateRequest($table, $inv, $name);
+			} else if (array_key_exists('updateCreamRequest', $_POST)) {
+                $table = 'cream';
+                $inv = 'creamInv';
+                $name = 'creamName';
+                handleUpdateRequest($table, $inv, $name);
+            } else if (array_key_exists('updateSweetenerRequest', $_POST)) {
+                $table = 'sweetener';
+                $inv = 'sweetenerInv';
+                $name = 'sweetName';
+                handleUpdateRequest($table, $inv, $name);
+            }
+			disconnectFromDB();
+		}
+	}
 
 // HANDLE ALL GET ROUTES
 // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -198,6 +264,10 @@ if (isset($_GET['displayToppingsTuplesRequest']) ||
     isset($_GET['displayCreamTuplesRequest']) ||
     isset($_GET['displaySweetenerTuplesRequest'])) {
     handleGetRequest();
+} else if (isset($_POST['updateToppingsSubmit']) ||
+            isset($_POST['updateCreamSubmit']) ||
+            isset($_POST['updateSweetenerSubmit'])) {
+    handlePostRequest();
 }
 ?>
 
