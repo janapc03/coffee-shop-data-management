@@ -62,6 +62,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     </form>
     <hr />
 
+    <h2>Delete Coffee Recipe</h2>
+    <form method="POST" action="listRecipes.php">
+        <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+
+        <input type="submit" value="Delete" name="deleteSubmit"></p>
+    </form>
+    <hr />
+
 	<h2>Display Caffeinated Coffee Recipes</h2>
 	<form method="GET" action="listRecipes.php">
 		<input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
@@ -245,6 +254,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         oci_commit($db_conn);
     }
 
+    function handleDeleteRequest()
+    {
+        global $db_conn;
+
+        $delCoffee = $_POST['inCoffeeName'];
+
+        executePlainSQL("DELETE FROM coffee WHERE coffeeName='" . $delCoffee . "'");
+        oci_commit($db_conn);
+    }
+
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
@@ -256,7 +275,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			} else if (array_key_exists('insertDecafQueryRequest', $_POST)) {
 			    $table = 'decaf';
 			    handleInsertRequest($table);
-			}
+			} else if (array_key_exists('deleteQueryRequest', $_POST)) {
+                handleDeleteRequest();
+            }
 
 			disconnectFromDB();
 		}
@@ -277,7 +298,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	if (isset($_POST['insertCafSubmit']) || isset($_POST['insertDecafSubmit']) ) {
+	if (isset($_POST['insertCafSubmit']) || isset($_POST['insertDecafSubmit']) || isset($_POST['deleteSubmit'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
 		handleGETRequest();
