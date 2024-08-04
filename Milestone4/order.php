@@ -163,9 +163,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                 <p>The values are case sensitive.</p>
 
                 	<form method="POST" action="order.php">
-                		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-                		Item Name: <input type="text" name="itemName"> <br /><br />
-                		Quantity: <input type="text" name="itemQty"> <br /><br />
+                		<input type="hidden" id="insertCartQueryRequest" name="insertCartQueryRequest">
+                		Item Name: <input type="text" name="inItemName"> <br /><br />
+                		Quantity: <input type="text" name="inItemQty"> <br /><br />
 
                 		<input type="submit" value="Add to Cart" name="addToCart"></p>
                 	</form>
@@ -320,8 +320,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		//Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['insNo'],
-			":bind2" => $_POST['insName']
+			":bind1" => $_POST['inItemName'],
+			":bind2" => $_POST['inItemQty']
 		);
 
 		$alltuples = array(
@@ -367,7 +367,8 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('insertQueryRequest', $_POST)) {
+			if (array_key_exists('insertCartQueryRequest', $_POST)) {
+			    $table = ''
 				handleInsertRequest();
 			}
 
