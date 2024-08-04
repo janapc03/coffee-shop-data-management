@@ -42,7 +42,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              float: right;
              width: 80%;
              background-color: #f1f1f1;
-             height: 600px;
+             height: 800px;
              }
 
         .order {
@@ -64,38 +64,58 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             float: left;
             border: 2px solid black;
             width: 18%;
-            height: 600px;
-            background-color: #ffe6e6;
+            height: 650px;
             }
 
-        .displayFunds {
-             height: 300px;
+        .displaySales {
+             box-sizing: border-box;
+             -moz-box-sizing: border-box;
+             -webkit-box-sizing: border-box;
+             height: 420px;
              border: 2px solid black;
              padding: 10px 10px 10px 10px;
              }
 
         .categories {
+            box-sizing: border-box;
+             -moz-box-sizing: border-box;
+             -webkit-box-sizing: border-box;
              height: 200px;
              border: 2px solid black;
              padding: 10px 10px 10px 10px;
              }
 
-        table {
+        .item-table {
              width: 90%;
              }
+
+         .sales-table-container {
+             position: absolute;
+             top: 2px;
+             left: 2px;
+             width: auto;
+             padding: 2px;
+         }
+
+
 
     </style>
 
 </head>
 
 <body>
+    <?php include("homebar.php"); ?>
 <section class="container">
-  <nav class="fundsAndCategories">
-      <div class="displayFunds">
+  <nav class="salesAndCategories">
+      <div class="displaySales">
 
         <p> <u>Sales</u> </p>
-        <p> Cafe Funds: </p>
-        <p> Employee Pay: </p>
+        <div class="sales-table-container">
+        <form method="GET" action="order.php">
+            <input type="hidden" id="displaySalesTuplesRequest" name="displaySalesTuplesRequest">
+            </form>
+        </div>
+
             <form method="POST" action="order.php">
                        <input type="hidden" id="updateFundsQueryRequest" name="updateFundsQueryRequest">
                        Cafe Funds: <input type="text" name="cafeFunds"> <br /><br />
@@ -117,24 +137,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <div class="order">
             <h2> Inventory: </h2>
 
-            <table align = "center" border = "1" cellpadding = "3" cellspacing = "0">
-                        <tr>
-                        <td>Name</td>
-                        <td>Inventory Quantity</td>
-                        <td>Supplier</td>
-                        </tr>
-                        <?php
-                        $x = 1;
-                        while($x <= 5) {
-                            echo "<tr>";
-                          echo "<td> $x*$x </td>";
-                          echo "<td>" .$x*$x. "</td>";
-                           echo "<td>" .$x*$x*$x. "</td>";
-                            echo "</tr>";
-                          $x++;
-                        }
-                    ?>
-                    </table>
+            <div class="items-table-container">
+                    <form method="GET" action="order.php">
+                        <input type="hidden" id="displayItemsTuplesRequest" name="displayItemsTuplesRequest">
+                        </form>
+                    </div>
+
 
             <div class="addToCart">
                 <p>The values are case sensitive.</p>
@@ -223,28 +231,50 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
-				echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			    echo "<br>INVALID INPUT, PLEASE TRY AGAIN<br>";
+				//echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
-				echo htmlentities($e['message']);
+				//echo htmlentities($e['message']);
 				echo "<br>";
 				$success = False;
 			}
 		}
 	}
 
-	function printResult($result)
-	{ //prints results from a select statement
-		echo "<br>Retrieved data from table Caffeinated:<br>";
-		echo "<table>";
-		echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Bean Type</th><th>Roast Level</th></tr>";
+    function printSalesResult($result)
+        	{ //prints results from a select statement
+        		echo '<br /><table class="sales-table">';
+        		echo "<thead><tr><th>Sales Date</th><th>Employee Pay</th><th>Funds</th></tr><tbody>";
 
-		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" .
-			$row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
-		}
+        		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
 
-		echo "</table>";
-	}
+        			echo "<tr>";
+                        echo "<td>" . $row['SALESDATE'] . "</td>";
+                        echo "<td>" . $row['EMPLOYEEPAY'] . "</td>";
+                        echo "<td>" . $row['CAFEFUNDS'] . "</td>";
+                        echo "</tr>"; //or just use "echo $row[0]"
+        		}
+
+        		echo "</tbody></table>";
+        	}
+
+        function printItemsResult($result)
+                	{ //prints results from a select statement
+                		echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
+                		echo "<thead><tr><th>Name</th><th>Inventory Quantity</th><th>Supplier</th></tr><tbody>";
+
+                		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+
+                			echo "<tr>";
+                                echo "<td>" . $row['SALESDATE'] . "</td>";
+                                echo "<td>" . $row['EMPLOYEEPAY'] . "</td>";
+                                echo "<td>" . $row['CAFEFUNDS'] . "</td>";
+                                echo "</tr>"; //or just use "echo $row[0]"
+                		}
+
+                		echo "</tbody></table>";
+                	}
+
 
 	function connectToDB()
 	{
@@ -293,11 +323,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleDisplayCafRequest()
+	function handleDisplaySalesRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM Caffeinated");
-		printResult($result);
+		$result = executePlainSQL("SELECT * FROM Sales");
+		printSalesResult($result);
 
 		oci_commit($db_conn);
 	}
@@ -306,7 +336,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
         $result = executePlainSQL("SELECT * FROM Decaf");
-        printResult($result);
+        printSalesResult($result);
 
         oci_commit($db_conn);
     }
@@ -329,8 +359,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-		    if (array_key_exists('displayCafTuples', $_GET)) {
-				handleDisplayCafRequest();
+		    if (array_key_exists('displaySalesTuples', $_GET)) {
+				displaySalesTuplesRequest();
 			} else if (array_key_exists('displayDecafTuples', $_GET)) {
                 handleDisplayDecafRequest();
             }
@@ -341,8 +371,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
+	} else if (isset($_GET['displaySalesTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
 		handleGETRequest();
+	} else {
+	if (connectToDB())
+	    handleDisplaySalesRequest();
+	    disconnectFromDB();
 	}
 
 	// End PHP parsing and send the rest of the HTML content
