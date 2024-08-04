@@ -335,11 +335,11 @@ insert into ListCoffee2 values (to_date('2024-08-15','YYYY-MM-DD'), '2 bottles')
 insert into ListCoffee2 values (to_date('2024-08-20','YYYY-MM-DD'), '4 bottles');
 insert into ListCoffee2 values (to_date('2024-08-10','YYYY-MM-DD'), '1 bottle');
 
-insert into Decaf values ('decaf latte', 'extra large', 'low', 'Arabica', 'light');
-insert into Decaf values ('decaf macchiato', 'medium', 'high', 'Liberica', 'light');
-insert into Decaf values ('decaf cappuccino', 'small', 'low', 'Arabica', 'medium');
-insert into Decaf values ('decaf drip coffee', 'large', 'high', 'Robusta', 'dark');
-insert into Decaf values ('decaf flat white', 'short', 'low', 'Arabica', 'dark');
+insert into Decaf values ('decaf latte', 'extra large', 'low', 'decaf Arabica', 'light');
+insert into Decaf values ('decaf macchiato', 'medium', 'high', 'decaf Liberica', 'light');
+insert into Decaf values ('decaf cappuccino', 'small', 'low', 'decaf Arabica', 'medium');
+insert into Decaf values ('decaf drip coffee', 'large', 'high', 'decaf Robusta', 'dark');
+insert into Decaf values ('decaf flat white', 'short', 'low', 'decaf Arabica', 'dark');
 
 insert into Caffeinated values ('latte', 'extra large', 'low', 'Arabica', 'light');
 insert into Caffeinated values ('macchiato', 'medium', 'high', 'Liberica', 'light');
