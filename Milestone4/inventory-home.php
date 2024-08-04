@@ -22,23 +22,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </head>
 
 <body>
+<?php include("homebar.php"); ?>
 
 <h1>Inventory of toppings</h1>
-<form method="GET" action="inventory-toppings.php">
+<form method="GET" action="inventory-home.php">
     <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
     <input type="submit" name="displayToppingsTuples"> </p>
 </form>
 <hr/>
 
 <h1>Inventory of creams</h1>
-<form method="GET" action="inventory-toppings.php">
+<form method="GET" action="inventory-home.php">
     <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
     <input type="submit" name="displayCreamTuples"> </p>
 </form>
 <hr/>
 
 <h1>Inventory of sweeteners</h1>
-<form method="GET" action="inventory-toppings.php">
+<form method="GET" action="inventory-home.php">
     <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
     <input type="submit" name="displaySweetenerTuples"> </p>
 </form>
