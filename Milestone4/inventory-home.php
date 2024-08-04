@@ -73,6 +73,40 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
 </form>
 
+<hr/>
+
+<h1>Inventory of Caffeinated Coffee Beans</h1>
+<form method="GET" action="inventory-home.php">
+    <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
+    <input type="submit" name="displayCafTuples"> </p>
+</form>
+
+<h2>Update Inventory of Caffeinated Coffee Beans</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="updateCafRequest" name="updateCafRequest">
+    Coffee bean name: <input type="text" name="name"> <br /><br />
+    Updated inventory: <input type="text" name="inv"> <br /><br />
+
+    <input type="submit" value="Update" name="updateCafSubmit"></p>
+</form>
+
+<hr/>
+
+<h1>Inventory of Decaffeinated Coffee Beans</h1>
+<form method="GET" action="inventory-home.php">
+    <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
+    <input type="submit" name="displayDecafTuples"> </p>
+</form>
+
+<h2>Update Inventory of Decaffeinated Coffee Beans</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="updateDecafRequest" name="updateDecafRequest">
+    Coffee bean name: <input type="text" name="name"> <br /><br />
+    Updated inventory: <input type="text" name="inv"> <br /><br />
+
+    <input type="submit" value="Update" name="updateDecafSubmit"></p>
+</form>
+
 <?php
 // The following code will be parsed as PHP
 
@@ -210,6 +244,15 @@ function handleDisplayRequest($table, $name, $inv)
     oci_commit($db_conn);
 }
 
+function handleDisplayCoffeeRequest($table, $name, $inv)
+{
+    global $db_conn;
+    $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
+    printResult($result, $name, $inv);
+
+    oci_commit($db_conn);
+}
+
 // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePostRequest()
@@ -229,6 +272,16 @@ function handleDisplayRequest($table, $name, $inv)
                 $table = 'sweetener';
                 $inv = 'sweetenerInv';
                 $name = 'sweetName';
+                handleUpdateRequest($table, $inv, $name);
+            } else if (array_key_exists('updateCafRequest', $_POST)) {
+                $table = 'caffeinated';
+                $inv = 'coffeeInv';
+                $name = 'beanType';
+                handleUpdateRequest($table, $inv, $name);
+            } else if (array_key_exists('updateDecafRequest', $_POST)) {
+                $table = 'decaf';
+                $inv = 'coffeeInv';
+                $name = 'beanType';
                 handleUpdateRequest($table, $inv, $name);
             }
 			disconnectFromDB();
@@ -255,6 +308,16 @@ function handleGetRequest()
             $name = 'SWEETNAME';
             $inv= 'SWEETENERINV';
             handleDisplayRequest($table, $name, $inv);
+        } else if (array_key_exists('displayCafTuples', $_GET)) {
+            $table = 'caffeinated';
+            $name = 'BEANTYPE';
+            $inv= 'COFFEEINV';
+            handleDisplayCoffeeRequest($table, $name, $inv);
+        } else if (array_key_exists('displayDecafTuples', $_GET)) {
+            $table = 'decaf';
+            $name = 'BEANTYPE';
+            $inv= 'COFFEEINV';
+            handleDisplayCoffeeRequest($table, $name, $inv);
         }
 
         disconnectFromDB();
@@ -262,11 +325,15 @@ function handleGetRequest()
 }
 if (isset($_GET['displayToppingsTuplesRequest']) ||
     isset($_GET['displayCreamTuplesRequest']) ||
-    isset($_GET['displaySweetenerTuplesRequest'])) {
+    isset($_GET['displaySweetenerTuplesRequest']) ||
+    isset($_GET['displayCafTuplesRequest']) ||
+    isset($_GET['displayDecafTuplesRequest'])) {
     handleGetRequest();
 } else if (isset($_POST['updateToppingsSubmit']) ||
             isset($_POST['updateCreamSubmit']) ||
-            isset($_POST['updateSweetenerSubmit'])) {
+            isset($_POST['updateSweetenerSubmit']) ||
+            isset($_POST['updateCafSubmit']) ||
+            isset($_POST['updateDecafSubmit'])) {
     handlePostRequest();
 }
 ?>
