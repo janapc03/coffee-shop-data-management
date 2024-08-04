@@ -28,7 +28,7 @@ li a {
 <ul>
   <li><a href="listRecipes.php">Recipes</a></li>
   <li><a href="#inventory-home">Inventory</a></li>
-  <li><a href="#about">Orders</a></li>
+  <li><a href="order.php">Orders</a></li>
 </ul>
 
 </body>
