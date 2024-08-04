@@ -52,12 +52,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             border: 2px solid black;
             padding: 10px 10px 10px 10px;
             }
+
         .shoppingCart {
             float: right;
             width: 25%;
             height: 400px;
             border: 2px solid black;
             padding: 10px 10px 10px 10px;
+            }
+
+        .items-table-container {
+            width: 90%;
             }
 
         nav {
@@ -85,9 +90,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              padding: 10px 10px 10px 10px;
              }
 
-        .item-table {
-             width: 90%;
-             }
 
          .sales-table-container {
              position: absolute;
@@ -96,8 +98,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              width: auto;
              padding: 2px;
          }
-
-
 
     </style>
 
@@ -126,10 +126,25 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             </div>
 
         <div class="categories">
-                    <p>Espresso</p>
-                    <p>Toppings</p>
-                    <p>Cream</p>
-                    <p>Sweetener</p>
+
+                    <form method="GET" action="order.php">
+                        <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
+                        <input type="submit" value="Toppings" name="displayToppingsTuples"> </p>
+
+                        <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
+                        <input type="submit" value="Cream" name="displayCreamTuples"> </p>
+
+                        <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
+                        <input type="submit" value="Sweetener" name="displaySweetenerTuples"> </p>
+
+                        <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
+                        <input type="submit" value="Caffeinated Beans" name="displayCafTuples"> </p>
+
+                        <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
+                        <input type="submit" value="Decaffeinated Beans" name="displayDecafTuples"> </p>
+                    </form>
+
+
             </div>
         </nav>
 
@@ -165,7 +180,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     </section>
 
 
-
 	<?php
 	// The following code will be parsed as PHP
 
@@ -180,7 +194,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function executePlainSQL($cmdstr)
 	{ //takes a plain (no bound variables) SQL command and executes it
-		//echo "<br>running ".$cmdstr."<br>";
 		global $db_conn, $success;
 
 		$statement = oci_parse($db_conn, $cmdstr);
@@ -258,21 +271,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         		echo "</tbody></table>";
         	}
 
-        function printItemsResult($result)
+        function printItemsResult($result, $name, $inv)
                 	{ //prints results from a select statement
                 		echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
-                		echo "<thead><tr><th>Name</th><th>Inventory Quantity</th><th>Supplier</th></tr><tbody>";
+                		echo "<tr><th>Name</th><th>Inventory</th></tr>";
 
-                		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
 
-                			echo "<tr>";
-                                echo "<td>" . $row['SALESDATE'] . "</td>";
-                                echo "<td>" . $row['EMPLOYEEPAY'] . "</td>";
-                                echo "<td>" . $row['CAFEFUNDS'] . "</td>";
-                                echo "</tr>"; //or just use "echo $row[0]"
-                		}
+                            while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+                                echo "<tr><td>" . $row[$name]  . "</td><td>" . $row[$inv]  . "</td></tr>";
+                            }
 
-                		echo "</tbody></table>";
+                            echo "</table>";
                 	}
 
 
@@ -332,14 +341,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleDisplayDecafRequest()
-    {
-        global $db_conn;
-        $result = executePlainSQL("SELECT * FROM Decaf");
-        printSalesResult($result);
+function handleDisplayItemsRequest($table, $name, $inv)
+{
+    global $db_conn;
+    $result = executePlainSQL("SELECT * FROM " . $table . "");
+    printItemsResult($result, $name, $inv);
 
-        oci_commit($db_conn);
-    }
+    oci_commit($db_conn);
+}
+
+function handleDisplayCoffeeRequest($table, $name, $inv)
+{
+    global $db_conn;
+    $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
+    printItemsResult($result, $name, $inv);
+
+    oci_commit($db_conn);
+}
 
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -359,11 +377,32 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-		    if (array_key_exists('displaySalesTuples', $_GET)) {
-				displaySalesTuplesRequest();
-			} else if (array_key_exists('displayDecafTuples', $_GET)) {
-                handleDisplayDecafRequest();
-            }
+                if (array_key_exists('displayToppingsTuples', $_GET)) {
+                    $table = 'toppings';
+                    $name = 'TOPPINGNAME';
+                    $inv = 'TOPPINGINV';
+                    handleDisplayItemsRequest($table, $name, $inv);
+                } else if (array_key_exists('displayCreamTuples', $_GET)) {
+                    $table = 'cream';
+                    $name = 'CREAMNAME';
+                    $inv= 'CREAMINV';
+                    handleDisplayItemsRequest($table, $name, $inv);
+                } else if (array_key_exists('displaySweetenerTuples', $_GET)) {
+                    $table = 'sweetener';
+                    $name = 'SWEETNAME';
+                    $inv= 'SWEETENERINV';
+                    handleDisplayItemsRequest($table, $name, $inv);
+                } else if (array_key_exists('displayCafTuples', $_GET)) {
+                    $table = 'caffeinated';
+                    $name = 'BEANTYPE';
+                    $inv= 'COFFEEINV';
+                    handleDisplayCoffeeRequest($table, $name, $inv);
+                } else if (array_key_exists('displayDecafTuples', $_GET)) {
+                    $table = 'decaf';
+                    $name = 'BEANTYPE';
+                    $inv= 'COFFEEINV';
+                    handleDisplayCoffeeRequest($table, $name, $inv);
+                }
 
 			disconnectFromDB();
 		}
@@ -371,8 +410,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displaySalesTuplesRequest']) || isset($_GET['displayDecafTuplesRequest'])) {
-		handleGETRequest();
+	} else if (isset($_GET['displayToppingsTuplesRequest']) ||
+               isset($_GET['displayCreamTuplesRequest']) ||
+               isset($_GET['displaySweetenerTuplesRequest']) ||
+               isset($_GET['displayCafTuplesRequest']) ||
+               isset($_GET['displayDecafTuplesRequest'])) {
+               handleGetRequest();
 	} else {
 	if (connectToDB())
 	    handleDisplaySalesRequest();
