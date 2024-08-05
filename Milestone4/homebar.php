@@ -19,17 +19,25 @@ li a {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+
+  }
+
+  div {
+  float: center;
+  }
 }
 
 </style>
 </head>
 <body>
 
+
 <ul>
-  <li><a href="listRecipes.php">Recipes</a></li>
-  <li><a href="inventory-home.php">Inventory</a></li>
-  <li><a href="order.php">Order</a></li>
-  <li><a href="past-purchases.php">Past Purchases</a></li>
+        <li><a href="home-page.php">Home</a></li>
+        <li><a href="listRecipes.php">Recipes</a></li>
+        <li><a href="inventory-home.php">Inventory</a></li>
+        <li><a href="order.php">Order</a></li>
+        <li><a href="past-purchases.php">Past Purchases</a></li>
 </ul>
 
 </body>
