@@ -39,6 +39,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="submit" value="Update" name="updateToppingsSubmit"></p>
 </form>
 
+<h2>Insert New Topping</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
+    Topping Name: <input type="text" name="inName"> <br /><br />
+    Amount in inventory: <input type="text" name="inInv"> <br /><br />
+
+    <input type="submit" value="Insert" name="insertToppingSubmit"></p>
+</form>
+
 <hr/>
 
 <h1>Inventory of creams</h1>
@@ -54,6 +63,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     Updated inventory: <input type="text" name="inv"> <br /><br />
 
     <input type="submit" value="Update" name="updateCreamSubmit"></p>
+</form>
+
+<h2>Insert New Cream</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
+    Topping Name: <input type="text" name="inName"> <br /><br />
+    Amount in inventory: <input type="text" name="inInv"> <br /><br />
+
+    <input type="submit" value="Insert" name="insertCreamSubmit"></p>
 </form>
 
 <hr/>
@@ -326,6 +344,7 @@ if (isset($_GET['displayToppingsTuplesRequest']) ||
             isset($_POST['updateCreamSubmit']) ||
             isset($_POST['updateSweetenerSubmit']) ||
             isset($_POST['updateCoffeeSubmit'])) {
+
     handlePostRequest();
 }
 ?>
