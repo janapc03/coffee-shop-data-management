@@ -125,7 +125,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
           <input type="submit" value="List Toppings" name="displayListToppingsAtts">
           <input type="submit" value="List Cream" name="displayListCreamAtts">
           <input type="submit" value="List Sweetener" name="displayListSweetenerAtts">
-          <input type="submit" value="List Coffee" name="displayListCoffeeAtts">
+          <input type="submit" value="List Coffee1" name="displayListCoffee1Atts">
+          <input type="submit" value="List Coffee2" name="displayListCoffee2Atts">
           <input type="submit" value="Add Toppings" name="displayAddToppingsAtts">
           <input type="submit" value="Add Cream" name="displayAddCreamAtts">
           <input type="submit" value="Add Sweetener" name="displayAddSweetenerAtts">
@@ -242,6 +243,31 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         		echo "</tbody></table>";
         	}
 
+       function printSelectedTableResult($result, $attributes)
+            	{ //prints results from a select statement
+            		echo '<br /><table class="selected-table">';
+            		echo "<thead><tr>";
+
+                       foreach ($attributes as $attr) {
+                               if (!empty($attr)) {
+                                   echo "<th>$attr</th>";
+                               }
+                           }
+                     echo "</tr></thead><tbody>";
+
+            		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            			echo "<tr>";
+                                foreach ($attributes as $attr) {
+                                    if (!empty($attr)) {
+                                        echo "<td>" . $row[$attr] . "</td>";
+                                    }
+                                }
+                                echo "</tr>";
+                            }
+
+            		echo "</tbody></table>";
+            	}
+
 
 	function connectToDB()
 	{
@@ -301,6 +327,20 @@ function handleDisplayAttsRequest($currentTable)
 
 		oci_commit($db_conn);
 	}
+
+function handleDisplaySelectedTableRequest($currentTable, $attributes)
+	{
+		global $db_conn;
+
+		$nonEmptyAttrs = array_filter($attributes); // Filter out empty attributes
+            if (!empty($nonEmptyAttrs)) {
+                $attrs = implode(", ", $nonEmptyAttrs);
+                $query = "SELECT $attrs FROM $currentTable";
+                $result = executePlainSQL($query);
+                printSelectedTableResult($result, $nonEmptyAttrs);
+                oci_commit($db_conn);
+	}
+}
 
 
 	// HANDLE ALL POST ROUTES
@@ -369,10 +409,10 @@ function handleDisplayAttsRequest($currentTable)
                 } else if (array_key_exists('displayListSweetenerAtts', $_GET)) {
                       $currentTable = 'LISTSWEETENER';
                       handleDisplayAttsRequest($currentTable);
-                } else if (array_key_exists('displayListCoffeeAtts', $_GET)) {
-                      $currentTable = executePlainSQL("SELECT *
-                                      		    FROM listCoffee1 lcf1, listCoffee2 lcf2
-                                      		    WHERE lcf1.listDate=lcf2.listDate'");
+                } else if (array_key_exists('displayListCoffee1Atts', $_GET)) {
+                      $currentTable = 'LISTCOFFEE1';
+                } else if (array_key_exists('displayListCoffee2Atts', $_GET)) {
+                       $currentTable = 'LISTCOFFEE2';
                       handleDisplayAttsRequest($currentTable);
                 } else if (array_key_exists('displayAddToppingsAtts', $_GET)) {
                        $currentTable = 'ADDTOPPINGS';
@@ -389,6 +429,16 @@ function handleDisplayAttsRequest($currentTable)
                 } else if (array_key_exists('displayDeliverAtts', $_GET)) {
                        $currentTable = 'DELIVER';
                        handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('viewTableTuples', $_GET)) {
+                        $currentTable = $_GET['selectedTable'];
+                        $attributes = [
+                            $_GET['att1'],
+                            $_GET['att2'],
+                            $_GET['att3'],
+                            $_GET['att4'],
+                            $_GET['att5']
+                            ];
+                        handleDisplaySelectedTableRequest($currentTable, $attributes);
                 }
 
 			disconnectFromDB();
@@ -397,8 +447,9 @@ function handleDisplayAttsRequest($currentTable)
 
 	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayTableAttsRequest']))  {
-               handleGetRequest();
+	} else if (isset($_GET['displayTableAttsRequest']) ||
+	           isset($_GET['displayProjectionRequest']))  {
+               handleGETRequest();
 	} else {
 	if (connectToDB())
 	    //handleDisplayRequest();
