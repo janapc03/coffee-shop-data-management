@@ -1,5 +1,5 @@
 drop table Deliver;
-drop table Delivery;
+drop table Delivery cascade constraints;
 drop table Purchase;
 drop table Supplier;
 drop table ListToppings;
@@ -269,6 +269,7 @@ insert into Toppings values ('caramel drizzle', 'low');
 insert into Toppings values ('cinnamon', 'high');
 insert into Toppings values ('icing sugar', 'low');
 insert into Toppings values ('cocoa powder', 'high');
+insert into Toppings values ('no toppings', '0');
 
 insert into ListToppings values (to_date('2024-08-01','YYYY-MM-DD'), 'whipped cream', '4 bottles');
 insert into ListToppings values (to_date('2024-08-11','YYYY-MM-DD'), 'caramel drizzle', '2 bottles');
@@ -292,6 +293,7 @@ insert into Cream values ('coconut', 'low');
 insert into Cream values ('oat', 'low');
 insert into Cream values ('almond', 'high');
 insert into Cream values ('soy', 'high');
+insert into Cream values ('no cream', '0');
 
 insert into ListCream values (to_date('2024-08-01','YYYY-MM-DD'), 'half and half', '10 cartons');
 insert into ListCream values (to_date('2024-08-11','YYYY-MM-DD'), 'coconut', '5 cartons');
@@ -315,6 +317,7 @@ insert into Sweetener values ('cane sugar', 'low');
 insert into Sweetener values ('stevia', 'low');
 insert into Sweetener values ('vanilla syrup', 'high');
 insert into Sweetener values ('chocolate syrup', 'low');
+insert into Sweetener values ('no sweetener', '0');
 
 insert into ListSweetener values (to_date('2024-08-01','YYYY-MM-DD'), 'honey', '5 bottles');
 insert into ListSweetener values (to_date('2024-08-11','YYYY-MM-DD'), 'cane sugar', '5 bottles');
