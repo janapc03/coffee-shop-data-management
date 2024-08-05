@@ -93,7 +93,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <hr />
 
-    <div style="display:inline-block; width:45%;">
+    <div style="display:inline-block; width:45%; vertical-align: top">
     <h2>Display Iced Coffee Recipes</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayIceTuplesRequest" name="displayIceTuplesRequest">
@@ -120,21 +120,32 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="submit" value="Delete" name="deleteIceSubmit"></p>
     </form>
     </div>
+    <div style="display:inline-block; width:50%; vertical-align: top">
 
     <h2>Recipes With additions</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayAddTuplesRequest" name="displayAddTuplesRequest">
-        <input type="submit" value="Display Recipes" name="displayAddTuples"></p>
+        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+
+        <input type="radio" id="caf" name="de_caf" value="caf">
+        <label for="caf">Caffeinated</label><br>
+        <input type="radio" id="decaf" name="de_caf" value="decaf">
+        <label for="decaf">Decaffeinated</label><br>
+
+        <input type="submit" value="Display Addtional Toppings" name="displayAddToppingsTuples">
+        <input type="submit" value="Display Addtional Creams" name="displayAddCreamTuples">
+        <input type="submit" value="Display Addtional Sweeteners" name="displayAddSweetTuples">
     </form>
 
     <h2>List Recipes That Use All Additions</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayAllTuplesRequest" name="displayAllTuplesRequest">
-        <input type="submit" value="Display Recipes With All Toppings" name="displayAllToppings"><br /><br />
-        <input type="submit" value="Display Recipes With All Creams" name="displayAllCreams"><br /><br />
-        <input type="submit" value="Display Recipes With All Sweeteners" name="displayAllSweeteners"><br /><br />
+        <input type="submit" value="Display Recipes With All Toppings" name="displayAllToppings">
+        <input type="submit" value="Display Recipes With All Creams" name="displayAllCreams">
+        <input type="submit" value="Display Recipes With All Sweeteners" name="displayAllSweeteners">
         </p>
     </form>
+    </div>
 
     <hr />
 
@@ -246,6 +257,32 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
             echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['METHOD'] . "</td><td>" . $row['ICEAMOUNT'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+
+        echo "</table>";
+    }
+
+    function printAddCafResult($result, $add, $addName, $addAmount)
+    { //prints results from a select statement
+        echo "<table>";
+        echo "<h4> " . $add . " Used: </h4>";
+        echo "<tr><th>Coffee Name</th><th>Size</th><th>Roast Level</th><th>Espresso Shots</th><th>" . $add . "</th><th>Amount</th></tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row['NUMSHOTS'] . "</td><td>" . $row[$addName] . "</td><td>" . $row[$addAmount] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+
+        echo "</table>";
+    }
+
+    function printAddDecafResult($result, $add, $addName, $addAmount)
+    { //prints results from a select statement
+        echo "<table>";
+        echo "<h4> " . $add . " Used: </h4>";
+        echo "<tr><th>Coffee Name</th><th>Size</th><th>Roast Level</th><th>" . $add . "</th><th>Amount</th></tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row[$addName] . "</td><td>" . $row[$addAmount] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         echo "</table>";
@@ -401,6 +438,30 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         oci_commit($db_conn);
     }
 
+    function handleDisplayAddRequest($table, $add, $addName, $addAmount)
+    {
+        global $db_conn;
+        $coffee = 'Caffeinated';
+
+        if ($_GET['de_caf'] == 'decaf') {
+            $coffee = 'Decaf';
+        }
+
+        $name = $_GET['inCoffeeName'];
+
+        $result = executePlainSQL("SELECT * FROM " . $table . " a, " . $coffee . " c WHERE c.coffeeName = '" . $name . "' AND a.coffeeName = c.coffeeName AND a.coffeeSize = c.coffeeSize");
+        //$result = executePlainSQL("SELECT * FROM " . $table . " a, " . $coffee . " c WHERE c.coffeeName = '" . $name . "' AND a.coffeeName = c.coffeeName AND a.coffeeSize = c.coffeeSize");
+
+        if ($coffee == 'Caffeinated') {
+            printAddCafResult($result, $add, $addName, $addAmount);
+        } else {
+            printAddDecafResult($result, $add, $addName, $addAmount);
+        }
+
+        oci_commit($db_conn);
+
+    }
+
     function handleDeleteRequest($table)
     {
         global $db_conn;
@@ -452,6 +513,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			    handleDisplayRequest($table);
 			} else if (array_key_exists('displayIceTuples', $_GET)) {
 			    handleDisplayIceRequest();
+            } else if (array_key_exists('displayAddToppingsTuples', $_GET)) {
+                $table = 'addToppings';
+                $add = 'Toppings';
+                $addName = 'TOPPINGNAME';
+                $addAmount = 'TOPPINGAMOUNT';
+                handleDisplayAddRequest($table, $add, $addName, $addAmount);
+            } else if (array_key_exists('displayAddCreamTuples', $_GET)) {
+                $table = 'addCream';
+                $add = 'Creams';
+                $addName = 'CREAMNAME';
+                $addAmount = 'CUPAMOUNT';
+                handleDisplayAddRequest($table, $add, $addName, $addAmount);
+            } else if (array_key_exists('displayAddSweetTuples', $_GET)) {
+                $table = 'addSweetener';
+                $add = 'Sweeteners';
+                $addName = 'SWEETNAME';
+                $addAmount = 'SWEETENERAMOUNT';
+                handleDisplayAddRequest($table, $add, $addName, $addAmount);
             } else if (array_key_exists('displayAllToppings', $_GET)) {
                 $add = 'toppings t';
                 $addName = 't.toppingName';

@@ -253,6 +253,7 @@ insert into Fund values (to_date('2024-08-10','YYYY-MM-DD'), to_date('2024-08-09
 
 insert into Coffee values ('latte', 'extra large');
 insert into Coffee values ('macchiato', 'medium');
+insert into Coffee values ('macchiato', 'large');
 insert into Coffee values ('cappuccino', 'small');
 insert into Coffee values ('drip coffee', 'large');
 insert into Coffee values ('flat white', 'short');
@@ -283,6 +284,7 @@ insert into AddToppings values ('cocoa powder', '5 tsp', 'macchiato', 'medium');
 insert into AddToppings values ('cinnamon', '5 tsp', 'macchiato', 'medium');
 insert into AddToppings values ('icing sugar', '5 tsp', 'macchiato', 'medium');
 insert into AddToppings values ('whipped cream', '5 tsp', 'macchiato', 'medium');
+insert into AddToppings values ('whipped cream', '7 tsp', 'macchiato', 'large');
 
 insert into Cream values ('half and half', 'low');
 insert into Cream values ('coconut', 'low');
@@ -349,6 +351,7 @@ insert into Decaf values ('decaf flat white', 'short', 'low', 'dark');
 
 insert into Caffeinated values ('latte', 'extra large', 'high', 'light', 3);
 insert into Caffeinated values ('macchiato', 'medium', 'high', 'light', 2);
+insert into Caffeinated values ('macchiato', 'large', 'high', 'light', 3);
 insert into Caffeinated values ('cappuccino', 'small', 'high', 'medium', 1);
 insert into Caffeinated values ('drip coffee', 'large', 'high', 'dark', 3);
 insert into Caffeinated values ('flat white', 'short', 'high', 'dark', 0);
