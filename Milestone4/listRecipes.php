@@ -39,7 +39,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <hr />
 
     <div style="width:99%; margin:auto">
-        <div style="display:inline-block; width:33%;">
+        <div style="display:inline-block; width:33%; vertical-align: top">
         <h2>Insert New Caffeinated Coffee Recipes</h2>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="insertCafQueryRequest" name="insertCafQueryRequest">
@@ -52,7 +52,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         </form>
         </div>
 
-        <div style="display:inline-block; width:33%;">
+        <div style="display:inline-block; width:33%; vertical-align: top">
         <h2>Insert New Decaf Coffee Recipes</h2>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="insertDecafQueryRequest" name="insertDecafQueryRequest">
@@ -64,7 +64,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         </form>
         </div>
 
-        <div style="display:inline-block; width:33%;">
+        <div style="display:inline-block; width:33%; vertical-align: top">
         <h2>Delete Coffee Recipe</h2>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
@@ -120,6 +120,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="submit" value="Delete" name="deleteIceSubmit"></p>
     </form>
     </div>
+
+    <h2>Recipes With additions</h2>
+    <form method="GET" action="listRecipes.php">
+        <input type="hidden" id="displayAddTuplesRequest" name="displayAddTuplesRequest">
+        <input type="submit" value="Display Recipes" name="displayAddTuples"></p>
+    </form>
+
+    <h2>List Recipes That Use All Additions</h2>
+    <form method="GET" action="listRecipes.php">
+        <input type="hidden" id="displayAllTuplesRequest" name="displayAllTuplesRequest">
+        <input type="submit" value="Display Recipes With All Toppings" name="displayAllToppings"><br /><br />
+        <input type="submit" value="Display Recipes With All Creams" name="displayAllCreams"><br /><br />
+        <input type="submit" value="Display Recipes With All Sweeteners" name="displayAllSweeteners"><br /><br />
+        </p>
+    </form>
+
+    <hr />
 
 	<?php
 	// The following code will be parsed as PHP
@@ -369,6 +386,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         oci_commit($db_conn);
     }
 
+    function handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName)
+    {
+        global $db_conn;
+        $result = executePlainSQL("SELECT c.coffeeName FROM coffee c WHERE NOT EXISTS (SELECT " . $addName . " FROM " . $add . " WHERE NOT EXISTS (SELECT " . $addOnName . " FROM " . $addOn . " WHERE " . $addOnName . " = " . $addName . " AND a.coffeeName = c.coffeeName))");
+
+        echo "<h3>Coffee Recipes that add all " . $titleName . "</h3>";
+        echo "<table>";
+        while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+        echo "</table>";
+
+        oci_commit($db_conn);
+    }
+
     function handleDeleteRequest($table)
     {
         global $db_conn;
@@ -420,7 +452,28 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			    handleDisplayRequest($table);
 			} else if (array_key_exists('displayIceTuples', $_GET)) {
 			    handleDisplayIceRequest();
-			}
+            } else if (array_key_exists('displayAllToppings', $_GET)) {
+                $add = 'toppings t';
+                $addName = 't.toppingName';
+                $addOn = 'addToppings a';
+                $addOnName = 'a.toppingName';
+                $titleName = 'Toppings';
+                handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName);
+            } else if (array_key_exists('displayAllCreams', $_GET)) {
+                $add = 'cream cr';
+                $addName = 'cr.creamName';
+                $addOn = 'addCream a';
+                $addOnName = 'a.creamName';
+                $titleName = 'Creams';
+                handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName);
+            } else if (array_key_exists('displayAllSweeteners', $_GET)) {
+                $add = 'sweetener s';
+                $addName = 's.sweetName';
+                $addOn = 'addSweetener a';
+                $addOnName = 'a.sweetName';
+                $titleName = 'Sweeteners';
+                handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName);
+            }
 
 			disconnectFromDB();
 		}
@@ -430,13 +483,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	    isset($_POST['insertIceSubmit']) || isset($_POST['deleteIceSubmit'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest']) ||
-	            isset($_GET['displayIceTuplesRequest'])) {
+	            isset($_GET['displayIceTuplesRequest']) || isset($_GET['displayAddTuplesRequest']) || isset($_GET['displayAllTuplesRequest'])) {
 		handleGETRequest();
 	}
 
-	/*SELECT c.coffeeName FROM coffee c WHERE NOT EXISTS
-	(SELECT cr.creamName FROM cream cr WHERE NOT EXISTS
-	(SELECT a.creamName FROM addCream a WHERE a.creamName = cr.creamName AND a.coffeeName = c.coffeeName));*/
+	/*SELECT c.coffeeName FROM coffee c WHERE NOT EXISTS (SELECT cr.creamName FROM cream cr WHERE NOT EXISTS (SELECT a.creamName FROM addCream a WHERE a.creamName = cr.creamName AND a.coffeeName = c.coffeeName));*/
 
 	// End PHP parsing and send the rest of the HTML content
 	?>
