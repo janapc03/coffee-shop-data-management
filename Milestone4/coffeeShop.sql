@@ -267,7 +267,6 @@ insert into Toppings values ('caramel drizzle', 'low');
 insert into Toppings values ('cinnamon', 'high');
 insert into Toppings values ('icing sugar', 'low');
 insert into Toppings values ('cocoa powder', 'high');
-insert into Toppings values ('no toppings', '0');
 
 insert into ListToppings values (to_date('2024-08-01','YYYY-MM-DD'), 'whipped cream', '4 bottles');
 insert into ListToppings values (to_date('2024-08-11','YYYY-MM-DD'), 'caramel drizzle', '2 bottles');
@@ -280,18 +279,16 @@ insert into AddToppings values ('caramel drizzle', '3 tsp', 'macchiato', 'medium
 insert into AddToppings values ('cinnamon', '2 tsp', 'cappuccino', 'small');
 insert into AddToppings values ('icing sugar', '4 tsp', 'drip coffee', 'large');
 insert into AddToppings values ('cocoa powder', '1 tsp', 'flat white', 'short');
-insert into AddToppings values ('no toppings', '0', 'decaf latte', 'extra large');
-insert into AddToppings values ('no toppings', '0', 'decaf macchiato', 'medium');
-insert into AddToppings values ('no toppings', '0', 'decaf cappuccino', 'small');
-insert into AddToppings values ('no toppings', '0', 'decaf drip coffee', 'large');
-insert into AddToppings values ('no toppings', '0', 'decaf flat white', 'short');
+insert into AddToppings values ('caramel drizzle', '5 tsp', 'latte', 'extra large');
+insert into AddToppings values ('cinnamon', '5 tsp', 'latte', 'extra large');
+insert into AddToppings values ('icing sugar', '5 tsp', 'latte', 'extra large');
+insert into AddToppings values ('cocoa powder', '5 tsp', 'latte', 'extra large');
 
 insert into Cream values ('half and half', 'low');
 insert into Cream values ('coconut', 'low');
 insert into Cream values ('oat', 'low');
 insert into Cream values ('almond', 'high');
 insert into Cream values ('soy', 'high');
-insert into Cream values ('no cream', '0');
 
 insert into ListCream values (to_date('2024-08-01','YYYY-MM-DD'), 'half and half', '10 cartons');
 insert into ListCream values (to_date('2024-08-11','YYYY-MM-DD'), 'coconut', '5 cartons');
@@ -304,18 +301,16 @@ insert into AddCream values ('coconut', '1 cup', 'macchiato', 'medium');
 insert into AddCream values ('oat', '1/2  cup', 'cappuccino', 'small');
 insert into AddCream values ('almond', '1.5 cups', 'drip coffee', 'large');
 insert into AddCream values ('soy', '1/3 cup', 'flat white', 'short');
-insert into AddCream values ('no cream', '0', 'decaf latte', 'extra large');
-insert into AddCream values ('no cream', '0', 'decaf macchiato', 'medium');
-insert into AddCream values ('no cream', '0', 'decaf cappuccino', 'small');
-insert into AddCream values ('no cream', '0', 'decaf drip coffee', 'large');
-insert into AddCream values ('no cream', '0', 'decaf flat white', 'short');
+insert into AddCream values ('soy', '1/3 cup', 'latte', 'extra large');
+insert into AddCream values ('coconut', '1/3 cup', 'latte', 'extra large');
+insert into AddCream values ('oat', '1/3 cup', 'latte', 'extra large');
+insert into AddCream values ('almond', '1/3 cup', 'latte', 'extra large');
 
 insert into Sweetener values ('honey', 'high');
 insert into Sweetener values ('cane sugar', 'low');
 insert into Sweetener values ('stevia', 'low');
 insert into Sweetener values ('vanilla syrup', 'high');
 insert into Sweetener values ('chocolate syrup', 'low');
-insert into Sweetener values ('no sweetener', '0');
 
 insert into ListSweetener values (to_date('2024-08-01','YYYY-MM-DD'), 'honey', '5 bottles');
 insert into ListSweetener values (to_date('2024-08-11','YYYY-MM-DD'), 'cane sugar', '5 bottles');
@@ -328,11 +323,10 @@ insert into AddSweetener values ('cane sugar', '3 spoons', 'macchiato', 'medium'
 insert into AddSweetener values ('stevia', '2 pumps', 'cappuccino', 'small');
 insert into AddSweetener values ('vanilla syrup', '1 pump', 'drip coffee', 'large');
 insert into AddSweetener values ('chocolate syrup', '3 pumps', 'flat white', 'short');
-insert into AddSweetener values ('no sweetener', '0', 'decaf latte', 'extra large');
-insert into AddSweetener values ('no sweetener', '0', 'decaf macchiato', 'medium');
-insert into AddSweetener values ('no sweetener', '0', 'decaf cappuccino', 'small');
-insert into AddSweetener values ('no sweetener', '0', 'decaf drip coffee', 'large');
-insert into AddSweetener values ('no sweetener', '0', 'decaf flat white', 'short');
+insert into AddSweetener values ('honey', '2 pumps', 'decaf cappuccino', 'small');
+insert into AddSweetener values ('cane sugar', '2 pumps', 'decaf cappuccino', 'small');
+insert into AddSweetener values ('vanilla syrup', '2 pumps', 'decaf cappuccino', 'small');
+insert into AddSweetener values ('chocolate syrup', '2 pumps', 'decaf cappuccino', 'small');
 
 insert into ListCoffee1 values (to_date('2024-08-01','YYYY-MM-DD'), 'latte', 'extra large');
 insert into ListCoffee1 values (to_date('2024-08-11','YYYY-MM-DD'), 'macchiato', 'medium');

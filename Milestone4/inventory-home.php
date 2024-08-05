@@ -24,13 +24,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
 <?php include("homebar.php"); ?>
 
-<h1>Inventory of toppings</h1>
+<div style="width:99%; margin:auto">
+<div style="display:inline-block; width:24%;">
+<h2>Inventory of toppings</h2>
 <form method="GET" action="inventory-home.php">
     <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
     <input type="submit" name="displayToppingsTuples"> </p>
 </form>
 
-<h2>Update Inventory of Toppings</h2>
+<h3>Update Inventory of Toppings</h3>
 <form method="POST" action="inventory-home.php">
     <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
     Toppings name: <input type="text" name="name"> <br /><br />
@@ -39,7 +41,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="submit" value="Update" name="updateToppingsSubmit"></p>
 </form>
 
-<h2>Insert New Topping</h2>
+<h3>Insert New Topping</h3>
 <form method="POST" action="inventory-home.php">
     <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
     Topping Name: <input type="text" name="inName"> <br /><br />
@@ -47,16 +49,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <input type="submit" value="Insert" name="insertToppingSubmit"></p>
 </form>
+</div>
 
-<hr/>
-
-<h1>Inventory of creams</h1>
+<div style="display:inline-block; width:24%;">
+<h2>Inventory of creams</h2>
 <form method="GET" action="inventory-home.php">
     <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
     <input type="submit" name="displayCreamTuples"> </p>
 </form>
 
-<h2>Update Inventory of Creams</h2>
+<h3>Update Inventory of Creams</h3>
 <form method="POST" action="inventory-home.php">
     <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
     Cream name: <input type="text" name="name"> <br /><br />
@@ -65,7 +67,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="submit" value="Update" name="updateCreamSubmit"></p>
 </form>
 
-<h2>Insert New Cream</h2>
+<h3>Insert New Cream</h3>
 <form method="POST" action="inventory-home.php">
     <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
     Topping Name: <input type="text" name="inName"> <br /><br />
@@ -73,16 +75,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <input type="submit" value="Insert" name="insertCreamSubmit"></p>
 </form>
+</div>
 
-<hr/>
-
-<h1>Inventory of sweeteners</h1>
+<div style="display:inline-block; width:24%;">
+<h2>Inventory of sweeteners</h2>
 <form method="GET" action="inventory-home.php">
     <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
     <input type="submit" name="displaySweetenerTuples"> </p>
 </form>
 
-<h2>Update Inventory of Sweeteners</h2>
+<h3>Update Inventory of Sweeteners</h3>
 <form method="POST" action="inventory-home.php">
     <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
     Sweetener name: <input type="text" name="name"> <br /><br />
@@ -90,16 +92,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
 </form>
+</div>
 
-<hr/>
-
-<h1>Inventory of Coffee Beans</h1>
+<div style="display:inline-block; width:24%;">
+<h2>Inventory of Coffee Beans</h2>
 <form method="GET" action="inventory-home.php">
     <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
     <input type="submit" name="displayCoffeeTuples"> </p>
 </form>
 
-<h2>Update Inventory of Coffee Beans</h2>
+<h3>Update Inventory of Coffee Beans</h3>
 <form method="POST" action="inventory-home.php">
     <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
     Updated Caffeinated inventory: <input type="text" name="cafInv"> <br /><br />
@@ -107,7 +109,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
 </form>
+</div>
 
+</div>
+<hr/>
 <?php
 // The following code will be parsed as PHP
 
@@ -348,8 +353,6 @@ if (isset($_GET['displayToppingsTuplesRequest']) ||
     handlePostRequest();
 }
 ?>
-
-<hr/>
 
 </body>
 </html>

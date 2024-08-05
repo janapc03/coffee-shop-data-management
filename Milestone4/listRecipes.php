@@ -93,6 +93,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <hr />
 
+    <div style="display:inline-block; width:45%;">
     <h2>Display Iced Coffee Recipes</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayIceTuplesRequest" name="displayIceTuplesRequest">
@@ -109,6 +110,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         <input type="submit" value="Ice" name="insertIceSubmit"></p>
     </form>
+    <hr />
     <h2>Remove Iced Recipe</h2>
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="deleteIceQueryRequest" name="deleteIceQueryRequest">
@@ -117,6 +119,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         <input type="submit" value="Delete" name="deleteIceSubmit"></p>
     </form>
+    </div>
 
 	<?php
 	// The following code will be parsed as PHP
@@ -430,6 +433,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	            isset($_GET['displayIceTuplesRequest'])) {
 		handleGETRequest();
 	}
+
+	/*SELECT c.coffeeName FROM coffee c WHERE NOT EXISTS
+	(SELECT cr.creamName FROM cream cr WHERE NOT EXISTS
+	(SELECT a.creamName FROM addCream a WHERE a.creamName = cr.creamName AND a.coffeeName = c.coffeeName));*/
 
 	// End PHP parsing and send the rest of the HTML content
 	?>
