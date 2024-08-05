@@ -105,9 +105,34 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
     <?php include("homebar.php"); ?>
 <section class="container">
-  <nav class="userOptions">
-      <p> Currently in Progress </p>
-
+  <nav class="tableNameOptions">
+      <p> Select a table to view its attributes: </p>
+      <form method="GET" action="home-page.php" name="displayTableForm">
+          <input type="submit" value="Coffee" name="displayCoffeeAtts">
+          <input type="hidden" id="displayTableAttsRequest" name="displayTableAttsRequest">
+          <input type="submit" value="Toppings" name="displayToppingsAtts">
+          <input type="submit" value="Cream" name="displayCreamAtts">
+          <input type="submit" value="Sweetener" name="displaySweetenerAtts">
+          <input type="submit" value="Decaf" name="displayDecafAtts">
+          <input type="submit" value="Caffeinated" name="displayCaffeinatedAtts">
+          <input type="submit" value="Iced Coffee" name="displayIcedCoffeeAtts">
+          <input type="submit" value="Delivery" name="displayDeliveryAtts">
+          <input type="submit" value="Supplier" name="displaySupplierAtts">
+          <input type="submit" value="Shopping List" name="displayShoppingListAtts">
+          <input type="submit" value="Purchase" name="displayPurchaseAtts">
+          <input type="submit" value="Sales" name="displaySalesAtts">
+          <input type="submit" value="Fund" name="displayFundAtts">
+          <input type="submit" value="List Toppings" name="displayListToppingsAtts">
+          <input type="submit" value="List Cream" name="displayListCreamAtts">
+          <input type="submit" value="List Sweetener" name="displayListSweetenerAtts">
+          <input type="submit" value="List Coffee" name="displayListCoffeeAtts">
+          <input type="submit" value="Add Toppings" name="displayAddToppingsAtts">
+          <input type="submit" value="Add Cream" name="displayAddCreamAtts">
+          <input type="submit" value="Add Sweetener" name="displayAddSweetenerAtts">
+          <input type="submit" value="Add Coffee" name="displayAddCoffeeAtts">
+          <input type="submit" value="Deliver" name="displayDeliverAtts">
+      </form>
+                 </div>
         </nav>
 
     <article>
@@ -192,40 +217,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printResult($result)
         	{ //prints results from a select statement
-        		echo '<br /><table class="past-purchases-table">';
-        		echo "<thead><tr><th>Tracking Num.</th><th>Expected By</th><th>Supplier</th><th>Order Date</th><th>Total Cost</th></tr><tbody>";
+        		echo '<br /><table class="attributes-table">';
+        		echo "<thead><tr><th>Attributes</th></tr><tbody>";
 
         		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-
         			echo "<tr>";
-                        echo "<td>" . $row['TRACKINGNUM'] . "</td>";
-                        echo "<td>" . $row['EXPECTEDDATE'] . "</td>";
-                        echo "<td>" . $row['SUPNAME'] . "</td>";
-                        echo "<td>" . $row['LISTDATE'] . "</td>";
-                        echo "<td>" . $row['PRICE'] . "</td>";
+                        echo "<td>" . $row['COLUMN_NAME'] . "</td>";
                         echo "</tr>"; //or just use "echo $row[0]"
         		}
 
         		echo "</tbody></table>";
         	}
-
-    function printAvgResult($result)
-            	{ //prints results from a select statement
-            		echo '<br /><table class="avg-cost-table">';
-            		echo "<thead><tr><th>Supplier</th><th>Num. of Orders</th><th>Average Order Cost</th></tr><tbody>";
-
-            		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-
-            			echo "<tr>";
-                            echo "<td>" . $row['SUPNAME'] . "</td>";
-                            echo "<td>" . $row['COUNT_SUPNAME'] . "</td>";
-                            echo "<td>" . $row['AVG_PRICE'] . "</td>";
-                            echo "</tr>"; //or just use "echo $row[0]"
-            		}
-
-            		echo "</tbody></table>";
-            	}
-
 
 
 	function connectToDB()
@@ -275,28 +277,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleDisplayAvgCostRequest()
+
+function handleDisplayAttsRequest($currentTable)
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT d.supName AS SUPNAME, COUNT(d.supName) AS COUNT_SUPNAME, AVG(p.price) AS AVG_PRICE
-		 FROM Deliver d, Delivery dy, Purchase p, ShoppingList sl
-		 WHERE d.trackingNum=dy.trackingNum
-		 AND dy.trackingNum=p.trackingNum
-		 AND p.listDate=sl.listDate
-		 GROUP BY d.supName");
-		printAvgResult($result);
-
-		oci_commit($db_conn);
-	}
-
-function handleDisplayRequest()
-	{
-		global $db_conn;
-		$result = executePlainSQL("SELECT d.trackingNum, dy.expectedDate, d.supName, p.listDate, p.price
-		 FROM Deliver d, Delivery dy, Purchase p, ShoppingList sl
-		 WHERE d.trackingNum=dy.trackingNum
-		 AND dy.trackingNum=p.trackingNum
-		 AND p.listDate=sl.listDate");
+		$result = executePlainSQL("SELECT COLUMN_NAME
+		    FROM user_tab_columns
+		    WHERE table_name='$currentTable'");
 		printResult($result);
 
 		oci_commit($db_conn);
@@ -321,28 +308,74 @@ function handleDisplayRequest()
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-                if (array_key_exists('displayAvgCostsTuples', $_GET)) {
-                    handleDisplayAvgCostRequest();
-                } else if (array_key_exists('displayCreamTuples', $_GET)) {
-                    $table = 'cream';
-                    $name = 'CREAMNAME';
-                    $inv= 'CREAMINV';
-                    handleDisplayItemsRequest($table, $name, $inv);
-                } else if (array_key_exists('displaySweetenerTuples', $_GET)) {
-                    $table = 'sweetener';
-                    $name = 'SWEETNAME';
-                    $inv= 'SWEETENERINV';
-                    handleDisplayItemsRequest($table, $name, $inv);
-                } else if (array_key_exists('displayCafTuples', $_GET)) {
-                    $table = 'caffeinated';
-                    $name = 'BEANTYPE';
-                    $inv= 'COFFEEINV';
-                    handleDisplayCoffeeRequest($table, $name, $inv);
-                } else if (array_key_exists('displayDecafTuples', $_GET)) {
-                    $table = 'decaf';
-                    $name = 'BEANTYPE';
-                    $inv= 'COFFEEINV';
-                    handleDisplayCoffeeRequest($table, $name, $inv);
+                if (array_key_exists('displayToppingsAtts', $_GET)) {
+                    $currentTable = 'TOPPINGS';
+                    handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayCoffeeAtts', $_GET)) {
+                    $currentTable = 'COFFEE';
+                    handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayCreamAtts', $_GET)) {
+                     $currentTable = 'CREAM';
+                     handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displaySweetenerAtts', $_GET)) {
+                    $currentTable = 'SWEETENER';
+                    handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayDecafAtts', $_GET)) {
+                    $currentTable = 'DECAF';
+                    handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayCaffeinatedAtts', $_GET)) {
+                    $currentTable = 'CAFFEINATED';
+                    handleDisplayAttsRequest($currentTable);
+                }else if (array_key_exists('displayIcedCoffeeAtts', $_GET)) {
+                     $currentTable = 'ICEDCOFFEE';
+                     handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayDeliveryAtts', $_GET)) {
+                     $currentTable = 'DELIVERY';
+                     handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displaySupplierAtts', $_GET)) {
+                     $currentTable = 'SUPPLIER';
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayShoppingListAtts', $_GET)) {
+                      $currentTable = 'SHOPPINGLIST';
+                      handleDisplayAttsRequest($currentTable);
+                }else if (array_key_exists('displayPurchaseAtts', $_GET)) {
+                      $currentTable = 'PURCHASE';
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displaySalesAtts', $_GET)) {
+                      $currentTable = 'SALES';
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayFundAtts', $_GET)) {
+                      $currentTable = 'FUND';
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayListToppingsAtts', $_GET)) {
+                      $currentTable = 'LISTTOPPINGS';
+                      handleDisplayAttsRequest($currentTable);
+                }else if (array_key_exists('displayListCreamAtts', $_GET)) {
+                      $currentTable = 'LISTCREAM';
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayListSweetenerAtts', $_GET)) {
+                      $currentTable = 'LISTSWEETENER';
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayListCoffeeAtts', $_GET)) {
+                      $currentTable = executePlainSQL("SELECT *
+                                      		    FROM listCoffee1 lcf1, listCoffee2 lcf2
+                                      		    WHERE lcf1.listDate=lcf2.listDate'");
+                      handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayAddToppingsAtts', $_GET)) {
+                       $currentTable = 'ADDTOPPINGS';
+                       handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayAddCreamAtts', $_GET)) {
+                       $currentTable = 'ADDCREAM';
+                       handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayAddSweetenerAtts', $_GET)) {
+                       $currentTable = 'ADDSWEETENER';
+                       handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayAddCoffeeAtts', $_GET)) {
+                       $currentTable = 'ADDCOFFEE';
+                       handleDisplayAttsRequest($currentTable);
+                } else if (array_key_exists('displayDeliverAtts', $_GET)) {
+                       $currentTable = 'DELIVER';
+                       handleDisplayAttsRequest($currentTable);
                 }
 
 			disconnectFromDB();
@@ -351,12 +384,11 @@ function handleDisplayRequest()
 
 	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayAvgCostsRequest']) ||
-               isset($_GET['displayCreamTuplesRequest']))  {
+	} else if (isset($_GET['displayTableAttsRequest']))  {
                handleGetRequest();
 	} else {
 	if (connectToDB())
-	    handleDisplayRequest();
+	    //handleDisplayRequest();
 	    disconnectFromDB();
 	}
 
