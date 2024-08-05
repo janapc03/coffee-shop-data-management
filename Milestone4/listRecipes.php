@@ -50,6 +50,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
             <input type="submit" value="Insert" name="insertCafSubmit"></p>
         </form>
+        <h3>Insert Toppings, Creams, and Sweeteners to Coffee Recipes</h3>
+        <form method="POST" action="listRecipes.php">
+            <input type="hidden" id="insertAddQueryRequest" name="insertAddQueryRequest">
+            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
+            Additions Name: <input type="text" name="inAdd"> <br /><br />
+            Additions amount: <input type="text" name="inAddAm"> <br /><br />
+
+            <input type="radio" id="topping" name="add" value="topping">
+            <label for="topping">Toppings</label><br>
+            <input type="radio" id="cream" name="add" value="cream">
+            <label for="cream">Creams</label><br>
+            <input type="radio" id="sweet" name="add" value="sweet">
+            <label for="sweet">Sweeteners</label><br>
+
+            <input type="submit" value="Insert" name="insertAddSubmit"></p>
+        </form>
         </div>
 
         <div style="display:inline-block; width:33%; vertical-align: top">
@@ -62,6 +79,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
             <input type="submit" value="Insert" name="insertDecafSubmit"></p>
         </form>
+        <h3>Remove Toppings, Creams, and Sweeteners From Coffee Recipes</h3>
+        <form method="POST" action="listRecipes.php">
+            <input type="hidden" id="deleteAddQueryRequest" name="deleteAddQueryRequest">
+            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
+            Additions Name: <input type="text" name="inAdd"> <br /><br />
+
+            <input type="radio" id="topping" name="add" value="topping">
+            <label for="topping">Toppings</label><br>
+            <input type="radio" id="cream" name="add" value="cream">
+            <label for="cream">Creams</label><br>
+            <input type="radio" id="sweet" name="add" value="sweet">
+            <label for="sweet">Sweeteners</label><br>
+
+            <input type="submit" value="Delete" name="deleteAddSubmit"></p>
+        </form>
+
+
         </div>
 
         <div style="display:inline-block; width:33%; vertical-align: top">
@@ -93,13 +128,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <hr />
 
-    <div style="display:inline-block; width:45%; vertical-align: top">
+    <div style="display:inline-block; width:49%; vertical-align: top">
     <h2>Display Iced Coffee Recipes</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayIceTuplesRequest" name="displayIceTuplesRequest">
         <input type="submit" value="Display Recipes" name="displayIceTuples"></p>
     </form>
     <hr />
+    <div style="display:inline-block; width:55%; vertical-align: top">
     <h2>Select Recipe to Ice</h2>
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="insertIceQueryRequest" name="insertIceQueryRequest">
@@ -110,7 +146,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         <input type="submit" value="Ice" name="insertIceSubmit"></p>
     </form>
-    <hr />
+    </div>
+    <div style="display:inline-block; width:44%; vertical-align: top">
     <h2>Remove Iced Recipe</h2>
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="deleteIceQueryRequest" name="deleteIceQueryRequest">
@@ -120,8 +157,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="submit" value="Delete" name="deleteIceSubmit"></p>
     </form>
     </div>
-    <div style="display:inline-block; width:50%; vertical-align: top">
+    </div>
 
+
+    <div style="display:inline-block; width:50%; vertical-align: top">
     <h2>Recipes With additions</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayAddTuplesRequest" name="displayAddTuplesRequest">
@@ -394,6 +433,36 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	    oci_commit($db_conn);
 	}
 
+    function handleAddRequest()
+    {
+        global $db_conn;
+
+        $tuple = array(
+            ":bind1" => $_POST['inAdd'],
+            ":bind2" => $_POST['inAddAm'],
+            ":bind3" => $_POST['inCoffeeName'],
+            ":bind4" => $_POST['inCoffeeSize']
+        );
+
+        $alltuples = array(
+            $tuple
+        );
+
+        if ($_POST['add'] == 'topping') {
+            $table = 'addToppings';
+        } else if ($_POST['add'] == 'cream') {
+            $table = 'addCream';
+        } else if ($_POST['add'] == 'sweet') {
+            $table = 'addSweetener';
+        } else {
+            exit();
+        }
+
+        executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
+
+        oci_commit($db_conn);
+    }
+
 	function handleDisplayRequest($table)
 	{
 		global $db_conn;
@@ -426,12 +495,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName)
     {
         global $db_conn;
-        $result = executePlainSQL("SELECT c.coffeeName FROM coffee c WHERE NOT EXISTS (SELECT " . $addName . " FROM " . $add . " WHERE NOT EXISTS (SELECT " . $addOnName . " FROM " . $addOn . " WHERE " . $addOnName . " = " . $addName . " AND a.coffeeName = c.coffeeName))");
+        $result = executePlainSQL("SELECT * FROM coffee c WHERE NOT EXISTS (SELECT " . $addName . " FROM " . $add . " WHERE NOT EXISTS (SELECT " . $addOnName . " FROM " . $addOn . " WHERE " . $addOnName . " = " . $addName . " AND a.coffeeName = c.coffeeName))");
 
         echo "<h3>Coffee Recipes that add all " . $titleName . "</h3>";
         echo "<table>";
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td></tr>"; //or just use "echo $row[0]"
         }
         echo "</table>";
 
@@ -441,16 +510,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function handleDisplayAddRequest($table, $add, $addName, $addAmount)
     {
         global $db_conn;
-        $coffee = 'Caffeinated';
+
 
         if ($_GET['de_caf'] == 'decaf') {
             $coffee = 'Decaf';
+        } else if ($_GET['de_caf'] == 'caf') {
+            $coffee = 'Caffeinated';
+        } else {
+            exit();
         }
 
         $name = $_GET['inCoffeeName'];
 
         $result = executePlainSQL("SELECT * FROM " . $table . " a, " . $coffee . " c WHERE c.coffeeName = '" . $name . "' AND a.coffeeName = c.coffeeName AND a.coffeeSize = c.coffeeSize");
-        //$result = executePlainSQL("SELECT * FROM " . $table . " a, " . $coffee . " c WHERE c.coffeeName = '" . $name . "' AND a.coffeeName = c.coffeeName AND a.coffeeSize = c.coffeeSize");
 
         if ($coffee == 'Caffeinated') {
             printAddCafResult($result, $add, $addName, $addAmount);
@@ -473,6 +545,33 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         oci_commit($db_conn);
     }
 
+    function handleDelAddRequest()
+    {
+        global $db_conn;
+
+        if ($_POST['add'] == 'topping') {
+            $table = 'addToppings';
+            $addName = 'toppingName';
+        } else if ($_POST['add'] == 'cream') {
+            $table = 'addCream';
+            $addName = 'creamName';
+        } else if ($_POST['add'] == 'sweet') {
+            $table = 'addSweetener';
+            $addName = 'sweetName';
+        } else {
+            exit();
+        }
+
+        $name = $_POST['inCoffeeName'];
+        $size = $_POST['inCoffeeSize'];
+        $add = $_POST['inAdd'];
+
+        executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $name . "' AND coffeeSize='" . $size . "' AND " . $addName . "='" . $add . "'");
+        oci_commit($db_conn);
+    }
+
+
+
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handlePOSTRequest()
@@ -492,6 +591,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             } else if (array_key_exists('deleteIceQueryRequest', $_POST)) {
                 $table = 'icedCoffee';
                 handleDeleteRequest($table);
+            } else if (array_key_exists('insertAddQueryRequest', $_POST)) {
+                handleAddRequest();
+            } else if (array_key_exists('deleteAddQueryRequest', $_POST)) {
+                handleDelAddRequest();
             }
 
 			disconnectFromDB();
@@ -559,7 +662,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	}
 
 	if (isset($_POST['insertCafSubmit']) || isset($_POST['insertDecafSubmit']) || isset($_POST['deleteSubmit']) ||
-	    isset($_POST['insertIceSubmit']) || isset($_POST['deleteIceSubmit'])) {
+	    isset($_POST['insertIceSubmit']) || isset($_POST['deleteIceSubmit']) ||
+	    isset($_POST['insertAddSubmit']) || isset($_POST['deleteAddSubmit'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest']) ||
 	            isset($_GET['displayIceTuplesRequest']) || isset($_GET['displayAddTuplesRequest']) || isset($_GET['displayAllTuplesRequest'])) {
