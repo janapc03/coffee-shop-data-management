@@ -345,13 +345,13 @@ insert into AddSweetener values ('vanilla syrup', '2 pumps', 'decaf cappuccino',
 insert into AddSweetener values ('chocolate syrup', '2 pumps', 'decaf cappuccino', 'small');
 
 insert into ListCoffee1 values (to_date('2024-08-01','YYYY-MM-DD'), 'latte', 'extra large');
-insert into ListCoffee1 values (to_date('2024-06-18','YYYY-MM-DD'), 'flat whie', 'small');
-insert into ListCoffee1 values (to_date('2024-05-22','YYYY-MM-DD'), 'cappuccino', 'extra large');
+insert into ListCoffee1 values (to_date('2024-06-18','YYYY-MM-DD'), 'cappuccino', 'small');
+insert into ListCoffee1 values (to_date('2024-05-22','YYYY-MM-DD'), 'decaf latte', 'extra large');
 insert into ListCoffee1 values (to_date('2024-08-11','YYYY-MM-DD'), 'macchiato', 'medium');
 insert into ListCoffee1 values (to_date('2024-08-15','YYYY-MM-DD'), 'cappuccino', 'small');
 insert into ListCoffee1 values (to_date('2024-08-20','YYYY-MM-DD'), 'drip coffee', 'large');
 insert into ListCoffee1 values (to_date('2024-08-10','YYYY-MM-DD'), 'flat white', 'short');
-insert into ListCoffee1 values (to_date('2024-07-19','YYYY-MM-DD'), 'latte', 'medium');
+insert into ListCoffee1 values (to_date('2024-07-19','YYYY-MM-DD'), 'macchiato', 'medium');
 
 insert into ListCoffee2 values (to_date('2024-08-01','YYYY-MM-DD'), '5 bottles', 10);
 insert into ListCoffee2 values (to_date('2024-08-11','YYYY-MM-DD'), '6 bottles', 150);

@@ -184,6 +184,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <input type="submit" value="Display Recipes With All Sweeteners" name="displayAllSweeteners">
         </p>
     </form>
+
+    <h2>List The Number of Additions for Recipes With Multiple Additions</h2>
+    <form method="GET" action="listRecipes.php">
+        <input type="hidden" id="displayNumTuplesRequest" name="displayNumTuplesRequest">
+        <input type="submit" value="Display Recipes Number of Toppings" name="displayNumToppings">
+        <input type="submit" value="Display Recipes Number of Creams" name="displayNumCreams">
+        <input type="submit" value="Display Recipes Number of Sweeteners" name="displayNumSweeteners">
+        </p>
+    </form>
     </div>
 
     <hr />
@@ -499,6 +508,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         echo "<h3>Coffee Recipes that add all " . $titleName . "</h3>";
         echo "<table>";
+        echo "<tr><th>Name</th><th>Size</th></tr>";
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
             echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td></tr>"; //or just use "echo $row[0]"
         }
@@ -531,7 +541,22 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         }
 
         oci_commit($db_conn);
+    }
 
+    function handleDisplayNumRequest($table, $name, $titleName)
+    {
+        global $db_conn;
+        $result = executePlainSQL("SELECT coffeeName, COUNT(" .$name. ") as num FROM " . $table . " GROUP BY coffeeName HAVING COUNT(*)>1");
+
+        echo "<h3>Coffee Recipes With Multiple " . $titleName . " and How Many</h3>";
+        echo "<table>";
+        echo "<tr><th>Name</th><th>Number of " . $titleName . "</th></tr>";
+        while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['NUM'] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+        echo "</table>";
+
+        oci_commit($db_conn);
     }
 
     function handleDeleteRequest($table)
@@ -655,6 +680,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                 $addOnName = 'a.sweetName';
                 $titleName = 'Sweeteners';
                 handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName);
+            } else if (array_key_exists('displayNumToppings', $_GET)) {
+                $table = 'addToppings';
+                $name = 'toppingName';
+                $titleName = 'Toppings';
+                handleDisplayNumRequest($table, $name, $titleName);
+            } else if (array_key_exists('displayNumCreams', $_GET)) {
+                $table = 'addCream';
+                $name = 'creamName';
+                $titleName = 'Creams';
+                handleDisplayNumRequest($table, $name, $titleName);
+            } else if (array_key_exists('displayNumSweeteners', $_GET)) {
+                $table = 'addSweetener';
+                $name = 'sweetName';
+                $titleName = 'Sweeteners';
+                handleDisplayNumRequest($table, $name, $titleName);
             }
 
 			disconnectFromDB();
@@ -666,7 +706,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	    isset($_POST['insertAddSubmit']) || isset($_POST['deleteAddSubmit'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayCafTuplesRequest']) || isset($_GET['displayDecafTuplesRequest']) ||
-	            isset($_GET['displayIceTuplesRequest']) || isset($_GET['displayAddTuplesRequest']) || isset($_GET['displayAllTuplesRequest'])) {
+	            isset($_GET['displayIceTuplesRequest']) || isset($_GET['displayAddTuplesRequest']) ||
+	            isset($_GET['displayAllTuplesRequest']) || isset($_GET['displayNumTuplesRequest'])) {
 		handleGETRequest();
 	}
 
