@@ -18,98 +18,107 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <html>
 
 <head>
-  <title>Inventory</title>
+    <title>Inventory</title>
 </head>
 
 <body>
 <?php include("homebar.php"); ?>
 
 <div style="width:99%; margin:auto">
-<div style="display:inline-block; width:24%;">
-<h2>Inventory of toppings</h2>
-<form method="GET" action="inventory-home.php">
-    <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
-    <input type="submit" name="displayToppingsTuples"> </p>
-</form>
+    <div style="display:inline-block; width:24%;">
+        <h2>Inventory of toppings</h2>
+        <form method="GET" action="inventory-home.php">
+            <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
+            <input type="submit" name="displayToppingsTuples"> </p>
+        </form>
 
-<h3>Update Inventory of Toppings</h3>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
-    Toppings name: <input type="text" name="name"> <br /><br />
-    Updated inventory: <input type="text" name="inv"> <br /><br />
+        <h3>Update Inventory of Toppings</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
+            Toppings name: <input type="text" name="name"> <br /><br />
+            Updated inventory: <input type="text" name="inv"> <br /><br />
 
-    <input type="submit" value="Update" name="updateToppingsSubmit"></p>
-</form>
+            <input type="submit" value="Update" name="updateToppingsSubmit"></p>
+        </form>
 
-<h3>Insert New Topping</h3>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
-    Topping Name: <input type="text" name="inName"> <br /><br />
-    Amount in inventory: <input type="text" name="inInv"> <br /><br />
+        <h3>Insert New Topping</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
+            Topping Name: <input type="text" name="inName"> <br /><br />
+            Amount in inventory: <input type="text" name="inInv"> <br /><br />
 
-    <input type="submit" value="Insert" name="insertToppingSubmit"></p>
-</form>
-</div>
+            <input type="submit" value="Insert" name="insertToppingSubmit"></p>
+        </form>
+    </div>
 
-<div style="display:inline-block; width:24%;">
-<h2>Inventory of creams</h2>
-<form method="GET" action="inventory-home.php">
-    <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
-    <input type="submit" name="displayCreamTuples"> </p>
-</form>
+    <div style="display:inline-block; width:24%;">
+        <h2>Inventory of creams</h2>
+        <form method="GET" action="inventory-home.php">
+            <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
+            <input type="submit" name="displayCreamTuples"> </p>
+        </form>
 
-<h3>Update Inventory of Creams</h3>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
-    Cream name: <input type="text" name="name"> <br /><br />
-    Updated inventory: <input type="text" name="inv"> <br /><br />
+        <h3>Update Inventory of Creams</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
+            Cream name: <input type="text" name="name"> <br /><br />
+            Updated inventory: <input type="text" name="inv"> <br /><br />
 
-    <input type="submit" value="Update" name="updateCreamSubmit"></p>
-</form>
+            <input type="submit" value="Update" name="updateCreamSubmit"></p>
+        </form>
 
-<h3>Insert New Cream</h3>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
-    Topping Name: <input type="text" name="inName"> <br /><br />
-    Amount in inventory: <input type="text" name="inInv"> <br /><br />
+        <h3>Insert New Cream</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
+            Topping Name: <input type="text" name="inName"> <br /><br />
+            Amount in inventory: <input type="text" name="inInv"> <br /><br />
 
-    <input type="submit" value="Insert" name="insertCreamSubmit"></p>
-</form>
-</div>
+            <input type="submit" value="Insert" name="insertCreamSubmit"></p>
+        </form>
+    </div>
 
-<div style="display:inline-block; width:24%;">
-<h2>Inventory of sweeteners</h2>
-<form method="GET" action="inventory-home.php">
-    <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
-    <input type="submit" name="displaySweetenerTuples"> </p>
-</form>
+    <div style="display:inline-block; width:24%;">
+        <h2>Inventory of sweeteners</h2>
+        <form method="GET" action="inventory-home.php">
+            <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
+            <input type="submit" name="displaySweetenerTuples"> </p>
+        </form>
 
-<h3>Update Inventory of Sweeteners</h3>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
-    Sweetener name: <input type="text" name="name"> <br /><br />
-    Updated inventory: <input type="text" name="inv"> <br /><br />
+        <h3>Update Inventory of Sweeteners</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
+            Sweetener name: <input type="text" name="name"> <br /><br />
+            Updated inventory: <input type="text" name="inv"> <br /><br />
 
-    <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
-</form>
-</div>
+            <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
+        </form>
 
-<div style="display:inline-block; width:24%;">
-<h2>Inventory of Coffee Beans</h2>
-<form method="GET" action="inventory-home.php">
-    <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
-    <input type="submit" name="displayCoffeeTuples"> </p>
-</form>
+        <h3>Insert New Sweetener</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="insertSweetenerQueryRequest" name="insertSweetenerQueryRequest">
+            Topping Name: <input type="text" name="inName"> <br /><br />
+            Amount in inventory: <input type="text" name="inInv"> <br /><br />
 
-<h3>Update Inventory of Coffee Beans</h3>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
-    Updated Caffeinated inventory: <input type="text" name="cafInv"> <br /><br />
-    Updated Decaffeinated inventory: <input type="text" name="decafInv"> <br /><br />
+            <input type="submit" value="Insert" name="insertSweetenerSubmit"></p>
+        </form>
+    </div>
 
-    <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
-</form>
-</div>
+    <div style="display:inline-block; width:24%;">
+        <h2>Inventory of Coffee Beans</h2>
+        <form method="GET" action="inventory-home.php">
+            <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
+            <input type="submit" name="displayCoffeeTuples"> </p>
+        </form>
+
+        <h3>Update Inventory of Coffee Beans</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
+            Updated Caffeinated inventory: <input type="text" name="cafInv"> <br /><br />
+            Updated Decaffeinated inventory: <input type="text" name="decafInv"> <br /><br />
+
+            <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
+        </form>
+    </div>
 
 </div>
 <hr/>
@@ -253,6 +262,26 @@ function handleUpdateRequest($table, $inv, $name)
     oci_commit($db_conn);
 }
 
+
+function handleInsertRequest($table)
+{
+    global $db_conn;
+
+    //Getting the values from user and insert data into the table
+    $tuple = array(
+        ":bind1" => $_POST['inName'],
+        ":bind2" => $_POST['inInv'],
+    );
+
+    $alltuples = array(
+        $tuple
+    );
+
+    executeBoundSQL("insert into " . $table . " values (:bind1, :bind2)", $alltuples);
+
+    oci_commit($db_conn);
+}
+
 function handleUpdateCoffeeRequest()
 {
     global $db_conn;
@@ -287,31 +316,40 @@ function handleDisplayCoffeeRequest()
 }
 
 // HANDLE ALL POST ROUTES
-	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-	function handlePostRequest()
-	{
-		if (connectToDB()) {
-			if (array_key_exists('updateToppingsRequest', $_POST)) {
-			    $table = 'toppings';
-			    $inv = 'toppingInv';
-			    $name = 'toppingName';
-				handleUpdateRequest($table, $inv, $name);
-			} else if (array_key_exists('updateCreamRequest', $_POST)) {
-                $table = 'cream';
-                $inv = 'creamInv';
-                $name = 'creamName';
-                handleUpdateRequest($table, $inv, $name);
-            } else if (array_key_exists('updateSweetenerRequest', $_POST)) {
-                $table = 'sweetener';
-                $inv = 'sweetenerInv';
-                $name = 'sweetName';
-                handleUpdateRequest($table, $inv, $name);
-            } else if (array_key_exists('updateCoffeeRequest', $_POST)) {
-                handleUpdateCoffeeRequest();
-            }
-			disconnectFromDB();
-		}
-	}
+// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
+function handlePostRequest()
+{
+    if (connectToDB()) {
+        if (array_key_exists('updateToppingsRequest', $_POST)) {
+            $table = 'toppings';
+            $inv = 'toppingInv';
+            $name = 'toppingName';
+            handleUpdateRequest($table, $inv, $name);
+        } else if (array_key_exists('updateCreamRequest', $_POST)) {
+            $table = 'cream';
+            $inv = 'creamInv';
+            $name = 'creamName';
+            handleUpdateRequest($table, $inv, $name);
+        } else if (array_key_exists('updateSweetenerRequest', $_POST)) {
+            $table = 'sweetener';
+            $inv = 'sweetenerInv';
+            $name = 'sweetName';
+            handleUpdateRequest($table, $inv, $name);
+        } else if (array_key_exists('updateCoffeeRequest', $_POST)) {
+            handleUpdateCoffeeRequest();
+        } else if (array_key_exists('insertToppingQueryRequest', $_POST)) {
+            $table = 'toppings';
+            handleInsertRequest($table);
+        } else if (array_key_exists('insertCreamQueryRequest', $_POST)) {
+            $table = 'cream';
+            handleInsertRequest($table);
+        } else if (array_key_exists('insertSweetenerQueryRequest', $_POST)) {
+            $table = 'sweetener';
+            handleInsertRequest($table);
+        }
+        disconnectFromDB();
+    }
+}
 
 // HANDLE ALL GET ROUTES
 // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -346,9 +384,12 @@ if (isset($_GET['displayToppingsTuplesRequest']) ||
     isset($_GET['displayCoffeeTuplesRequest'])) {
     handleGetRequest();
 } else if (isset($_POST['updateToppingsSubmit']) ||
-            isset($_POST['updateCreamSubmit']) ||
-            isset($_POST['updateSweetenerSubmit']) ||
-            isset($_POST['updateCoffeeSubmit'])) {
+    isset($_POST['updateCreamSubmit']) ||
+    isset($_POST['updateSweetenerSubmit']) ||
+    isset($_POST['updateCoffeeSubmit']) ||
+    isset($_POST['insertToppingSubmit']) ||
+    isset($_POST['insertCreamSubmit']) ||
+    isset($_POST['insertSweetenerSubmit'])) {
 
     handlePostRequest();
 }
