@@ -115,22 +115,22 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
           <input type="submit" value="Sweetener" name="displaySweetenerAtts">
           <input type="submit" value="Decaf" name="displayDecafAtts">
           <input type="submit" value="Caffeinated" name="displayCaffeinatedAtts">
-          <input type="submit" value="Iced Coffee" name="displayIcedCoffeeAtts">
+          <input type="submit" value="IcedCoffee" name="displayIcedCoffeeAtts">
           <input type="submit" value="Delivery" name="displayDeliveryAtts">
           <input type="submit" value="Supplier" name="displaySupplierAtts">
-          <input type="submit" value="Shopping List" name="displayShoppingListAtts">
+          <input type="submit" value="ShoppingList" name="displayShoppingListAtts">
           <input type="submit" value="Purchase" name="displayPurchaseAtts">
           <input type="submit" value="Sales" name="displaySalesAtts">
           <input type="submit" value="Fund" name="displayFundAtts">
-          <input type="submit" value="List Toppings" name="displayListToppingsAtts">
-          <input type="submit" value="List Cream" name="displayListCreamAtts">
-          <input type="submit" value="List Sweetener" name="displayListSweetenerAtts">
-          <input type="submit" value="List Coffee1" name="displayListCoffee1Atts">
-          <input type="submit" value="List Coffee2" name="displayListCoffee2Atts">
-          <input type="submit" value="Add Toppings" name="displayAddToppingsAtts">
-          <input type="submit" value="Add Cream" name="displayAddCreamAtts">
-          <input type="submit" value="Add Sweetener" name="displayAddSweetenerAtts">
-          <input type="submit" value="Add Coffee" name="displayAddCoffeeAtts">
+          <input type="submit" value="ListToppings" name="displayListToppingsAtts">
+          <input type="submit" value="ListCream" name="displayListCreamAtts">
+          <input type="submit" value="ListSweetener" name="displayListSweetenerAtts">
+          <input type="submit" value="ListCoffee1" name="displayListCoffee1Atts">
+          <input type="submit" value="ListCoffee2" name="displayListCoffee2Atts">
+          <input type="submit" value="AddToppings" name="displayAddToppingsAtts">
+          <input type="submit" value="AddCream" name="displayAddCreamAtts">
+          <input type="submit" value="AddSweetener" name="displayAddSweetenerAtts">
+          <input type="submit" value="AddCoffee" name="displayAddCoffeeAtts">
           <input type="submit" value="Deliver" name="displayDeliverAtts">
       </form>
                  </div>
@@ -235,12 +235,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function printResult($result)
         	{ //prints results from a select statement
         		echo '<br /><table class="attributes-table">';
-        		echo "<thead><tr><th>Attributes</th></tr><tbody>";
+        		echo "<thead><tr><th>Attribute Num.</th><th>Attribute Name</th></tr><tbody>";
+
+                $attributeNumber = 1;
 
         		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
         			echo "<tr>";
+                        echo "<td>" . $attributeNumber . "</td>";
                         echo "<td>" . $row['COLUMN_NAME'] . "</td>";
                         echo "</tr>"; //or just use "echo $row[0]"
+                        $attributeNumber++;
         		}
 
         		echo "</tbody></table>";
@@ -414,6 +418,7 @@ function handleDisplaySelectedTableRequest($currentTable, $attributes)
                       handleDisplayAttsRequest($currentTable);
                 } else if (array_key_exists('displayListCoffee1Atts', $_GET)) {
                       $currentTable = 'LISTCOFFEE1';
+                      handleDisplayAttsRequest($currentTable);
                 } else if (array_key_exists('displayListCoffee2Atts', $_GET)) {
                        $currentTable = 'LISTCOFFEE2';
                       handleDisplayAttsRequest($currentTable);
