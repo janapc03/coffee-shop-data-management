@@ -17,8 +17,6 @@ drop table ListCoffee1 cascade constraints;
 drop table ListCoffee2 cascade constraints;
 drop table Decaf cascade constraints;
 drop table Caffeinated cascade constraints;
-drop table AddEspresso cascade constraints;
-drop table Espresso cascade constraints;
 drop table IcedCoffee cascade constraints;
 drop table Coffee cascade constraints;
 
