@@ -141,13 +141,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             <input type="hidden" id="displaySalesTuplesRequest" name="displaySalesTuplesRequest">
             </form>
         </div>
-        <p> Update Sales Info:</p>
+        <p> Add New Sales Info:</p>
             <form method="POST" action="order.php">
-                       <input type="hidden" id="updateFundsQueryRequest" name="updateFundsQueryRequest">
+                       <input type="hidden" id="insertFundsQueryRequest" name="insertFundsQueryRequest">
+                       Date (YYYY-MM-DD): <input type="text" name="currDate"> <br /><br />
                        Cafe Funds: <input type="text" name="cafeFunds"> <br /><br />
                        Employee Pay: <input type="text" name="employeePay"> <br /><br />
 
-                       <input type="submit" value="Update" name="updateFunds"></p>
+                       <input type="submit" value="Add" name="insertFunds"></p>
                        </form>
             </div>
 
@@ -341,28 +342,30 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_close($db_conn);
 	}
 
-	function handleInsertRequest()
+	function handleInsertFundsRequest()
 	{
 		global $db_conn;
 
 		//Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['inItemName'],
-			":bind2" => $_POST['inItemQty']
+			":bind1" => $_POST['currDate'],
+			":bind2" => $_POST['employeePay'],
+			":bind3" => $_POST['cafeFunds']
 		);
 
 		$alltuples = array(
 			$tuple
 		);
 
-		executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+		executeBoundSQL("insert into sales
+		values (to_date(:bind1, 'YYYY-MM-DD'), :bind2, :bind3)", $alltuples);
 		oci_commit($db_conn);
 	}
 
 	function handleDisplaySalesRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM Sales");
+		$result = executePlainSQL("SELECT * FROM Sales ORDER BY salesDate DESC");
 		printSalesResult($result);
 
 		oci_commit($db_conn);
@@ -425,8 +428,9 @@ function handleDisplayShoppingListRequest()
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('insertCartQueryRequest', $_POST)) {
-				handleInsertRequest();
+			if (array_key_exists('insertFundsQueryRequest', $_POST)) {
+				handleInsertFundsRequest();
+				handleDisplaySalesRequest();
 			}
 
 			disconnectFromDB();
@@ -471,7 +475,7 @@ function handleDisplayShoppingListRequest()
 		}
 	}
 
-	if (isset($_POST['updateSubmit'])) {
+	if (isset($_POST['insertFunds'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayToppingsTuplesRequest']) ||
                isset($_GET['displayCreamTuplesRequest']) ||
@@ -480,7 +484,7 @@ function handleDisplayShoppingListRequest()
                isset($_GET['displayDecafTuplesRequest']) ||
                isset($_GET['displayItemsTuplesRequest']) ||
                isset($_GET['displayShoppingListRequest'])) {
-               handleGetRequest();
+               handleGETRequest();
 	} else {
 	if (connectToDB())
 	    handleDisplaySalesRequest();
