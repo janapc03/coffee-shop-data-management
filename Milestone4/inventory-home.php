@@ -267,19 +267,6 @@ function handleInsertRequest($table)
         $tuple
     );
 
-    //$toppingtuple = array(
-    //    ":bind11" => $_POST['inToppingName'],
-     //   ":bind12" => $_POST['inToppingInv'],
-    //);
-
-    //$parenttuples = array(
-    //    $toppingtuple
-    //);
-
-    //executeBoundSQL("insert into coffee values (:bind11, :bind12)", $parenttuples);
-
-    //oci_commit($db_conn);
-
     executeBoundSQL("insert into " . $table . " values (:bind1, :bind2)", $alltuples);
 
     oci_commit($db_conn);
