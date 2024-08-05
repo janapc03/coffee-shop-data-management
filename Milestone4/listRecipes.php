@@ -45,9 +45,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             <input type="hidden" id="insertCafQueryRequest" name="insertCafQueryRequest">
             Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
             Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-            Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
-            Bean Type: <input type="text" name="inBeanType"> <br /><br />
             Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
+            Number of Espresso Shots: <input type="number" name="inShots"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCafSubmit"></p>
         </form>
@@ -59,8 +58,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             <input type="hidden" id="insertDecafQueryRequest" name="insertDecafQueryRequest">
             Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
             Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-            Coffee Inventory: <input type="text" name="inCoffeeInv"> <br /><br />
-            Bean Type: <input type="text" name="inBeanType"> <br /><br />
             Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
 
             <input type="submit" value="Insert" name="insertDecafSubmit"></p>
@@ -72,6 +69,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
             Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+            Size: <input type="text" name="inSize"> <br /><br />
 
             <input type="submit" value="Delete" name="deleteSubmit"></p>
         </form>
@@ -105,15 +103,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="insertIceQueryRequest" name="insertIceQueryRequest">
         Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-        Ice Amount: <input type="text" ice="inIce"> <br /><br />
-        Method of Iced Coffee: <input type="text" method="inMethod"> <br /><br />
+        Size: <input type="text" name="inSize"> <br /><br />
+        Ice Amount: <input type="text" name="inIce"> <br /><br />
+        Method of Iced Coffee: <input type="text" name="inMethod"> <br /><br />
 
-        <input type="submit" value="Delete" name="insertIceSubmit"></p>
+        <input type="submit" value="Ice" name="insertIceSubmit"></p>
     </form>
     <h2>Remove Iced Recipe</h2>
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="deleteIceQueryRequest" name="deleteIceQueryRequest">
         Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+        Size: <input type="text" name="inSize"> <br /><br />
 
         <input type="submit" value="Delete" name="deleteIceSubmit"></p>
     </form>
@@ -185,35 +185,47 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
-			    echo "<br>INVALID INPUT, PLEASE TRY AGAIN<br>";
-				//echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			    //echo "<br>INVALID INPUT, PLEASE TRY AGAIN<br>";
+				echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
-				//echo htmlentities($e['message']);
+				echo htmlentities($e['message']);
 				echo "<br>";
 				$success = False;
 			}
 		}
 	}
 
-	function printResult($result)
+	function printCafResult($result)
 	{ //prints results from a select statement
 		echo "<table>";
-		echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Bean Type</th><th>Roast Level</th></tr>";
+		echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Roast Level</th><th>Number of Espresso Shots</th></tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row['NUMSHOTS'] . "</td></tr>"; //or just use "echo $row[0]"
 		}
 
 		echo "</table>";
 	}
 
+	function printDecafResult($result)
+    { //prints results from a select statement
+        echo "<table>";
+        echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Roast Level</th></tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+
+        echo "</table>";
+    }
+
 	function printIceResult($result)
     { //prints results from a select statement
         echo "<table>";
-        echo "<tr><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory</th><th>Coffee Bean</th><th>Roast Level</th></tr>";
+        echo "<tr><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory</th><th>Roast Level</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['METHOD'] . "</td><td>" . $row['ICEAMOUNT'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['BEANTYPE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['METHOD'] . "</td><td>" . $row['ICEAMOUNT'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         echo "</table>";
@@ -253,13 +265,32 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		global $db_conn;
 
 		//Getting the values from user and insert data into the table
-		$tuple = array(
-			":bind1" => $_POST['inCoffeeName'],
-			":bind2" => $_POST['inCoffeeSize'],
-			":bind3" => $_POST['inCoffeeInv'],
-			":bind4" => $_POST['inBeanType'],
-			":bind5" => $_POST['inRoastLevel']
-		);
+
+		$resultC = executePlainSQL("SELECT coffeeInv FROM " . $table ."");
+		$rowC = OCI_Fetch_Array($resultC, OCI_ASSOC);
+		if (!$rowC) {
+		    $inv = 'empty';
+		} else {
+		    $inv = $rowC['COFFEEINV'];
+		}
+
+		if ($table == 'caffeinated') {
+
+		    $tuple = array(
+                ":bind1" => $_POST['inCoffeeName'],
+                ":bind2" => $_POST['inCoffeeSize'],
+                ":bind3" => $inv,
+                ":bind4" => $_POST['inRoastLevel'],
+                ":bind5" => $_POST['inShots']
+            );
+		} else {
+		    $tuple = array(
+                ":bind1" => $_POST['inCoffeeName'],
+                ":bind2" => $_POST['inCoffeeSize'],
+                ":bind3" => $inv,
+                ":bind4" => $_POST['inRoastLevel']
+            );
+		}
 
 		$alltuples = array(
 			$tuple
@@ -278,18 +309,48 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		oci_commit($db_conn);
 
-        executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
-
+		if ($table == 'caffeinated') {
+		    executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
+        } else {
+            executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
+        }
         oci_commit($db_conn);
+	}
+
+	function handleInsertIceRequest()
+	{
+	    global $db_conn;
+
+	    $tuple = array(
+            ":bind1" => $_POST['inCoffeeName'],
+            ":bind2" => $_POST['inSize'],
+            ":bind3" => $_POST['inIce'],
+            ":bind4" => $_POST['inMethod']
+        );
+
+        $alltuples = array(
+            $tuple
+        );
+
+        executeBoundSQL("insert into icedCoffee values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
+
+	    oci_commit($db_conn);
 	}
 
 	function handleDisplayRequest($table)
 	{
 		global $db_conn;
+
 		$result = executePlainSQL("SELECT * FROM " . $table ."");
-		printResult($result);
+
+		if ($table == 'caffeinated') {
+            printCafResult($result);
+		} else {
+            printDecafResult($result);
+		}
 
 		oci_commit($db_conn);
+
 	}
 
     function handleDisplayIceRequest()
@@ -305,13 +366,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         oci_commit($db_conn);
     }
 
-    function handleDeleteRequest()
+    function handleDeleteRequest($table)
     {
         global $db_conn;
 
         $delCoffee = $_POST['inCoffeeName'];
+        $delSize = $_POST['inSize'];
 
-        executePlainSQL("DELETE FROM coffee WHERE coffeeName='" . $delCoffee . "'");
+        executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $delCoffee . "' AND coffeeSize='" . $delSize . "'");
         oci_commit($db_conn);
     }
 
@@ -327,11 +389,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			    $table = 'decaf';
 			    handleInsertRequest($table);
 			} else if (array_key_exists('deleteQueryRequest', $_POST)) {
-                handleDeleteRequest();
+			    $table = 'coffee';
+                handleDeleteRequest($table);
             } else if (array_key_exists('insertIceQueryRequest', $_POST)) {
-                handleInsertRequest();
+                handleInsertIceRequest();
             } else if (array_key_exists('deleteIceQueryRequest', $_POST)) {
-                handleDeleteRequest();
+                $table = 'icedCoffee';
+                handleDeleteRequest($table);
             }
 
 			disconnectFromDB();

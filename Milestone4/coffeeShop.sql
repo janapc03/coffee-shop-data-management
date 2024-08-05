@@ -172,7 +172,6 @@ create table Decaf (
     coffeeName varchar(30) not null,
     coffeeSize varchar(20) not null,
     coffeeInv varchar(20) not null,
-    beanType varchar(20) not null,
     roastLevel varchar(20) not null,
     primary key (coffeeName, coffeeSize),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
@@ -182,7 +181,6 @@ create table Caffeinated (
     coffeeName varchar(30) not null,
     coffeeSize varchar(20) not null,
     coffeeInv varchar(20) not null,
-    beanType varchar(20) not null,
     roastLevel varchar(20) not null,
     numShots int not null,
     primary key (coffeeName, coffeeSize),
@@ -348,17 +346,17 @@ insert into ListCoffee2 values (to_date('2024-08-15','YYYY-MM-DD'), '2 bottles')
 insert into ListCoffee2 values (to_date('2024-08-20','YYYY-MM-DD'), '4 bottles');
 insert into ListCoffee2 values (to_date('2024-08-10','YYYY-MM-DD'), '1 bottle');
 
-insert into Decaf values ('decaf latte', 'extra large', 'low', 'decaf Arabica', 'light');
-insert into Decaf values ('decaf macchiato', 'medium', 'high', 'decaf Liberica', 'light');
-insert into Decaf values ('decaf cappuccino', 'small', 'low', 'decaf Arabica', 'medium');
-insert into Decaf values ('decaf drip coffee', 'large', 'high', 'decaf Robusta', 'dark');
-insert into Decaf values ('decaf flat white', 'short', 'low', 'decaf Arabica', 'dark');
+insert into Decaf values ('decaf latte', 'extra large', 'low', 'light');
+insert into Decaf values ('decaf macchiato', 'medium', 'low', 'light');
+insert into Decaf values ('decaf cappuccino', 'small', 'low','medium');
+insert into Decaf values ('decaf drip coffee', 'large', 'low', 'dark');
+insert into Decaf values ('decaf flat white', 'short', 'low', 'dark');
 
-insert into Caffeinated values ('latte', 'extra large', 'low', 'Arabica', 'light', 3);
-insert into Caffeinated values ('macchiato', 'medium', 'high', 'Liberica', 'light', 2);
-insert into Caffeinated values ('cappuccino', 'small', 'low', 'Arabica', 'medium', 1);
-insert into Caffeinated values ('drip coffee', 'large', 'high', 'Robusta', 'dark', 3);
-insert into Caffeinated values ('flat white', 'short', 'low', 'Arabica', 'dark', 0);
+insert into Caffeinated values ('latte', 'extra large', 'high', 'light', 3);
+insert into Caffeinated values ('macchiato', 'medium', 'high', 'light', 2);
+insert into Caffeinated values ('cappuccino', 'small', 'high', 'medium', 1);
+insert into Caffeinated values ('drip coffee', 'large', 'high', 'dark', 3);
+insert into Caffeinated values ('flat white', 'short', 'high', 'dark', 0);
 
 insert into IcedCoffee values ('latte', 'extra large', 'iced', '1 scoop');
 insert into IcedCoffee values ('macchiato', 'medium', 'ice cap', '2 scoops');

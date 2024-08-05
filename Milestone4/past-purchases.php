@@ -45,7 +45,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              height: 600px;
              }
 
-        .order {
+        .pastPurchases {
             float: left;
             width: 70%;
             height: 590px;
@@ -106,15 +106,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <?php include("homebar.php"); ?>
 <section class="container">
   <nav class="userOptions">
-      <p>Find avg price from each supplier</p>
+      <p><u>Options</u></p>
+      <div class="userButtons">
+          <form method="GET" action="past-purchases.php">
+               <input type="hidden" id="displayAvgCostsRequest" name="displayAvgCostsRequest">
+               <p><input type="submit" value="Average Costs" name="displayAvgCostsTuples"></p>
+
+              </form>
+          </div>
 
         </nav>
 
     <article>
+        <div class="pastPurchases">
         <h3>Past Purchases</h3>
         <form method="GET" action="past-purchases.php">
             <input type="hidden" id="displayPastPurchases" name="displayPastPurchases">
             </form>
+        </div>
         </article>
     </section>
 
@@ -212,6 +221,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         		echo "</tbody></table>";
         	}
 
+    function printAvgResult($result)
+            	{ //prints results from a select statement
+            		echo '<br /><table class="avg-cost-table">';
+            		echo "<thead><tr><th>Supplier</th><th>Num. of Orders</th><th>Average Order Cost</th></tr><tbody>";
+
+            		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+
+            			echo "<tr>";
+                            echo "<td>" . $row['SUPNAME'] . "</td>";
+                            echo "<td>" . $row['COUNT_SUPNAME'] . "</td>";
+                            echo "<td>" . $row['AVG_PRICE'] . "</td>";
+                            echo "</tr>"; //or just use "echo $row[0]"
+            		}
+
+            		echo "</tbody></table>";
+            	}
+
 
 
 	function connectToDB()
@@ -261,7 +287,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleDisplayRequest()
+	function handleDisplayAvgCostRequest()
+	{
+		global $db_conn;
+		$result = executePlainSQL("SELECT d.supName AS SUPNAME, COUNT(d.supName) AS COUNT_SUPNAME, AVG(p.price) AS AVG_PRICE
+		 FROM Deliver d, Delivery dy, Purchase p, ShoppingList sl
+		 WHERE d.trackingNum=dy.trackingNum
+		 AND dy.trackingNum=p.trackingNum
+		 AND p.listDate=sl.listDate
+		 GROUP BY d.supName");
+		printAvgResult($result);
+
+		oci_commit($db_conn);
+	}
+
+function handleDisplayRequest()
 	{
 		global $db_conn;
 		$result = executePlainSQL("SELECT d.trackingNum, dy.expectedDate, d.supName, p.listDate, p.price
@@ -293,11 +333,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleGETRequest()
 	{
 		if (connectToDB()) {
-                if (array_key_exists('displayToppingsTuples', $_GET)) {
-                    $table = 'toppings';
-                    $name = 'TOPPINGNAME';
-                    $inv = 'TOPPINGINV';
-                    handleDisplayItemsRequest($table, $name, $inv);
+                if (array_key_exists('displayAvgCostsTuples', $_GET)) {
+                    handleDisplayAvgCostRequest();
                 } else if (array_key_exists('displayCreamTuples', $_GET)) {
                     $table = 'cream';
                     $name = 'CREAMNAME';
@@ -326,11 +363,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayToppingsTuplesRequest']) ||
-               isset($_GET['displayCreamTuplesRequest']) ||
-               isset($_GET['displaySweetenerTuplesRequest']) ||
-               isset($_GET['displayCafTuplesRequest']) ||
-               isset($_GET['displayDecafTuplesRequest'])) {
+	} else if (isset($_GET['displayAvgCostsRequest']) ||
+               isset($_GET['displayCreamTuplesRequest']))  {
                handleGetRequest();
 	} else {
 	if (connectToDB())
