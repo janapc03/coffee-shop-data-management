@@ -75,36 +75,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 <hr/>
 
-<h1>Inventory of Caffeinated Coffee Beans</h1>
+<h1>Inventory of Coffee Beans</h1>
 <form method="GET" action="inventory-home.php">
-    <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
-    <input type="submit" name="displayCafTuples"> </p>
+    <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
+    <input type="submit" name="displayCoffeeTuples"> </p>
 </form>
 
-<h2>Update Inventory of Caffeinated Coffee Beans</h2>
+<h2>Update Inventory of Coffee Beans</h2>
 <form method="POST" action="inventory-home.php">
-    <input type="hidden" id="updateCafRequest" name="updateCafRequest">
-    Coffee bean name: <input type="text" name="name"> <br /><br />
-    Updated inventory: <input type="text" name="inv"> <br /><br />
+    <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
+    Updated Caffeinated inventory: <input type="text" name="cafInv"> <br /><br />
+    Updated Decaffeinated inventory: <input type="text" name="decafInv"> <br /><br />
 
-    <input type="submit" value="Update" name="updateCafSubmit"></p>
-</form>
-
-<hr/>
-
-<h1>Inventory of Decaffeinated Coffee Beans</h1>
-<form method="GET" action="inventory-home.php">
-    <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
-    <input type="submit" name="displayDecafTuples"> </p>
-</form>
-
-<h2>Update Inventory of Decaffeinated Coffee Beans</h2>
-<form method="POST" action="inventory-home.php">
-    <input type="hidden" id="updateDecafRequest" name="updateDecafRequest">
-    Coffee bean name: <input type="text" name="name"> <br /><br />
-    Updated inventory: <input type="text" name="inv"> <br /><br />
-
-    <input type="submit" value="Update" name="updateDecafSubmit"></p>
+    <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
 </form>
 
 <?php
@@ -194,6 +177,18 @@ function printResult($result, $name, $inv)
     echo "</table>";
 }
 
+function printCoffeeResult($result)
+{ //prints results from a select statement
+    echo "<table>";
+    echo "<tr><th>Caffeinated Inventory</th><th>Decaffeinated Inventory</th></tr>";
+
+    while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+        echo "<tr><td>" . $row['CAF']  . "</td><td>" . $row['DECAF']  . "</td></tr>";
+    }
+
+    echo "</table>";
+}
+
 function connectToDB()
 {
     global $db_conn;
@@ -235,6 +230,21 @@ function handleUpdateRequest($table, $inv, $name)
     oci_commit($db_conn);
 }
 
+function handleUpdateCoffeeRequest()
+{
+    global $db_conn;
+    $caf = $_POST['cafInv'];
+    $decaf = $_POST['decafInv'];
+
+    if ($caf != null) {
+        executePlainSQL("UPDATE caffeinated SET coffeeInv ='" . $caf . "'");
+    }
+    if ($decaf != null) {
+        executePlainSQL("UPDATE decaf SET coffeeInv ='" . $decaf . "'");
+    }
+    oci_commit($db_conn);
+}
+
 function handleDisplayRequest($table, $name, $inv)
 {
     global $db_conn;
@@ -244,11 +254,11 @@ function handleDisplayRequest($table, $name, $inv)
     oci_commit($db_conn);
 }
 
-function handleDisplayCoffeeRequest($table, $name, $inv)
+function handleDisplayCoffeeRequest()
 {
     global $db_conn;
-    $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
-    printResult($result, $name, $inv);
+    $result = executePlainSQL("SELECT DISTINCT c.coffeeInv as caf, d.coffeeInv as decaf FROM caffeinated c, decaf d");
+    printCoffeeResult($result);
 
     oci_commit($db_conn);
 }
@@ -273,16 +283,8 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
                 $inv = 'sweetenerInv';
                 $name = 'sweetName';
                 handleUpdateRequest($table, $inv, $name);
-            } else if (array_key_exists('updateCafRequest', $_POST)) {
-                $table = 'caffeinated';
-                $inv = 'coffeeInv';
-                $name = 'beanType';
-                handleUpdateRequest($table, $inv, $name);
-            } else if (array_key_exists('updateDecafRequest', $_POST)) {
-                $table = 'decaf';
-                $inv = 'coffeeInv';
-                $name = 'beanType';
-                handleUpdateRequest($table, $inv, $name);
+            } else if (array_key_exists('updateCoffeeRequest', $_POST)) {
+                handleUpdateCoffeeRequest();
             }
 			disconnectFromDB();
 		}
@@ -308,16 +310,8 @@ function handleGetRequest()
             $name = 'SWEETNAME';
             $inv= 'SWEETENERINV';
             handleDisplayRequest($table, $name, $inv);
-        } else if (array_key_exists('displayCafTuples', $_GET)) {
-            $table = 'caffeinated';
-            $name = 'BEANTYPE';
-            $inv= 'COFFEEINV';
-            handleDisplayCoffeeRequest($table, $name, $inv);
-        } else if (array_key_exists('displayDecafTuples', $_GET)) {
-            $table = 'decaf';
-            $name = 'BEANTYPE';
-            $inv= 'COFFEEINV';
-            handleDisplayCoffeeRequest($table, $name, $inv);
+        } else if (array_key_exists('displayCoffeeTuples', $_GET)) {
+            handleDisplayCoffeeRequest();
         }
 
         disconnectFromDB();
@@ -326,14 +320,12 @@ function handleGetRequest()
 if (isset($_GET['displayToppingsTuplesRequest']) ||
     isset($_GET['displayCreamTuplesRequest']) ||
     isset($_GET['displaySweetenerTuplesRequest']) ||
-    isset($_GET['displayCafTuplesRequest']) ||
-    isset($_GET['displayDecafTuplesRequest'])) {
+    isset($_GET['displayCoffeeTuplesRequest'])) {
     handleGetRequest();
 } else if (isset($_POST['updateToppingsSubmit']) ||
             isset($_POST['updateCreamSubmit']) ||
             isset($_POST['updateSweetenerSubmit']) ||
-            isset($_POST['updateCafSubmit']) ||
-            isset($_POST['updateDecafSubmit'])) {
+            isset($_POST['updateCoffeeSubmit'])) {
     handlePostRequest();
 }
 ?>
