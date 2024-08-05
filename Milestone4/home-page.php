@@ -136,7 +136,20 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         </nav>
 
     <article>
-
+        <div>
+        <p>Input the table and attributes you'd like to view: </p>
+        <p>Note: Not all attribute boxes need to be filled </p>
+        <form method="GET" action="home-page.php">
+                       <input type="hidden" id="displayProjectionRequest" name="displayProjectionRequest">
+                       Table: <input type="text" name="selectedTable"> <br /><br />
+                       Attribute 1: <input type="text" name="att1"> <br /><br />
+                       Attribute 2: <input type="text" name="att2"> <br /><br />
+                       Attribute 3: <input type="text" name="att3"> <br /><br />
+                       Attribute 4: <input type="text" name="att4"> <br /><br />
+                       Attribute 5: <input type="text" name="att5"> <br /><br />
+                       <input type="submit" value="View Table" name="viewTableTuples"></p>
+                      </form>
+        </div>
         </article>
     </section>
 
