@@ -79,7 +79,7 @@ grant select on Coffee to public;
 
 create table Toppings (
     toppingName varchar(30) not null,
-    toppingInv varchar(20) not null,
+    toppingInv int not null,
     primary key (toppingName));
 grant select on Toppings to public;
 
@@ -104,7 +104,7 @@ grant select on AddToppings to public;
 
 create table Cream (
     creamName varchar(30) not null,
-    creamInv varchar(20) not null,
+    creamInv int not null,
     primary key (creamName));
 grant select on Cream to public;
 
@@ -129,7 +129,7 @@ grant select on AddCream to public;
 
 create table Sweetener (
     sweetName varchar(30) not null,
-    sweetenerInv varchar(20) not null,
+    sweetenerInv int not null,
     primary key (sweetName));
 grant select on Sweetener to public;
 
@@ -171,7 +171,7 @@ grant select on ListCoffee2 to public;
 create table Decaf (
     coffeeName varchar(30) not null,
     coffeeSize varchar(20) not null,
-    coffeeInv varchar(20) not null,
+    coffeeInv int not null,
     roastLevel varchar(20) not null,
     primary key (coffeeName, coffeeSize),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
@@ -180,7 +180,7 @@ grant select on Decaf to public;
 create table Caffeinated (
     coffeeName varchar(30) not null,
     coffeeSize varchar(20) not null,
-    coffeeInv varchar(20) not null,
+    coffeeInv int not null,
     roastLevel varchar(20) not null,
     numShots int not null,
     primary key (coffeeName, coffeeSize),
@@ -263,11 +263,11 @@ insert into Coffee values ('decaf cappuccino', 'small');
 insert into Coffee values ('decaf drip coffee', 'large');
 insert into Coffee values ('decaf flat white', 'short');
 
-insert into Toppings values ('whipped cream', 'low');
-insert into Toppings values ('caramel drizzle', 'low');
-insert into Toppings values ('cinnamon', 'high');
-insert into Toppings values ('icing sugar', 'low');
-insert into Toppings values ('cocoa powder', 'high');
+insert into Toppings values ('whipped cream', 50);
+insert into Toppings values ('caramel drizzle', 30);
+insert into Toppings values ('cinnamon', 20);
+insert into Toppings values ('icing sugar', 100);
+insert into Toppings values ('cocoa powder', 120);
 
 insert into ListToppings values (to_date('2024-08-01','YYYY-MM-DD'), 'whipped cream', '4 bottles');
 insert into ListToppings values (to_date('2024-08-11','YYYY-MM-DD'), 'caramel drizzle', '2 bottles');
@@ -286,11 +286,11 @@ insert into AddToppings values ('icing sugar', '5 tsp', 'macchiato', 'medium');
 insert into AddToppings values ('whipped cream', '5 tsp', 'macchiato', 'medium');
 insert into AddToppings values ('whipped cream', '7 tsp', 'macchiato', 'large');
 
-insert into Cream values ('half and half', 'low');
-insert into Cream values ('coconut', 'low');
-insert into Cream values ('oat', 'low');
-insert into Cream values ('almond', 'high');
-insert into Cream values ('soy', 'high');
+insert into Cream values ('half and half', 100);
+insert into Cream values ('coconut', 50);
+insert into Cream values ('oat', 89);
+insert into Cream values ('almond', 165);
+insert into Cream values ('soy', 83);
 
 insert into ListCream values (to_date('2024-08-01','YYYY-MM-DD'), 'half and half', '10 cartons');
 insert into ListCream values (to_date('2024-08-11','YYYY-MM-DD'), 'coconut', '5 cartons');
@@ -308,11 +308,11 @@ insert into AddCream values ('coconut', '1/3 cup', 'latte', 'extra large');
 insert into AddCream values ('oat', '1/3 cup', 'latte', 'extra large');
 insert into AddCream values ('almond', '1/3 cup', 'latte', 'extra large');
 
-insert into Sweetener values ('honey', 'high');
-insert into Sweetener values ('cane sugar', 'low');
-insert into Sweetener values ('stevia', 'low');
-insert into Sweetener values ('vanilla syrup', 'high');
-insert into Sweetener values ('chocolate syrup', 'low');
+insert into Sweetener values ('honey', 148);
+insert into Sweetener values ('cane sugar', 167);
+insert into Sweetener values ('stevia', 60);
+insert into Sweetener values ('vanilla syrup', 76);
+insert into Sweetener values ('chocolate syrup', 51);
 
 insert into ListSweetener values (to_date('2024-08-01','YYYY-MM-DD'), 'honey', '5 bottles');
 insert into ListSweetener values (to_date('2024-08-11','YYYY-MM-DD'), 'cane sugar', '5 bottles');
@@ -343,18 +343,18 @@ insert into ListCoffee2 values (to_date('2024-08-15','YYYY-MM-DD'), '2 bottles')
 insert into ListCoffee2 values (to_date('2024-08-20','YYYY-MM-DD'), '4 bottles');
 insert into ListCoffee2 values (to_date('2024-08-10','YYYY-MM-DD'), '1 bottle');
 
-insert into Decaf values ('decaf latte', 'extra large', 'low', 'light');
-insert into Decaf values ('decaf macchiato', 'medium', 'low', 'light');
-insert into Decaf values ('decaf cappuccino', 'small', 'low','medium');
-insert into Decaf values ('decaf drip coffee', 'large', 'low', 'dark');
-insert into Decaf values ('decaf flat white', 'short', 'low', 'dark');
+insert into Decaf values ('decaf latte', 'extra large', 95, 'light');
+insert into Decaf values ('decaf macchiato', 'medium', 95, 'light');
+insert into Decaf values ('decaf cappuccino', 'small', 95,'medium');
+insert into Decaf values ('decaf drip coffee', 'large', 95, 'dark');
+insert into Decaf values ('decaf flat white', 'short', 95, 'dark');
 
-insert into Caffeinated values ('latte', 'extra large', 'high', 'light', 3);
-insert into Caffeinated values ('macchiato', 'medium', 'high', 'light', 2);
-insert into Caffeinated values ('macchiato', 'large', 'high', 'light', 3);
-insert into Caffeinated values ('cappuccino', 'small', 'high', 'medium', 1);
-insert into Caffeinated values ('drip coffee', 'large', 'high', 'dark', 3);
-insert into Caffeinated values ('flat white', 'short', 'high', 'dark', 0);
+insert into Caffeinated values ('latte', 'extra large', 145, 'light', 3);
+insert into Caffeinated values ('macchiato', 'medium', 145, 'light', 2);
+insert into Caffeinated values ('macchiato', 'large', 145, 'light', 3);
+insert into Caffeinated values ('cappuccino', 'small', 145, 'medium', 1);
+insert into Caffeinated values ('drip coffee', 'large', 145, 'dark', 3);
+insert into Caffeinated values ('flat white', 'short', 145, 'dark', 0);
 
 insert into IcedCoffee values ('latte', 'extra large', 'iced', '1 scoop');
 insert into IcedCoffee values ('macchiato', 'medium', 'ice cap', '2 scoops');
