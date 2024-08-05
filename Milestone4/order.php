@@ -65,6 +65,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             width: 90%;
             }
 
+        .shopping-list-table {
+            float: right;
+            width: 25%;
+        }
+
         nav {
             float: left;
             width: 18%;
@@ -174,6 +179,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <div class="shoppingCart">
         <p><b><u>Shopping Cart</u></b> </p>
+        <form method="GET" action="order.php">
+              <input type="hidden" id="displayShoppingListRequest" name="displayShoppingListRequest">
+              Date (YYYY-MM-DD): <input type="text" name="shoppingListDate"> <br /><br />
+
+              <input type="submit" value="View List" name="viewListTuples"></p>
+              </form>
         </div>
 
         </article>
@@ -284,6 +295,22 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                             echo "</table>";
                 	}
 
+        function printShoppingListResult($result)
+                	{ //prints results from a select statement
+                		echo '<br /><table class="shopping-list-table">';
+                		echo "<thead><tr><th>Name</th><th>Amount</th></tr><tbody>";
+
+                		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+
+                			echo "<tr>";
+                                echo "<td>" . $row['ITEMNAME'] . "</td>";
+                                echo "<td>" . $row['ITEMAMOUNT'] . "</td>";
+                                echo "</tr>"; //or just use "echo $row[0]"
+                		}
+
+                		echo "</tbody></table>";
+                	}
+
 
 	function connectToDB()
 	{
@@ -356,8 +383,39 @@ function handleDisplayItemsRequest($table, $name, $inv)
 function handleDisplayCoffeeRequest($table, $name, $inv)
 {
     global $db_conn;
+
+    $result = executePlainSQL("SELECT * FROM Sales");
+    printSalesResult($result);
+
     $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
     printItemsResult($result, $name, $inv);
+
+    oci_commit($db_conn);
+}
+
+function handleDisplayShoppingListRequest()
+{
+    global $db_conn;
+    $result = executePlainSQL("SELECT * FROM Sales");
+        printSalesResult($result);
+
+    $listDate = $_GET['shoppingListDate'];
+    $result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT
+        FROM listToppings lt
+        WHERE  lt.listDate=to_date('$listDate','YYYY-MM-DD')
+        UNION
+        SELECT sweetName AS ITEMNAME, sweetenerQuant as ITEMAMOUNT
+        FROM listSweetener ls
+        WHERE  ls.listDate=to_date('$listDate','YYYY-MM-DD')
+        UNION
+        SELECT creamName AS ITEMNAME, creamQuant as ITEMAMOUNT
+        FROM listCream lc
+        WHERE  lc.listDate=to_date('$listDate','YYYY-MM-DD')
+        UNION
+        SELECT coffeeName AS ITEMNAME, coffeeQuant as ITEMAMOUNT
+        FROM listCoffee1 lcf1, listCoffee2 lcf2
+        WHERE  lcf1.listDate=to_date('$listDate','YYYY-MM-DD') AND lcf1.listDate=lcf2.listDate");
+    printShoppingListResult($result);
 
     oci_commit($db_conn);
 }
@@ -405,6 +463,8 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
                     $name = 'BEANTYPE';
                     $inv= 'COFFEEINV';
                     handleDisplayCoffeeRequest($table, $name, $inv);
+                } else if (array_key_exists('viewListTuples', $_GET)) {
+                    handleDisplayShoppingListRequest();
                 }
 
 			disconnectFromDB();
@@ -417,7 +477,9 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
                isset($_GET['displayCreamTuplesRequest']) ||
                isset($_GET['displaySweetenerTuplesRequest']) ||
                isset($_GET['displayCafTuplesRequest']) ||
-               isset($_GET['displayDecafTuplesRequest'])) {
+               isset($_GET['displayDecafTuplesRequest']) ||
+               isset($_GET['displayItemsTuplesRequest']) ||
+               isset($_GET['displayShoppingListRequest'])) {
                handleGetRequest();
 	} else {
 	if (connectToDB())

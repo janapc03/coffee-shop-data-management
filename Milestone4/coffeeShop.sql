@@ -231,7 +231,7 @@ insert into ShoppingList values (to_date('2024-08-10','YYYY-MM-DD'), 800);
 insert into ShoppingList values (to_date('2024-07-19','YYYY-MM-DD'), 110);
 
 insert into Purchase values (1234, to_date('2024-08-01','YYYY-MM-DD'), 150);
-insert into Purchase values (2345, to_date('2024-06-18','YYYY-MM-DD'), 450);
+insert into Purchase values (2345, to_date('2024-06-18','YYYY-MM-DD'), 452);
 insert into Purchase values (3456, to_date('2024-05-22','YYYY-MM-DD'), 220);
 insert into Purchase values (1235, to_date('2024-08-11','YYYY-MM-DD'), 300);
 insert into Purchase values (1236, to_date('2024-08-15','YYYY-MM-DD'), 275);
