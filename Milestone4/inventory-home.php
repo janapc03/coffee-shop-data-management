@@ -220,11 +220,11 @@ function executeBoundSQL($cmdstr, $list)
 
 function printResult($result, $name, $inv)
 { //prints results from a select statement
-    echo "<table>";
-    echo "<tr><th>Name</th><th>Inventory (kg)</th></tr>";
+    echo "<table style=\"width:35%; text-align: center; margin-left:auto; margin-right:auto; border-collapse: collapse;\">";
+    echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\"><th>Name</th><th>Inventory (kg)</th></tr>";
 
     while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-        echo "<tr><td>" . $row[$name]  . "</td><td>" . $row[$inv]  . "</td></tr>";
+        echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\"><td style=\"padding: 15px;\">" . $row[$name]  . "</td><td style=\"padding: 15px;\">" . $row[$inv]  . "</td></tr>";
     }
 
     echo "</table>";
@@ -232,11 +232,11 @@ function printResult($result, $name, $inv)
 
 function printCoffeeResult($result)
 { //prints results from a select statement
-    echo "<table>";
-    echo "<tr><th>Caffeinated Inventory (kg)</th><th>Decaffeinated Inventory (kg)</th></tr>";
+    echo "<table style=\"width:35%; text-align: center; margin-left:auto; margin-right:auto; border-collapse: collapse;\">";
+    echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\"><th>Caffeinated Inventory (kg)</th><th>Decaffeinated Inventory (kg)</th></tr>";
 
     while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-        echo "<tr><td>" . $row['CAF']  . "</td><td>" . $row['DECAF']  . "</td></tr>";
+        echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\"><td style=\"padding: 15px;\">" . $row['CAF']  . "</td><td style=\"padding: 15px;\">" . $row['DECAF']  . "</td></tr>";
     }
 
     echo "</table>";
@@ -408,18 +408,22 @@ function handleGetRequest()
             $table = 'toppings';
             $name = 'TOPPINGNAME';
             $inv = 'TOPPINGINV';
+            echo "<h3 style=\"text-align: center\">Toppings Inventory</h3>";
             handleDisplayRequest($table, $name, $inv);
         } else if (array_key_exists('displayCreamTuples', $_GET)) {
             $table = 'cream';
             $name = 'CREAMNAME';
             $inv= 'CREAMINV';
+            echo "<h3 style=\"text-align: center\">Cream Inventory</h3>";
             handleDisplayRequest($table, $name, $inv);
         } else if (array_key_exists('displaySweetenerTuples', $_GET)) {
             $table = 'sweetener';
             $name = 'SWEETNAME';
             $inv= 'SWEETENERINV';
+            echo "<h3 style=\"text-align: center\">Sweetener Inventory</h3>";
             handleDisplayRequest($table, $name, $inv);
         } else if (array_key_exists('displayCoffeeTuples', $_GET)) {
+            echo "<h3 style=\"text-align: center\">Coffee Beans Inventory</h3>";
             handleDisplayCoffeeRequest();
         }
 

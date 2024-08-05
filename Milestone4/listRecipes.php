@@ -123,18 +123,20 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
             <input type="submit" value="Display Recipes" name="displayDecafTuples"></p>
         </form>
+
+        <hr />
+
+        <h2>Display Iced Coffee Recipes</h2>
+        <form method="GET" action="listRecipes.php">
+            <input type="hidden" id="displayIceTuplesRequest" name="displayIceTuplesRequest">
+            <input type="submit" value="Display Recipes" name="displayIceTuples"></p>
+        </form>
         </div>
     </div>
 
     <hr />
 
     <div style="display:inline-block; width:49%; vertical-align: top">
-    <h2>Display Iced Coffee Recipes</h2>
-    <form method="GET" action="listRecipes.php">
-        <input type="hidden" id="displayIceTuplesRequest" name="displayIceTuplesRequest">
-        <input type="submit" value="Display Recipes" name="displayIceTuples"></p>
-    </form>
-    <hr />
     <div style="display:inline-block; width:55%; vertical-align: top">
     <h2>Select Recipe to Ice</h2>
     <form method="POST" action="listRecipes.php">
@@ -276,11 +278,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printCafResult($result)
 	{ //prints results from a select statement
-		echo "<table>";
-		echo "<tr><th>Name</th><th>Size</th><th>Inventory (kg)</th><th>Roast Level</th><th>Number of Espresso Shots</th></tr>";
+		echo "<table style=\"width:60%; text-align: center; margin-left:auto; margin-right:auto;  border-collapse: collapse;\">";
+		echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Size</th><th>Inventory (kg)</th><th>Roast Level</th><th>Number of Espresso Shots</th></tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row['NUMSHOTS'] . "</td></tr>"; //or just use "echo $row[0]"
+			echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEEINV'] . "</td><td style=\"padding: 15px;\">" . $row['ROASTLEVEL'] . "</td><td style=\"padding: 15px;\">" . $row['NUMSHOTS'] . "</td></tr>"; //or just use "echo $row[0]"
 		}
 
 		echo "</table>";
@@ -288,11 +290,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printDecafResult($result)
     { //prints results from a select statement
-        echo "<table>";
-        echo "<tr><th>Name</th><th>Size</th><th>Inventory (kg)</th><th>Roast Level</th></tr>";
+        echo "<table style=\"width:50%; text-align: center; margin-left:auto; margin-right:auto;  border-collapse: collapse;\">";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Size</th><th>Inventory (kg)</th><th>Roast Level</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEEINV'] . "</td><td style=\"padding: 15px;\">" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         echo "</table>";
@@ -300,11 +302,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printIceResult($result)
     { //prints results from a select statement
-        echo "<table>";
-        echo "<tr><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory (kg)</th><th>Roast Level</th></tr>";
+        echo "<table style=\"width:75%; text-align: center; margin-left:auto; margin-right:auto;  border-collapse: collapse;\">";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory (kg)</th><th>Roast Level</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['METHOD'] . "</td><td>" . $row['ICEAMOUNT'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td><td style=\"padding: 15px;\">" . $row['METHOD'] . "</td><td style=\"padding: 15px;\">" . $row['ICEAMOUNT'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEEINV'] . "</td><td style=\"padding: 15px;\">" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         echo "</table>";
@@ -312,12 +314,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printAddCafResult($result, $add, $addName, $addAmount)
     { //prints results from a select statement
-        echo "<table>";
-        echo "<h4> " . $add . " Used: </h4>";
-        echo "<tr><th>Coffee Name</th><th>Size</th><th>Roast Level</th><th>Espresso Shots</th><th>" . $add . "</th><th>Amount</th></tr>";
+        echo "<table style=\"width:60%; text-align: center; margin-left:auto; margin-right:auto; border-collapse: collapse;\">";
+        echo "<h3 style=\"text-align: center\"> " . $add . " Used: </h3>";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Coffee Name</th><th>Size</th><th>Roast Level</th><th>Espresso Shots</th><th>" . $add . "</th><th>Amount</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row['NUMSHOTS'] . "</td><td>" . $row[$addName] . "</td><td>" . $row[$addAmount] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td><td style=\"padding: 15px;\">" . $row['ROASTLEVEL'] . "</td><td style=\"padding: 15px;\">" . $row['NUMSHOTS'] . "</td><td style=\"padding: 15px;\">" . $row[$addName] . "</td><td style=\"padding: 15px;\">" . $row[$addAmount] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         echo "</table>";
@@ -325,12 +327,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printAddDecafResult($result, $add, $addName, $addAmount)
     { //prints results from a select statement
-        echo "<table>";
-        echo "<h4> " . $add . " Used: </h4>";
-        echo "<tr><th>Coffee Name</th><th>Size</th><th>Roast Level</th><th>" . $add . "</th><th>Amount</th></tr>";
+        echo "<table style=\"width:60%; text-align: center; margin-left:auto; margin-right:auto;  border-collapse: collapse;\">";
+        echo "<h3 style=\"text-align: center\"> " . $add . " Used: </h3>";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Coffee Name</th><th>Size</th><th>Roast Level</th><th>" . $add . "</th><th>Amount</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row[$addName] . "</td><td>" . $row[$addAmount] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td><td style=\"padding: 15px;\">" . $row['ROASTLEVEL'] . "</td><td style=\"padding: 15px;\">" . $row[$addName] . "</td><td style=\"padding: 15px;\">" . $row[$addAmount] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         echo "</table>";
@@ -492,9 +494,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
         $result = executePlainSQL("SELECT DISTINCT * FROM icedcoffee i, caffeinated c WHERE i.coffeeName = c.coffeeName AND i.coffeeSize = c.coffeeSize");
-        echo "<h3>Iced Coffee Recipes</h3>";
+        echo "<h3 style=\"text-align: center\">Iced Coffee Recipes</h3>";
         printIceResult($result);
-        echo "<h3>Iced Decaf Coffee Recipes</h3>";
+        echo "<h3 style=\"text-align: center\">Iced Decaf Coffee Recipes</h3>";
         $result = executePlainSQL("SELECT DISTINCT * FROM icedcoffee i, decaf d WHERE i.coffeeName = d.coffeeName AND i.coffeeSize = d.coffeeSize");
         printIceResult($result);
 
@@ -506,11 +508,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         global $db_conn;
         $result = executePlainSQL("SELECT * FROM coffee c WHERE NOT EXISTS (SELECT " . $addName . " FROM " . $add . " WHERE NOT EXISTS (SELECT " . $addOnName . " FROM " . $addOn . " WHERE " . $addOnName . " = " . $addName . " AND a.coffeeName = c.coffeeName))");
 
-        echo "<h3>Coffee Recipes that add all " . $titleName . "</h3>";
-        echo "<table>";
-        echo "<tr><th>Name</th><th>Size</th></tr>";
+        echo "<h3 style=\"text-align: center\">Coffee Recipes that add all " . $titleName . "</h3>";
+        echo "<table style=\"width:25%; text-align: center; margin-left:auto; margin-right:auto; border-collapse: collapse;\">";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Size</th></tr>";
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td></tr>"; //or just use "echo $row[0]"
         }
         echo "</table>";
 
@@ -548,11 +550,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         global $db_conn;
         $result = executePlainSQL("SELECT coffeeName, COUNT(" .$name. ") as num FROM " . $table . " GROUP BY coffeeName HAVING COUNT(*)>1");
 
-        echo "<h3>Coffee Recipes With Multiple " . $titleName . " and How Many</h3>";
-        echo "<table>";
-        echo "<tr><th>Name</th><th>Number of " . $titleName . "</th></tr>";
+        echo "<h3 style=\"text-align: center\">Coffee Recipes With Multiple " . $titleName . " and How Many</h3>";
+        echo "<table style=\"width:25%; text-align: center; margin-left:auto; margin-right:auto;  border-collapse: collapse;\">";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Number of " . $titleName . "</th></tr>";
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['NUM'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['NUM'] . "</td></tr>"; //or just use "echo $row[0]"
         }
         echo "</table>";
 
@@ -633,11 +635,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		if (connectToDB()) {
 		    if (array_key_exists('displayCafTuples', $_GET)) {
 		        $table = 'caffeinated';
-		        echo "<h3>Caffeinated Coffee Recipes</h3>";
+		        echo "<h3 style=\"text-align: center\">Caffeinated Coffee Recipes</h3>";
 				handleDisplayRequest($table);
 			} else if (array_key_exists('displayDecafTuples', $_GET)) {
 			    $table = 'decaf';
-			    echo "<h3>Decaf Coffee Recipes</h3>";
+			    echo "<h3 style=\"text-align: center\">Decaf Coffee Recipes</h3>";
 			    handleDisplayRequest($table);
 			} else if (array_key_exists('displayIceTuples', $_GET)) {
 			    handleDisplayIceRequest();
