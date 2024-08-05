@@ -279,10 +279,10 @@ insert into AddToppings values ('caramel drizzle', '3 tsp', 'macchiato', 'medium
 insert into AddToppings values ('cinnamon', '2 tsp', 'cappuccino', 'small');
 insert into AddToppings values ('icing sugar', '4 tsp', 'drip coffee', 'large');
 insert into AddToppings values ('cocoa powder', '1 tsp', 'flat white', 'short');
-insert into AddToppings values ('caramel drizzle', '5 tsp', 'latte', 'extra large');
-insert into AddToppings values ('cinnamon', '5 tsp', 'latte', 'extra large');
-insert into AddToppings values ('icing sugar', '5 tsp', 'latte', 'extra large');
-insert into AddToppings values ('cocoa powder', '5 tsp', 'latte', 'extra large');
+insert into AddToppings values ('cocoa powder', '5 tsp', 'macchiato', 'medium');
+insert into AddToppings values ('cinnamon', '5 tsp', 'macchiato', 'medium');
+insert into AddToppings values ('icing sugar', '5 tsp', 'macchiato', 'medium');
+insert into AddToppings values ('whipped cream', '5 tsp', 'macchiato', 'medium');
 
 insert into Cream values ('half and half', 'low');
 insert into Cream values ('coconut', 'low');
@@ -325,6 +325,7 @@ insert into AddSweetener values ('vanilla syrup', '1 pump', 'drip coffee', 'larg
 insert into AddSweetener values ('chocolate syrup', '3 pumps', 'flat white', 'short');
 insert into AddSweetener values ('honey', '2 pumps', 'decaf cappuccino', 'small');
 insert into AddSweetener values ('cane sugar', '2 pumps', 'decaf cappuccino', 'small');
+insert into AddSweetener values ('stevia', '2 pumps', 'decaf cappuccino', 'small');
 insert into AddSweetener values ('vanilla syrup', '2 pumps', 'decaf cappuccino', 'small');
 insert into AddSweetener values ('chocolate syrup', '2 pumps', 'decaf cappuccino', 'small');
 

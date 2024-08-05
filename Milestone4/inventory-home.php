@@ -25,7 +25,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <?php include("homebar.php"); ?>
 
 <div style="width:99%; margin:auto">
-    <div style="display:inline-block; width:24%;">
+    <div style="display:inline-block; width:24%; vertical-align: top">
         <h2>Inventory of toppings</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
@@ -58,7 +58,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         </form>
     </div>
 
-    <div style="display:inline-block; width:24%;">
+    <div style="display:inline-block; width:24%; vertical-align: top">
         <h2>Inventory of creams</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
@@ -92,7 +92,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     </div>
 
-    <div style="display:inline-block; width:24%;">
+    <div style="display:inline-block; width:24%; vertical-align: top">
         <h2>Inventory of sweeteners</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
@@ -125,7 +125,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     </div>
 
-    <div style="display:inline-block; width:24%;">
+    <div style="display:inline-block; width:24%; vertical-align: top">
         <h2>Inventory of Coffee Beans</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
