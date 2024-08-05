@@ -36,7 +36,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
             Toppings name: <input type="text" name="name"> <br /><br />
-            Updated inventory: <input type="text" name="inv"> <br /><br />
+            Updated inventory (kg): <input type="text" name="inv"> <br /><br />
 
             <input type="submit" value="Update" name="updateToppingsSubmit"></p>
         </form>
@@ -45,7 +45,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
             Topping Name: <input type="text" name="inName"> <br /><br />
-            Amount in inventory: <input type="text" name="inInv"> <br /><br />
+            Amount in inventory (kg): <input type="text" name="inInv"> <br /><br />
 
             <input type="submit" value="Insert" name="insertToppingSubmit"></p>
         </form>
@@ -69,7 +69,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
             Cream name: <input type="text" name="name"> <br /><br />
-            Updated inventory: <input type="text" name="inv"> <br /><br />
+            Updated inventory (kg): <input type="text" name="inv"> <br /><br />
 
             <input type="submit" value="Update" name="updateCreamSubmit"></p>
         </form>
@@ -78,7 +78,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
             Cream Name: <input type="text" name="inName"> <br /><br />
-            Amount in inventory: <input type="text" name="inInv"> <br /><br />
+            Amount in inventory (kg): <input type="text" name="inInv"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCreamSubmit"></p>
         </form>
@@ -103,7 +103,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
             Sweetener name: <input type="text" name="name"> <br /><br />
-            Updated inventory: <input type="text" name="inv"> <br /><br />
+            Updated inventory (kg): <input type="text" name="inv"> <br /><br />
 
             <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
         </form>
@@ -112,7 +112,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertSweetenerQueryRequest" name="insertSweetenerQueryRequest">
             Sweetener Name: <input type="text" name="inName"> <br /><br />
-            Amount in inventory: <input type="text" name="inInv"> <br /><br />
+            Amount in inventory (kg): <input type="text" name="inInv"> <br /><br />
             <input type="submit" value="Insert" name="insertSweetenerSubmit"></p>
         </form>
 
@@ -135,8 +135,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Update Inventory of Coffee Beans</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
-            Updated Caffeinated inventory: <input type="text" name="cafInv"> <br /><br />
-            Updated Decaffeinated inventory: <input type="text" name="decafInv"> <br /><br />
+            Updated Caffeinated inventory (kg): <input type="text" name="cafInv"> <br /><br />
+            Updated Decaffeinated inventory (kg): <input type="text" name="decafInv"> <br /><br />
 
             <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
         </form>
@@ -221,7 +221,7 @@ function executeBoundSQL($cmdstr, $list)
 function printResult($result, $name, $inv)
 { //prints results from a select statement
     echo "<table>";
-    echo "<tr><th>Name</th><th>Inventory</th></tr>";
+    echo "<tr><th>Name</th><th>Inventory (kg)</th></tr>";
 
     while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
         echo "<tr><td>" . $row[$name]  . "</td><td>" . $row[$inv]  . "</td></tr>";
@@ -233,7 +233,7 @@ function printResult($result, $name, $inv)
 function printCoffeeResult($result)
 { //prints results from a select statement
     echo "<table>";
-    echo "<tr><th>Caffeinated Inventory</th><th>Decaffeinated Inventory</th></tr>";
+    echo "<tr><th>Caffeinated Inventory (kg)</th><th>Decaffeinated Inventory (kg)</th></tr>";
 
     while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
         echo "<tr><td>" . $row['CAF']  . "</td><td>" . $row['DECAF']  . "</td></tr>";

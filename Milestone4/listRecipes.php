@@ -268,7 +268,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function printCafResult($result)
 	{ //prints results from a select statement
 		echo "<table>";
-		echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Roast Level</th><th>Number of Espresso Shots</th></tr>";
+		echo "<tr><th>Name</th><th>Size</th><th>Inventory (kg)</th><th>Roast Level</th><th>Number of Espresso Shots</th></tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
 			echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td><td>" . $row['NUMSHOTS'] . "</td></tr>"; //or just use "echo $row[0]"
@@ -280,7 +280,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function printDecafResult($result)
     { //prints results from a select statement
         echo "<table>";
-        echo "<tr><th>Name</th><th>Size</th><th>Inventory</th><th>Roast Level</th></tr>";
+        echo "<tr><th>Name</th><th>Size</th><th>Inventory (kg)</th><th>Roast Level</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
             echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
@@ -292,7 +292,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function printIceResult($result)
     { //prints results from a select statement
         echo "<table>";
-        echo "<tr><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory</th><th>Roast Level</th></tr>";
+        echo "<tr><th>Name</th><th>Size</th><th>Method</th><th>Ice Amount</th><th>Inventory (kg)</th><th>Roast Level</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
             echo "<tr><td>" . $row['COFFEENAME'] . "</td><td>" . $row['COFFEESIZE'] . "</td><td>" . $row['METHOD'] . "</td><td>" . $row['ICEAMOUNT'] . "</td><td>" . $row['COFFEEINV'] . "</td><td>" . $row['ROASTLEVEL'] . "</td></tr>"; //or just use "echo $row[0]"
