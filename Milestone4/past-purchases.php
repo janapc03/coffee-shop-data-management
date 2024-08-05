@@ -105,13 +105,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
     <?php include("homebar.php"); ?>
 <section class="container">
-  <nav class="salesAndCategories">
-      <p> GUI in progress</p>
+  <nav class="userOptions">
+      <p>Find avg price from each supplier</p>
 
         </nav>
 
     <article>
-
+        <h3>Past Purchases</h3>
+        <form method="GET" action="past-purchases.php">
+            <input type="hidden" id="displayPastPurchases" name="displayPastPurchases">
+            </form>
         </article>
     </section>
 
@@ -190,35 +193,25 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-    function printSalesResult($result)
+    function printResult($result)
         	{ //prints results from a select statement
-        		echo '<br /><table class="sales-table">';
-        		echo "<thead><tr><th>Sales Date</th><th>Employee Pay</th><th>Funds</th></tr><tbody>";
+        		echo '<br /><table class="past-purchases-table">';
+        		echo "<thead><tr><th>Tracking Num.</th><th>Expected By</th><th>Supplier</th><th>Order Date</th><th>Total Cost</th></tr><tbody>";
 
         		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
 
         			echo "<tr>";
-                        echo "<td>" . $row['SALESDATE'] . "</td>";
-                        echo "<td>" . $row['EMPLOYEEPAY'] . "</td>";
-                        echo "<td>" . $row['CAFEFUNDS'] . "</td>";
+                        echo "<td>" . $row['TRACKINGNUM'] . "</td>";
+                        echo "<td>" . $row['EXPECTEDDATE'] . "</td>";
+                        echo "<td>" . $row['SUPNAME'] . "</td>";
+                        echo "<td>" . $row['LISTDATE'] . "</td>";
+                        echo "<td>" . $row['PRICE'] . "</td>";
                         echo "</tr>"; //or just use "echo $row[0]"
         		}
 
         		echo "</tbody></table>";
         	}
 
-        function printItemsResult($result, $name, $inv)
-                	{ //prints results from a select statement
-                		echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
-                		echo "<tr><th>Name</th><th>Inventory</th></tr>";
-
-
-                            while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-                                echo "<tr><td>" . $row[$name]  . "</td><td>" . $row[$inv]  . "</td></tr>";
-                            }
-
-                            echo "</table>";
-                	}
 
 
 	function connectToDB()
@@ -268,35 +261,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		oci_commit($db_conn);
 	}
 
-	function handleDisplaySalesRequest()
+	function handleDisplayRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT * FROM Sales");
-		printSalesResult($result);
+		$result = executePlainSQL("SELECT d.trackingNum, dy.expectedDate, d.supName, p.listDate, p.price
+		 FROM Deliver d, Delivery dy, Purchase p, ShoppingList sl
+		 WHERE d.trackingNum=dy.trackingNum
+		 AND dy.trackingNum=p.trackingNum
+		 AND p.listDate=sl.listDate");
+		printResult($result);
 
 		oci_commit($db_conn);
 	}
 
-function handleDisplayItemsRequest($table, $name, $inv)
-{
-    global $db_conn;
-    $result = executePlainSQL("SELECT * FROM Sales");
-        printSalesResult($result);
-
-    $result = executePlainSQL("SELECT * FROM " . $table . "");
-    printItemsResult($result, $name, $inv);
-
-    oci_commit($db_conn);
-}
-
-function handleDisplayCoffeeRequest($table, $name, $inv)
-{
-    global $db_conn;
-    $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
-    printItemsResult($result, $name, $inv);
-
-    oci_commit($db_conn);
-}
 
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -357,7 +334,7 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
                handleGetRequest();
 	} else {
 	if (connectToDB())
-	    handleDisplaySalesRequest();
+	    handleDisplayRequest();
 	    disconnectFromDB();
 	}
 

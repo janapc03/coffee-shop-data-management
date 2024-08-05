@@ -49,11 +49,11 @@ create table ShoppingList (
 grant select on ShoppingList to public;
 
 create table Purchase (
-    supName varchar(50) not null,
+    trackingNum int not null,
     listDate date not null,
     price int not null,
-    primary key (supName, listDate),
-    foreign key (supName) references Supplier (supName) ON DELETE CASCADE,
+    primary key (trackingNum, listDate),
+    foreign key (trackingNum) references Delivery (trackingNum) ON DELETE CASCADE,
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE);
 grant select on Purchase to public;
 
@@ -217,10 +217,13 @@ grant select on IcedCoffee to public;
 
 
 insert into Delivery values (1234, to_date('2024-09-01','YYYY-MM-DD'));
+insert into Delivery values (2345, to_date('2024-07-10','YYYY-MM-DD'));
+insert into Delivery values (3456, to_date('2024-06-01','YYYY-MM-DD'));
 insert into Delivery values (1235, to_date('2024-09-10','YYYY-MM-DD'));
 insert into Delivery values (1236, to_date('2024-09-20','YYYY-MM-DD'));
 insert into Delivery values (1237, to_date('2024-09-30','YYYY-MM-DD'));
 insert into Delivery values (1238, to_date('2024-10-15','YYYY-MM-DD'));
+insert into Delivery values (4567, to_date('2024-07-29','YYYY-MM-DD'));
 
 insert into Supplier values ('COSTCO', '1234 Main St.');
 insert into Supplier values ('Blenz Beans', '1234 Arbutus St.');
@@ -229,22 +232,31 @@ insert into Supplier values ('Superstore', '317 Cambie St.');
 insert into Supplier values ('The Bean Shop', '9288 Oak St.');
 
 insert into Deliver  values ('COSTCO', 1234);
+insert into Deliver  values ('COSTCO', 2345);
+insert into Deliver  values ('COSTCO', 3456);
 insert into Deliver  values ('Blenz Beans', 1235);
 insert into Deliver  values ('Kona Beans', 1236);
 insert into Deliver  values ('Superstore', 1237);
 insert into Deliver  values ('The Bean Shop', 1238);
+insert into Deliver  values ('The Bean Shop', 4567);
 
 insert into ShoppingList values (to_date('2024-08-01','YYYY-MM-DD'), 500);
+insert into ShoppingList values (to_date('2024-06-18','YYYY-MM-DD'), 900);
+insert into ShoppingList values (to_date('2024-05-22','YYYY-MM-DD'), 300);
 insert into ShoppingList values (to_date('2024-08-11','YYYY-MM-DD'), 650);
 insert into ShoppingList values (to_date('2024-08-15','YYYY-MM-DD'), 420);
 insert into ShoppingList values (to_date('2024-08-20','YYYY-MM-DD'), 399);
 insert into ShoppingList values (to_date('2024-08-10','YYYY-MM-DD'), 800);
+insert into ShoppingList values (to_date('2024-07-19','YYYY-MM-DD'), 110);
 
-insert into Purchase values ('COSTCO', to_date('2024-08-01','YYYY-MM-DD'), 150);
-insert into Purchase values ('Blenz Beans', to_date('2024-08-11','YYYY-MM-DD'), 300);
-insert into Purchase values ('Kona Beans', to_date('2024-08-15','YYYY-MM-DD'), 275);
-insert into Purchase values ('Superstore', to_date('2024-08-20','YYYY-MM-DD'), 399);
-insert into Purchase values ('The Bean Shop', to_date('2024-08-10','YYYY-MM-DD'), 200);
+insert into Purchase values (1234, to_date('2024-08-01','YYYY-MM-DD'), 150);
+insert into Purchase values (2345, to_date('2024-06-18','YYYY-MM-DD'), 450);
+insert into Purchase values (3456, to_date('2024-05-22','YYYY-MM-DD'), 220);
+insert into Purchase values (1235, to_date('2024-08-11','YYYY-MM-DD'), 300);
+insert into Purchase values (1236, to_date('2024-08-15','YYYY-MM-DD'), 275);
+insert into Purchase values (1237, to_date('2024-08-20','YYYY-MM-DD'), 399);
+insert into Purchase values (1238, to_date('2024-08-10','YYYY-MM-DD'), 200);
+insert into Purchase values (4567, to_date('2024-07-19','YYYY-MM-DD'), 60);
 
 insert into Sales values (to_date('2024-07-30','YYYY-MM-DD'), 500, 1200);
 insert into Sales values (to_date('2024-08-10','YYYY-MM-DD'), 590, 1300);
