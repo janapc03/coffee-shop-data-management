@@ -5,8 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Database access configuration
-$config["dbuser"] = "ora_miaodan";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a92389279";	// change to 'a' + your student number
+$config["dbuser"] = "ora_jbarlesc";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a43974147";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -49,6 +49,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
             <input type="submit" value="Insert" name="insertToppingSubmit"></p>
         </form>
+
+        <h3>Delete a Topping</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="deleteToppingQueryRequest" name="deleteToppingQueryRequest">
+            Topping Name: <input type="text" name="toppingName"> <br /><br />
+            Inventory: <input type="text" name="toppingInv"> <br /><br />
+            <input type="submit" value="Delete" name="deleteToppingSubmit">
+        </form>
     </div>
 
     <div style="display:inline-block; width:24%;">
@@ -75,6 +83,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
             <input type="submit" value="Insert" name="insertCreamSubmit"></p>
         </form>
+
+        <h3>Delete a Cream</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="deleteCreamQueryRequest" name="deleteCreamQueryRequest">
+            Cream Name: <input type="text" name="creamName"> <br /><br />
+            Inventory: <input type="text" name="creamInv"> <br /><br />
+            <input type="submit" value="Delete" name="deleteCreamSubmit">
+        </form>
+
     </div>
 
     <div style="display:inline-block; width:24%;">
@@ -98,9 +115,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             <input type="hidden" id="insertSweetenerQueryRequest" name="insertSweetenerQueryRequest">
             Topping Name: <input type="text" name="inName"> <br /><br />
             Amount in inventory: <input type="text" name="inInv"> <br /><br />
-
             <input type="submit" value="Insert" name="insertSweetenerSubmit"></p>
         </form>
+
+        <h3>Delete a Sweetener</h3>
+        <form method="POST" action="inventory-home.php">
+            <input type="hidden" id="deleteSweetenerQueryRequest" name="deleteSweetenerQueryRequest">
+            Sweetener Name: <input type="text" name="sweetName"> <br /><br />
+            Inventory: <input type="text" name="sweetenerInv"> <br /><br />
+            <input type="submit" value="Delete" name="deleteSweetenerSubmit">
+        </form>
+
     </div>
 
     <div style="display:inline-block; width:24%;">
@@ -315,6 +340,18 @@ function handleDisplayCoffeeRequest()
     oci_commit($db_conn);
 }
 
+function handleDeleteRequest($table, $nameCol, $invCol)
+{
+    global $db_conn;
+
+    $delName = $_POST[$nameCol];
+    $delInv = $_POST[$invCol];
+
+    executePlainSQL("DELETE FROM " . $table . " WHERE " . $nameCol . "='" . $delName . "' AND " . $invCol . "='" . $delInv . "'");
+    oci_commit($db_conn);
+}
+
+
 // HANDLE ALL POST ROUTES
 // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 function handlePostRequest()
@@ -346,7 +383,23 @@ function handlePostRequest()
         } else if (array_key_exists('insertSweetenerQueryRequest', $_POST)) {
             $table = 'sweetener';
             handleInsertRequest($table);
+        } else if (array_key_exists('deleteToppingQueryRequest', $_POST)) {
+            $table = 'toppings';
+            $deleteName = 'toppingName';
+            $deleteInv = 'toppingInv';
+            handleDeleteRequest($table, $deleteName, $deleteInv);
+        } else if (array_key_exists('deleteCreamQueryRequest', $_POST)) {
+            $table = 'cream';
+            $deleteName = 'creamName';
+            $deleteInv = 'creamInv';
+            handleDeleteRequest($table, $deleteName, $deleteInv);
+        }  else if (array_key_exists('deleteSweetenerQueryRequest', $_POST)) {
+            $table = 'sweetener';
+            $deleteName = 'sweetName';
+            $deleteInv = 'sweetenerInv';
+            handleDeleteRequest($table, $deleteName, $deleteInv);
         }
+
         disconnectFromDB();
     }
 }
@@ -389,7 +442,10 @@ if (isset($_GET['displayToppingsTuplesRequest']) ||
     isset($_POST['updateCoffeeSubmit']) ||
     isset($_POST['insertToppingSubmit']) ||
     isset($_POST['insertCreamSubmit']) ||
-    isset($_POST['insertSweetenerSubmit'])) {
+    isset($_POST['insertSweetenerSubmit']) ||
+    isset($POST['deleteToppingSubmit']) ||
+    isset($POST['deleteCreamSubmit']) ||
+    isset($POST['deleteSweetenerSubmit'])) {
 
     handlePostRequest();
 }
