@@ -186,25 +186,10 @@ create table Caffeinated (
     coffeeInv varchar(20) not null,
     beanType varchar(20) not null,
     roastLevel varchar(20) not null,
+    numShots int not null,
     primary key (coffeeName, coffeeSize),
     foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE);
 grant select on Caffeinated to public;
-
-create table Espresso (
-    strength varchar(20) not null,
-    type varchar(30) not null,
-    primary key (strength));
-grant select on Espresso to public;
-
-create table AddEspresso (
-    coffeeName varchar(30) not null,
-    coffeeSize varchar(20) not null,
-    numShots int not null,
-    strength varchar(20) not null,
-    primary key (coffeeName, coffeeSize, strength),
-    foreign key (coffeeName, coffeeSize) references Coffee (coffeeName, coffeeSize) ON DELETE CASCADE,
-    foreign key (strength) references Espresso (strength) ON DELETE CASCADE);
-grant select on AddEspresso to public;
 
 create table IcedCoffee (
     coffeeName varchar(30) not null,
@@ -298,6 +283,11 @@ insert into AddToppings values ('caramel drizzle', '3 tsp', 'macchiato', 'medium
 insert into AddToppings values ('cinnamon', '2 tsp', 'cappuccino', 'small');
 insert into AddToppings values ('icing sugar', '4 tsp', 'drip coffee', 'large');
 insert into AddToppings values ('cocoa powder', '1 tsp', 'flat white', 'short');
+insert into AddToppings values ('no toppings', '0', 'decaf latte', 'extra large');
+insert into AddToppings values ('no toppings', '0', 'decaf macchiato', 'medium');
+insert into AddToppings values ('no toppings', '0', 'decaf cappuccino', 'small');
+insert into AddToppings values ('no toppings', '0', 'decaf drip coffee', 'large');
+insert into AddToppings values ('no toppings', '0', 'decaf flat white', 'short');
 
 insert into Cream values ('half and half', 'low');
 insert into Cream values ('coconut', 'low');
@@ -316,6 +306,11 @@ insert into AddCream values ('coconut', '1 cup', 'macchiato', 'medium');
 insert into AddCream values ('oat', '1/2  cup', 'cappuccino', 'small');
 insert into AddCream values ('almond', '1.5 cups', 'drip coffee', 'large');
 insert into AddCream values ('soy', '1/3 cup', 'flat white', 'short');
+insert into AddCream values ('no cream', '0', 'decaf latte', 'extra large');
+insert into AddCream values ('no cream', '0', 'decaf macchiato', 'medium');
+insert into AddCream values ('no cream', '0', 'decaf cappuccino', 'small');
+insert into AddCream values ('no cream', '0', 'decaf drip coffee', 'large');
+insert into AddCream values ('no cream', '0', 'decaf flat white', 'short');
 
 insert into Sweetener values ('honey', 'high');
 insert into Sweetener values ('cane sugar', 'low');
@@ -334,6 +329,11 @@ insert into AddSweetener values ('cane sugar', '3 spoons', 'macchiato', 'medium'
 insert into AddSweetener values ('stevia', '2 pumps', 'cappuccino', 'small');
 insert into AddSweetener values ('vanilla syrup', '1 pump', 'drip coffee', 'large');
 insert into AddSweetener values ('chocolate syrup', '3 pumps', 'flat white', 'short');
+insert into AddSweetener values ('no sweetener', '0', 'decaf latte', 'extra large');
+insert into AddSweetener values ('no sweetener', '0', 'decaf macchiato', 'medium');
+insert into AddSweetener values ('no sweetener', '0', 'decaf cappuccino', 'small');
+insert into AddSweetener values ('no sweetener', '0', 'decaf drip coffee', 'large');
+insert into AddSweetener values ('no sweetener', '0', 'decaf flat white', 'short');
 
 insert into ListCoffee1 values (to_date('2024-08-01','YYYY-MM-DD'), 'latte', 'extra large');
 insert into ListCoffee1 values (to_date('2024-08-11','YYYY-MM-DD'), 'macchiato', 'medium');
@@ -353,23 +353,11 @@ insert into Decaf values ('decaf cappuccino', 'small', 'low', 'decaf Arabica', '
 insert into Decaf values ('decaf drip coffee', 'large', 'high', 'decaf Robusta', 'dark');
 insert into Decaf values ('decaf flat white', 'short', 'low', 'decaf Arabica', 'dark');
 
-insert into Caffeinated values ('latte', 'extra large', 'low', 'Arabica', 'light');
-insert into Caffeinated values ('macchiato', 'medium', 'high', 'Liberica', 'light');
-insert into Caffeinated values ('cappuccino', 'small', 'low', 'Arabica', 'medium');
-insert into Caffeinated values ('drip coffee', 'large', 'high', 'Robusta', 'dark');
-insert into Caffeinated values ('flat white', 'short', 'low', 'Arabica', 'dark');
-
-insert into Espresso values ('weak', 'single shot');
-insert into Espresso values ('medium', 'double shot');
-insert into Espresso values ('strong', 'triple shot');
-insert into Espresso values ('extra strong', '4 shots');
-insert into Espresso values ('super strong', '5 shots');
-
-insert into AddEspresso values ('latte', 'extra large', 4, 'extra strong');
-insert into AddEspresso values ('macchiato', 'medium', 2, 'medium');
-insert into AddEspresso values ('cappuccino', 'small', 1, 'weak');
-insert into AddEspresso values ('drip coffee', 'large', 2, 'medium');
-insert into AddEspresso values ('flat white', 'short', 1, 'weak');
+insert into Caffeinated values ('latte', 'extra large', 'low', 'Arabica', 'light', 3);
+insert into Caffeinated values ('macchiato', 'medium', 'high', 'Liberica', 'light', 2);
+insert into Caffeinated values ('cappuccino', 'small', 'low', 'Arabica', 'medium', 1);
+insert into Caffeinated values ('drip coffee', 'large', 'high', 'Robusta', 'dark', 3);
+insert into Caffeinated values ('flat white', 'short', 'low', 'Arabica', 'dark', 0);
 
 insert into IcedCoffee values ('latte', 'extra large', 'iced', '1 scoop');
 insert into IcedCoffee values ('macchiato', 'medium', 'ice cap', '2 scoops');
