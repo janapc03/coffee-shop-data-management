@@ -39,6 +39,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <input type="submit" value="Update" name="updateToppingsSubmit"></p>
 </form>
 
+<h2>Insert New Topping</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
+    Topping Name: <input type="text" name="inName"> <br /><br />
+    Amount in inventory: <input type="text" name="inInv"> <br /><br />
+
+    <input type="submit" value="Insert" name="insertToppingSubmit"></p>
+</form>
+
 <hr/>
 
 <h1>Inventory of creams</h1>
@@ -54,6 +63,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     Updated inventory: <input type="text" name="inv"> <br /><br />
 
     <input type="submit" value="Update" name="updateCreamSubmit"></p>
+</form>
+
+<h2>Insert New Cream</h2>
+<form method="POST" action="inventory-home.php">
+    <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
+    Topping Name: <input type="text" name="inName"> <br /><br />
+    Amount in inventory: <input type="text" name="inInv"> <br /><br />
+
+    <input type="submit" value="Insert" name="insertCreamSubmit"></p>
 </form>
 
 <hr/>
@@ -235,6 +253,38 @@ function handleUpdateRequest($table, $inv, $name)
     oci_commit($db_conn);
 }
 
+function handleInsertRequest($table)
+{
+    global $db_conn;
+
+    //Getting the values from user and insert data into the table
+    $tuple = array(
+        ":bind1" => $_POST['inName'],
+        ":bind2" => $_POST['inInv'],
+    );
+
+    $alltuples = array(
+        $tuple
+    );
+
+    //$toppingtuple = array(
+    //    ":bind11" => $_POST['inToppingName'],
+     //   ":bind12" => $_POST['inToppingInv'],
+    //);
+
+    //$parenttuples = array(
+    //    $toppingtuple
+    //);
+
+    //executeBoundSQL("insert into coffee values (:bind11, :bind12)", $parenttuples);
+
+    //oci_commit($db_conn);
+
+    executeBoundSQL("insert into " . $table . " values (:bind1, :bind2)", $alltuples);
+
+    oci_commit($db_conn);
+}
+
 function handleDisplayRequest($table, $name, $inv)
 {
     global $db_conn;
@@ -283,6 +333,12 @@ function handleDisplayCoffeeRequest($table, $name, $inv)
                 $inv = 'coffeeInv';
                 $name = 'beanType';
                 handleUpdateRequest($table, $inv, $name);
+            } else if (array_key_exists('insertToppingQueryRequest', $_POST)) {
+                $table = 'toppings';
+                handleInsertRequest($table);
+            } else if (array_key_exists('insertCreamQueryRequest', $_POST)) {
+                $table = 'cream';
+                handleInsertRequest($table);
             }
 			disconnectFromDB();
 		}
@@ -333,7 +389,9 @@ if (isset($_GET['displayToppingsTuplesRequest']) ||
             isset($_POST['updateCreamSubmit']) ||
             isset($_POST['updateSweetenerSubmit']) ||
             isset($_POST['updateCafSubmit']) ||
-            isset($_POST['updateDecafSubmit'])) {
+            isset($_POST['updateDecafSubmit']) ||
+            isset($_POST['insertToppingSubmit']) ||
+            isset($_POST['insertCreamSubmit'])) {
     handlePostRequest();
 }
 ?>
