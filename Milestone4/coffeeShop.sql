@@ -87,6 +87,7 @@ create table ListToppings (
     listDate date not null,
     toppingName varchar(30) not null,
     toppingQuant varchar(20) not null,
+    price int not null,
     primary key (listDate, toppingName),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
     foreign key (toppingName) references Toppings (toppingName) ON DELETE CASCADE);
@@ -112,6 +113,7 @@ create table ListCream (
     listDate date not null,
     creamName varchar(30) not null,
     creamQuant varchar(20) not null,
+    price int not null,
     primary key (listDate, creamName),
     foreign key (listDate) references ShoppingList (listdate) ON DELETE CASCADE,
     foreign key (creamName) references Cream (creamName) ON DELETE CASCADE);
@@ -137,6 +139,7 @@ create table ListSweetener (
     listDate date not null,
     sweetName varchar(30) not null,
     sweetenerQuant varchar(20) not null,
+    price int not null,
     primary key (listDate, sweetName),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE,
     foreign key (sweetName) references Sweetener (sweetName) ON DELETE CASCADE);
@@ -164,6 +167,7 @@ grant select on ListCoffee1 to public;
 create table ListCoffee2 (
     listDate date not null,
     coffeeQuant varchar(20) not null,
+    price int not null,
     primary key (listDate),
     foreign key (listDate) references ShoppingList (listDate) ON DELETE CASCADE);
 grant select on ListCoffee2 to public;
@@ -269,11 +273,14 @@ insert into Toppings values ('cinnamon', 20);
 insert into Toppings values ('icing sugar', 100);
 insert into Toppings values ('cocoa powder', 120);
 
-insert into ListToppings values (to_date('2024-08-01','YYYY-MM-DD'), 'whipped cream', '4 bottles');
-insert into ListToppings values (to_date('2024-08-11','YYYY-MM-DD'), 'caramel drizzle', '2 bottles');
-insert into ListToppings values (to_date('2024-08-15','YYYY-MM-DD'), 'cinnamon', '1 bottle');
-insert into ListToppings values (to_date('2024-08-20','YYYY-MM-DD'), 'icing sugar', '3 bottles');
-insert into ListToppings values (to_date('2024-08-10','YYYY-MM-DD'), 'cocoa powder', '4 bottles');
+insert into ListToppings values (to_date('2024-08-01','YYYY-MM-DD'), 'whipped cream', '4 bottles', 10);
+insert into ListToppings values (to_date('2024-06-18','YYYY-MM-DD'), 'cinnamon', '2 bottles', 50);
+insert into ListToppings values (to_date('2024-05-22','YYYY-MM-DD'), 'icing sugar', '1 bottle', 5);
+insert into ListToppings values (to_date('2024-08-11','YYYY-MM-DD'), 'caramel drizzle', '2 bottles', 40);
+insert into ListToppings values (to_date('2024-08-15','YYYY-MM-DD'), 'cinnamon', '1 bottle', 10);
+insert into ListToppings values (to_date('2024-08-20','YYYY-MM-DD'), 'icing sugar', '3 bottles', 29);
+insert into ListToppings values (to_date('2024-08-10','YYYY-MM-DD'), 'cocoa powder', '4 bottles', 60);
+insert into ListToppings values (to_date('2024-08-01','YYYY-MM-DD'), 'cocoa powder', '1 bottle', 15);
 
 insert into AddToppings values ('whipped cream', '5 tsp', 'latte', 'extra large');
 insert into AddToppings values ('caramel drizzle', '3 tsp', 'macchiato', 'medium');
@@ -292,11 +299,14 @@ insert into Cream values ('oat', 89);
 insert into Cream values ('almond', 165);
 insert into Cream values ('soy', 83);
 
-insert into ListCream values (to_date('2024-08-01','YYYY-MM-DD'), 'half and half', '10 cartons');
-insert into ListCream values (to_date('2024-08-11','YYYY-MM-DD'), 'coconut', '5 cartons');
-insert into ListCream values (to_date('2024-08-15','YYYY-MM-DD'), 'oat', '4 cartons');
-insert into ListCream values (to_date('2024-08-20','YYYY-MM-DD'), 'almond', '3 cartons');
-insert into ListCream values (to_date('2024-08-10','YYYY-MM-DD'), 'soy', '2 cartons');
+insert into ListCream values (to_date('2024-08-01','YYYY-MM-DD'), 'half and half', '10 cartons', 100);
+insert into ListCream values (to_date('2024-06-18','YYYY-MM-DD'), 'coconut', '5 cartons', 200);
+insert into ListCream values (to_date('2024-05-22','YYYY-MM-DD'), 'almond', '4 cartons', 100);
+insert into ListCream values (to_date('2024-08-11','YYYY-MM-DD'), 'coconut', '5 cartons', 120);
+insert into ListCream values (to_date('2024-08-15','YYYY-MM-DD'), 'oat', '4 cartons', 140);
+insert into ListCream values (to_date('2024-08-20','YYYY-MM-DD'), 'almond', '3 cartons', 150);
+insert into ListCream values (to_date('2024-08-10','YYYY-MM-DD'), 'soy', '2 cartons', 40);
+insert into ListCream values (to_date('2024-08-10','YYYY-MM-DD'), 'oat', '1 carton', 40);
 
 insert into AddCream values ('half and half', '2 cups', 'latte', 'extra large');
 insert into AddCream values ('coconut', '1 cup', 'macchiato', 'medium');
@@ -314,11 +324,14 @@ insert into Sweetener values ('stevia', 60);
 insert into Sweetener values ('vanilla syrup', 76);
 insert into Sweetener values ('chocolate syrup', 51);
 
-insert into ListSweetener values (to_date('2024-08-01','YYYY-MM-DD'), 'honey', '5 bottles');
-insert into ListSweetener values (to_date('2024-08-11','YYYY-MM-DD'), 'cane sugar', '5 bottles');
-insert into ListSweetener values (to_date('2024-08-15','YYYY-MM-DD'), 'stevia', '2 bottles');
-insert into ListSweetener values (to_date('2024-08-20','YYYY-MM-DD'), 'vanilla syrup', '4 bottles');
-insert into ListSweetener values (to_date('2024-08-10','YYYY-MM-DD'), 'chocolate syrup', '1 bottle');
+insert into ListSweetener values (to_date('2024-08-01','YYYY-MM-DD'), 'honey', '5 bottles', 15);
+insert into ListSweetener values (to_date('2024-06-18','YYYY-MM-DD'), 'stevia', '5 bottles', 52);
+insert into ListSweetener values (to_date('2024-05-22','YYYY-MM-DD'), 'honey', '2 bottles', 14);
+insert into ListSweetener values (to_date('2024-08-11','YYYY-MM-DD'), 'cane sugar', '5 bottles', 40);
+insert into ListSweetener values (to_date('2024-08-15','YYYY-MM-DD'), 'stevia', '2 bottles', 30);
+insert into ListSweetener values (to_date('2024-08-20','YYYY-MM-DD'), 'vanilla syrup', '4 bottles', 40);
+insert into ListSweetener values (to_date('2024-08-10','YYYY-MM-DD'), 'chocolate syrup', '1 bottle', 15);
+insert into ListSweetener values (to_date('2024-07-19','YYYY-MM-DD'), 'chocolate syrup', '3 bottles', 15);
 
 insert into AddSweetener values ('honey', '2 pump', 'latte', 'extra large');
 insert into AddSweetener values ('cane sugar', '3 spoons', 'macchiato', 'medium');
@@ -332,16 +345,22 @@ insert into AddSweetener values ('vanilla syrup', '2 pumps', 'decaf cappuccino',
 insert into AddSweetener values ('chocolate syrup', '2 pumps', 'decaf cappuccino', 'small');
 
 insert into ListCoffee1 values (to_date('2024-08-01','YYYY-MM-DD'), 'latte', 'extra large');
+insert into ListCoffee1 values (to_date('2024-06-18','YYYY-MM-DD'), 'flat whie', 'small');
+insert into ListCoffee1 values (to_date('2024-05-22','YYYY-MM-DD'), 'cappuccino', 'extra large');
 insert into ListCoffee1 values (to_date('2024-08-11','YYYY-MM-DD'), 'macchiato', 'medium');
 insert into ListCoffee1 values (to_date('2024-08-15','YYYY-MM-DD'), 'cappuccino', 'small');
 insert into ListCoffee1 values (to_date('2024-08-20','YYYY-MM-DD'), 'drip coffee', 'large');
 insert into ListCoffee1 values (to_date('2024-08-10','YYYY-MM-DD'), 'flat white', 'short');
+insert into ListCoffee1 values (to_date('2024-07-19','YYYY-MM-DD'), 'latte', 'medium');
 
-insert into ListCoffee2 values (to_date('2024-08-01','YYYY-MM-DD'), '5 bottles');
-insert into ListCoffee2 values (to_date('2024-08-11','YYYY-MM-DD'), '5 bottles');
-insert into ListCoffee2 values (to_date('2024-08-15','YYYY-MM-DD'), '2 bottles');
-insert into ListCoffee2 values (to_date('2024-08-20','YYYY-MM-DD'), '4 bottles');
-insert into ListCoffee2 values (to_date('2024-08-10','YYYY-MM-DD'), '1 bottle');
+insert into ListCoffee2 values (to_date('2024-08-01','YYYY-MM-DD'), '5 bottles', 10);
+insert into ListCoffee2 values (to_date('2024-08-11','YYYY-MM-DD'), '6 bottles', 150);
+insert into ListCoffee2 values (to_date('2024-08-15','YYYY-MM-DD'), '3 bottles', 100);
+insert into ListCoffee2 values (to_date('2024-06-18','YYYY-MM-DD'), '5 bottles', 100);
+insert into ListCoffee2 values (to_date('2024-05-22','YYYY-MM-DD'), '2 bottles', 95);
+insert into ListCoffee2 values (to_date('2024-08-20','YYYY-MM-DD'), '4 bottles', 180);
+insert into ListCoffee2 values (to_date('2024-08-10','YYYY-MM-DD'), '1 bottle', 45);
+insert into ListCoffee2 values (to_date('2024-07-19','YYYY-MM-DD'), '2 bottle', 45);
 
 insert into Decaf values ('decaf latte', 'extra large', 95, 'light');
 insert into Decaf values ('decaf macchiato', 'medium', 95, 'light');

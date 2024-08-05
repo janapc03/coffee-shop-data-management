@@ -139,7 +139,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <article>
         <div>
         <p>Input the table and attributes you'd like to view: </p>
-        <p>Note: Not all attribute boxes need to be filled </p>
+        <p>Note: Not all attribute boxes need to be filled, but put the attribute name in
+            the corresponding number text box (i.e. 'CREAMINV' is the 2nd attribute of 'Cream', so
+            write it in the 'Attribute 2' textbox)</p>
+        <p>Input attribute names in ALL CAPS</p>
         <form method="GET" action="home-page.php">
                        <input type="hidden" id="displayProjectionRequest" name="displayProjectionRequest">
                        Table: <input type="text" name="selectedTable"> <br /><br />
