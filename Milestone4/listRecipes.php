@@ -464,6 +464,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         } else {
             executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
         }
+        echo "Successfully added coffee recipe";
         oci_commit($db_conn);
 	}
 
@@ -500,6 +501,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         );
 
         executeBoundSQL("insert into icedCoffee values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
+
+        echo "Successfully iced coffee recipe";
 
 	    oci_commit($db_conn);
 	}
@@ -560,6 +563,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         );
 
         executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
+
+        echo "Successfully added additions to coffee recipe";
 
         oci_commit($db_conn);
     }

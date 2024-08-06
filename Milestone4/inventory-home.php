@@ -333,7 +333,7 @@ function handleInsertRequest($table, $checkName)
 
 
     executeBoundSQL("insert into " . $table . " values (:bind1, :bind2)", $alltuples);
-
+    echo "Successfully added additions";
 
     oci_commit($db_conn);
 }
