@@ -308,9 +308,18 @@ function handleUpdateRequest($table, $inv, $name)
 }
 
 
-function handleInsertRequest($table)
+function handleInsertRequest($table, $checkName)
 {
     global $db_conn;
+
+
+    $result = executePlainSQL("SELECT Count(*) FROM " . $table . " WHERE " . $checkName . "='" . $_POST['inName']. "'");
+    if (($row = oci_fetch_row($result)) != false ) {
+        if ($row[0] != 0) {
+            echo "Invalid input, already exists";
+            exit();
+        }
+    }
 
     //Getting the values from user and insert data into the table
     $tuple = array(
@@ -322,7 +331,9 @@ function handleInsertRequest($table)
         $tuple
     );
 
+
     executeBoundSQL("insert into " . $table . " values (:bind1, :bind2)", $alltuples);
+
 
     oci_commit($db_conn);
 }
@@ -423,13 +434,16 @@ function handlePostRequest()
             handleUpdateCoffeeRequest();
         } else if (array_key_exists('insertToppingQueryRequest', $_POST)) {
             $table = 'toppings';
-            handleInsertRequest($table);
+            $checkName = 'toppingName';
+            handleInsertRequest($table, $checkName);
         } else if (array_key_exists('insertCreamQueryRequest', $_POST)) {
             $table = 'cream';
-            handleInsertRequest($table);
+            $checkName = 'creamName';
+            handleInsertRequest($table, $checkName);
         } else if (array_key_exists('insertSweetenerQueryRequest', $_POST)) {
             $table = 'sweetener';
-            handleInsertRequest($table);
+            $checkName = 'sweetName';
+            handleInsertRequest($table, $checkName);
         } else if (array_key_exists('deleteToppingQueryRequest', $_POST)) {
             $table = 'toppings';
             $name = 'toppingName';
