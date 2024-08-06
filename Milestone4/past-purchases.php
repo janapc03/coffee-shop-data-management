@@ -11,8 +11,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_janapchi";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a87884193";	// change to 'a' + your student number
+$config["dbuser"] = "ora_miaodan";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a92389279";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -112,6 +112,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
                <input type="hidden" id="displayAggregationRequest" name="displayAggregationRequest">
                <p><input type="submit" value="Nested Agg Query" name="displayAggregationTuples"></p>
+
+               <input type="radio" id="topping" name="add" value="topping">
+               <label for="topping">Toppings</label><br>
+               <input type="radio" id="cream" name="add" value="cream">
+               <label for="cream">Creams</label><br>
+               <input type="radio" id="sweet" name="add" value="sweet">
+               <label for="sweet">Sweeteners</label><br>
+               <input type="radio" id="coffee" name="add" value="coffee">
+               <label for="coffee">Coffee</label><br>
 
               </form>
           </div>
@@ -343,7 +352,24 @@ function handleDisplayAggregationRequest()
         		 AND p.listDate=sl.listDate");
         		printResult($result);
 
-		$result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT, lt.price as ITEMPRICE
+        if ($_GET['add'] == 'topping') {
+            $table = 'listToppings';
+        } else if ($_GET['add'] == 'cream') {
+            $table = 'listCream';
+        } else if ($_GET['add'] == 'sweet') {
+            $table = 'listSweetener';
+        } else if ($_GET['add'] == 'coffee') {
+            $table = 'listCoffee2';
+        }else {
+            exit();
+        }
+
+        $result = executePlainSQL("SELECT COUNT(*) FROM " . $table . " WHERE price < (SELECT AVG(price) FROM " . $table . ")");
+        if (($row = oci_fetch_row($result)) != false) {
+            echo "<br> The number of " . $_GET['add'] . " purchases below it's average price: " . $row[0] . "<br>";
+        }
+
+		/*$result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT, lt.price as ITEMPRICE
                                             FROM listToppings lt
                                             UNION
                                             SELECT sweetName AS ITEMNAME, sweetenerQuant as ITEMAMOUNT, ls.price as ITEMPRICE
@@ -355,7 +381,7 @@ function handleDisplayAggregationRequest()
                                             SELECT coffeeName AS ITEMNAME, coffeeQuant as ITEMAMOUNT, lcf2.price as ITEMPRICE
                                             FROM listCoffee1 lcf1, listCoffee2 lcf2
                                             WHERE lcf1.listDate=lcf2.listDate");
-                                        printAggregationResult($result);
+                                        printAggregationResult($result);*/
 
 		oci_commit($db_conn);
 	}
