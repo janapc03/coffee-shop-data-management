@@ -338,6 +338,7 @@ insert into AddSweetener values ('cane sugar', '3 spoons', 'macchiato', 'medium'
 insert into AddSweetener values ('stevia', '2 pumps', 'cappuccino', 'small');
 insert into AddSweetener values ('vanilla syrup', '1 pump', 'drip coffee', 'large');
 insert into AddSweetener values ('chocolate syrup', '3 pumps', 'flat white', 'short');
+insert into AddSweetener values ('chocolate syrup', '3 pumps', 'drip coffee', 'large');
 insert into AddSweetener values ('honey', '2 pumps', 'decaf cappuccino', 'small');
 insert into AddSweetener values ('cane sugar', '2 pumps', 'decaf cappuccino', 'small');
 insert into AddSweetener values ('stevia', '2 pumps', 'decaf cappuccino', 'small');

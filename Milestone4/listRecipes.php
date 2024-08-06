@@ -217,10 +217,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     </form>
     </div>
     </div>
-
-
-
-
     <hr />
 
 	<?php
@@ -253,6 +249,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$r = oci_execute($statement, OCI_DEFAULT);
 		if (!$r) {
 			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			// ORA-01400: invalid NULL input
+			// ORA-02291: no parent key
+			// ORA-00001: already exists in table
 			$e = oci_error($statement); // For oci_execute errors pass the statementhandle
 			echo htmlentities($e['message']);
 			$success = False;
@@ -288,6 +287,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				unset($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
 			}
 
+			// ORA-01400: invalid NULL input
+            // ORA-02291: no parent key
+            // ORA-00001: already exists in table
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
 			    //echo "<br>INVALID INPUT, PLEASE TRY AGAIN<br>";
@@ -483,7 +485,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             $tuple
         );
 
-        if ($_POST['add'] == 'topping') {
+        if (!array_key_exists('add', $_POST)) {
+            echo "Additions option not clicked";
+            exit();
+        } if ($_POST['add'] == 'topping') {
             $table = 'addToppings';
         } else if ($_POST['add'] == 'cream') {
             $table = 'addCream';
@@ -530,7 +535,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function handleDisplayAllRequest($add, $addName, $addOn, $addOnName, $titleName)
     {
         global $db_conn;
-        $result = executePlainSQL("SELECT * FROM coffee c WHERE NOT EXISTS (SELECT " . $addName . " FROM " . $add . " WHERE NOT EXISTS (SELECT " . $addOnName . " FROM " . $addOn . " WHERE " . $addOnName . " = " . $addName . " AND a.coffeeName = c.coffeeName))");
+        $result = executePlainSQL("SELECT * FROM coffee c WHERE NOT EXISTS (SELECT " . $addName . " FROM " . $add . " WHERE NOT EXISTS (SELECT " . $addOnName . " FROM " . $addOn . " WHERE " . $addOnName . " = " . $addName . " AND a.coffeeName = c.coffeeName AND a.coffeeSize = c.coffeeSize))");
 
         echo "<h3 style=\"text-align: center\">Coffee Recipes that add all " . $titleName . "</h3>";
         echo "<table style=\"width:25%; text-align: center; margin-left:auto; margin-right:auto; border-collapse: collapse;\">";
@@ -548,7 +553,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         global $db_conn;
 
 
-        if ($_GET['de_caf'] == 'decaf') {
+        if (!array_key_exists('de_caf', $_GET)) {
+            echo "Caffeine option not clicked";
+            exit();
+        } if ($_GET['de_caf'] == 'decaf') {
             $coffee = 'Decaf';
         } else if ($_GET['de_caf'] == 'caf') {
             $coffee = 'Caffeinated';
@@ -557,6 +565,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         }
 
         $name = $_GET['inCoffeeName'];
+
+        if ($name == null) {
+            echo "Invalid null input, please try again";
+            exit();
+        }
 
         $result = executePlainSQL("SELECT * FROM " . $table . " a, " . $coffee . " c WHERE c.coffeeName = '" . $name . "' AND a.coffeeName = c.coffeeName AND a.coffeeSize = c.coffeeSize");
 
@@ -572,13 +585,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function handleDisplayNumRequest($table, $name, $titleName)
     {
         global $db_conn;
-        $result = executePlainSQL("SELECT coffeeName, COUNT(" .$name. ") as num FROM " . $table . " GROUP BY coffeeName HAVING COUNT(*)>1");
+        $result = executePlainSQL("SELECT coffeeName, coffeeSize, COUNT(" .$name. ") as num FROM " . $table . " GROUP BY coffeeName, coffeeSize HAVING COUNT(*)>1");
 
         echo "<h3 style=\"text-align: center\">Coffee Recipes With Multiple " . $titleName . " and How Many</h3>";
         echo "<table style=\"width:25%; text-align: center; margin-left:auto; margin-right:auto;  border-collapse: collapse;\">";
-        echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Number of " . $titleName . "</th></tr>";
+        echo "<tr style=\"border-bottom: 1px solid black\"><th>Name</th><th>Size</th><th>Number of " . $titleName . "</th></tr>";
         while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['NUM'] . "</td></tr>"; //or just use "echo $row[0]"
+            echo "<tr style=\"border-bottom: 1px solid black\"><td style=\"padding: 15px;\">" . $row['COFFEENAME'] . "</td><td style=\"padding: 15px;\">" . $row['COFFEESIZE'] . "</td><td style=\"padding: 15px;\">" . $row['NUM'] . "</td></tr>"; //or just use "echo $row[0]"
         }
         echo "</table>";
 
@@ -592,6 +605,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         $delCoffee = $_POST['inCoffeeName'];
         $delSize = $_POST['inSize'];
 
+        if ($delCoffee = null || $delSize == null) {
+            echo "Invalid null input, please try again";
+            exit();
+        }
+
         executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $delCoffee . "' AND coffeeSize='" . $delSize . "'");
         oci_commit($db_conn);
     }
@@ -600,7 +618,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
 
-        if ($_POST['add'] == 'topping') {
+        if (!array_key_exists('add', $_POST)) {
+            echo "Additions option not clicked";
+            exit();
+        } else if ($_POST['add'] == 'topping') {
             $table = 'addToppings';
             $addName = 'toppingName';
         } else if ($_POST['add'] == 'cream') {
@@ -617,7 +638,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         $size = $_POST['inCoffeeSize'];
         $add = $_POST['inAdd'];
 
-        executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $name . "' AND coffeeSize='" . $size . "' AND " . $addName . "='" . $add . "'");
+        if ($name = null || $size == null || $add == null) {
+            echo "Invalid null input, please try again";
+            exit();
+        }
+
+        $result = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $name . "' AND coffeeSize='" . $size . "' AND " . $addName . "='" . $add . "'");
+
         oci_commit($db_conn);
     }
 
