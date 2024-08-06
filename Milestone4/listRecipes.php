@@ -67,7 +67,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
             <p>Coffee Size: </p><input type="text" name="inCoffeeSize"> <br /><br />
             <p>Roast Level:</p> <input type="text" name="inRoastLevel"> <br /><br />
-            <p>Number of Espresso Shots:</p> <input type="number" name="inShots"> <br /><br />
+            <p>Number of Espresso Shots:</p> <input type="number" name="inShots" min="0"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCafSubmit"></p>
         </form>
@@ -125,7 +125,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
             <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
-           <p> Size:</p> <input type="text" name="inSize"> <br /><br />
+            <p> Size:</p> <input type="text" name="inSize"> <br /><br />
 
             <input type="submit" value="Delete" name="deleteSubmit"></p>
         </form>
@@ -605,12 +605,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         $delCoffee = $_POST['inCoffeeName'];
         $delSize = $_POST['inSize'];
 
-        if ($delCoffee = null || $delSize == null) {
+        if ($delCoffee == null || $delSize == null) {
             echo "Invalid null input, please try again";
             exit();
         }
 
-        executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $delCoffee . "' AND coffeeSize='" . $delSize . "'");
+        $result = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $delCoffee . "' AND coffeeSize='" . $delSize . "'");
+
+        if (oci_num_rows($result) == 0) {
+            echo "Invalid input, recipe does not exist";
+        } else {
+            echo "Successfully deleted coffee recipe";
+        }
+
         oci_commit($db_conn);
     }
 
@@ -638,12 +645,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         $size = $_POST['inCoffeeSize'];
         $add = $_POST['inAdd'];
 
-        if ($name = null || $size == null || $add == null) {
+        if ($name == null || $size == null || $add == null) {
             echo "Invalid null input, please try again";
             exit();
         }
 
         $result = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $name . "' AND coffeeSize='" . $size . "' AND " . $addName . "='" . $add . "'");
+
+        if (oci_num_rows($result) == 0) {
+            echo "Invalid input, additions do not exist in recipe";
+        } else {
+            echo "Successfully removed additions from recipe";
+        }
 
         oci_commit($db_conn);
     }

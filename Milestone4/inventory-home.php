@@ -49,7 +49,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
             <p>Toppings name: </p><input type="text" name="name"> <br /><br />
-            <p>Updated inventory (kg): </p><input type="text" name="inv"> <br /><br />
+            <p>Updated inventory (kg): </p><input type="number" name="inv" min="0"> <br /><br />
 
             <input type="submit" value="Update" name="updateToppingsSubmit"></p>
         </form>
@@ -58,7 +58,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
             <p>Topping Name: </p><input type="text" name="inName"> <br /><br />
-            <p>Amount in inventory (kg):</p> <input type="text" name="inInv"> <br /><br />
+            <p>Amount in inventory (kg):</p> <input type="number" name="inInv" min="0"> <br /><br />
 
             <input type="submit" value="Insert" name="insertToppingSubmit"></p>
         </form>
@@ -82,7 +82,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
             <p>Cream name:</p> <input type="text" name="name"> <br /><br />
-           <p> Updated inventory (kg): </p><input type="text" name="inv"> <br /><br />
+           <p> Updated inventory (kg): </p><input type="number" name="inv" min="0"> <br /><br />
 
             <input type="submit" value="Update" name="updateCreamSubmit"></p>
         </form>
@@ -91,7 +91,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
             <p>Cream Name: </p><input type="text" name="inName"> <br /><br />
-            <p>Amount in inventory (kg): </p><input type="text" name="inInv"> <br /><br />
+            <p>Amount in inventory (kg): </p><input type="number" name="inInv" min="0"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCreamSubmit"></p>
         </form>
@@ -116,7 +116,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
             <p>Sweetener name: </p><input type="text" name="name"> <br /><br />
-            <p>Updated inventory (kg): </p><input type="text" name="inv"> <br /><br />
+            <p>Updated inventory (kg): </p><input type="number" name="inv" min="0"> <br /><br />
 
             <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
         </form>
@@ -125,7 +125,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertSweetenerQueryRequest" name="insertSweetenerQueryRequest">
             <p>Sweetener Name:</p> <input type="text" name="inName"> <br /><br />
-           <p> Amount in inventory (kg):</p> <input type="text" name="inInv"> <br /><br />
+           <p> Amount in inventory (kg):</p> <input type="number" name="inInv" min="0"> <br /><br />
             <input type="submit" value="Insert" name="insertSweetenerSubmit"></p>
         </form>
 
@@ -148,8 +148,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Update Coffee Bean Inventory</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
-            <p>Updated Caffeinated inventory (kg): </p><input type="text" name="cafInv"> <br /><br />
-            <p>Updated Decaffeinated inventory (kg): </p><input type="text" name="decafInv"> <br /><br />
+            <p>Updated Caffeinated inventory (kg): </p><input type="number" name="cafInv" min="0"> <br /><br />
+            <p>Updated Decaffeinated inventory (kg): </p><input type="number" name="decafInv" min="0"> <br /><br />
 
             <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
         </form>
@@ -290,9 +290,19 @@ function handleUpdateRequest($table, $inv, $name)
     $itemName = $_POST['name'];
     $updatedItemInv = $_POST['inv'];
 
+    if ($itemName == null || $updatedItemInv == null) {
+        echo "Invalid null input, please try again";
+        exit();
+    }
+
     // you need the wrap the old name and new name values with single quotations
-    executePlainSQL("UPDATE " . $table . " SET " . $inv . " ='" . $updatedItemInv . "' WHERE " . $name . " ='" . $itemName . "'");
+    $result = executePlainSQL("UPDATE " . $table . " SET " . $inv . " ='" . $updatedItemInv . "' WHERE " . $name . " ='" . $itemName . "'");
     //executePlainSQL("UPDATE toppings SET toppingInv = 'low' WHERE toppingName = 'whipped cream'");
+    if (oci_num_rows($result) == 0) {
+        echo "Invalid input, addition does not exist";
+    } else {
+        echo "Successfully updated addition";
+    }
     oci_commit($db_conn);
 }
 
@@ -323,11 +333,26 @@ function handleUpdateCoffeeRequest()
     $decaf = $_POST['decafInv'];
 
     if ($caf != null) {
-        executePlainSQL("UPDATE caffeinated SET coffeeInv ='" . $caf . "'");
+        $result = executePlainSQL("UPDATE caffeinated SET coffeeInv ='" . $caf . "'");
+        if (oci_num_rows($result) == 0) {
+            echo "Invalid input, caffeinated coffee beans inventory has not been updated";
+        } else {
+            echo "Successfully updated coffee bean inventory";
+        }
     }
     if ($decaf != null) {
-        executePlainSQL("UPDATE decaf SET coffeeInv ='" . $decaf . "'");
+        $result = executePlainSQL("UPDATE decaf SET coffeeInv ='" . $decaf . "'");
+        if (oci_num_rows($result) == 0) {
+            echo "Invalid input, decaf coffee beans inventory has not been updated";
+        } else {
+            echo "Successfully updated coffee bean inventory";
+        }
     }
+
+    if ($caf == null && $decaf == null) {
+        echo "Invalid null input, please try again";
+    }
+
     oci_commit($db_conn);
 }
 
@@ -337,8 +362,18 @@ function handleDeleteRequest($table, $name)
 
     $deleteName = $_POST['delName'];
 
-    executePlainSQL("DELETE FROM " . $table . " WHERE " . $name . "='" . $deleteName . "'");
+    if ($deleteName == null) {
+        echo "Invalid null input, please try again";
+        exit();
+    }
+
+    $result = executePlainSQL("DELETE FROM " . $table . " WHERE " . $name . "='" . $deleteName . "'");
     //executePlainSQL("DELETE FROM toppings WHERE toppingName='cinnamon'");
+    if (oci_num_rows($result) == 0) {
+        echo "Invalid input, addition does not exist";
+    } else {
+        echo "Successfully deleted addition";
+    }
     oci_commit($db_conn);
 }
 
