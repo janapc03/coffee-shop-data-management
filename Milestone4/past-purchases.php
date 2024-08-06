@@ -112,6 +112,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                <input type="hidden" id="displayAvgCostsRequest" name="displayAvgCostsRequest">
                <p><input type="submit" value="Average Costs" name="displayAvgCostsTuples"></p>
 
+               <input type="hidden" id="displayAggregationRequest" name="displayAggregationRequest">
+               <p><input type="submit" value="Nested Agg Query" name="displayAggregationTuples"></p>
+
               </form>
           </div>
 
@@ -238,6 +241,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             		echo "</tbody></table>";
             	}
 
+    function printAggregationResult($result)
+                	{ //prints results from a select statement
+                		echo '<br /><table class="aggregation-table">';
+                		echo "<thead><tr><th>Name</th><th>Amount</th><th>Price</th></tr><tbody>";
+
+                		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+
+                			echo "<tr>";
+                            echo "<td>" . $row['ITEMNAME'] . "</td>";
+                            echo "<td>" . $row['ITEMAMOUNT'] . "</td>";
+                            echo "<td>" . $row['ITEMPRICE'] . "</td>";
+                            echo "</tr>"; //or just use "echo $row[0]"
+                                            		}
+
+                		echo "</tbody></table>";
+                	}
+
 
 
 	function connectToDB()
@@ -314,6 +334,34 @@ function handleDisplayRequest()
 		oci_commit($db_conn);
 	}
 
+function handleDisplayAggregationRequest()
+	{
+		global $db_conn;
+
+		$result = executePlainSQL("SELECT d.trackingNum, dy.expectedDate, d.supName, p.listDate, p.price
+        		 FROM Deliver d, Delivery dy, Purchase p, ShoppingList sl
+        		 WHERE d.trackingNum=dy.trackingNum
+        		 AND dy.trackingNum=p.trackingNum
+        		 AND p.listDate=sl.listDate");
+        		printResult($result);
+
+		$result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT, lt.price as ITEMPRICE
+                                            FROM listToppings lt
+                                            UNION
+                                            SELECT sweetName AS ITEMNAME, sweetenerQuant as ITEMAMOUNT, ls.price as ITEMPRICE
+                                            FROM listSweetener ls
+                                            UNION
+                                            SELECT creamName AS ITEMNAME, creamQuant as ITEMAMOUNT, lc.price as ITEMPRICE
+                                            FROM listCream lc
+                                            UNION
+                                            SELECT coffeeName AS ITEMNAME, coffeeQuant as ITEMAMOUNT, lcf2.price as ITEMPRICE
+                                            FROM listCoffee1 lcf1, listCoffee2 lcf2
+                                            WHERE lcf1.listDate=lcf2.listDate");
+                                        printAggregationResult($result);
+
+		oci_commit($db_conn);
+	}
+
 
 	// HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -335,26 +383,8 @@ function handleDisplayRequest()
 		if (connectToDB()) {
                 if (array_key_exists('displayAvgCostsTuples', $_GET)) {
                     handleDisplayAvgCostRequest();
-                } else if (array_key_exists('displayCreamTuples', $_GET)) {
-                    $table = 'cream';
-                    $name = 'CREAMNAME';
-                    $inv= 'CREAMINV';
-                    handleDisplayItemsRequest($table, $name, $inv);
-                } else if (array_key_exists('displaySweetenerTuples', $_GET)) {
-                    $table = 'sweetener';
-                    $name = 'SWEETNAME';
-                    $inv= 'SWEETENERINV';
-                    handleDisplayItemsRequest($table, $name, $inv);
-                } else if (array_key_exists('displayCafTuples', $_GET)) {
-                    $table = 'caffeinated';
-                    $name = 'BEANTYPE';
-                    $inv= 'COFFEEINV';
-                    handleDisplayCoffeeRequest($table, $name, $inv);
-                } else if (array_key_exists('displayDecafTuples', $_GET)) {
-                    $table = 'decaf';
-                    $name = 'BEANTYPE';
-                    $inv= 'COFFEEINV';
-                    handleDisplayCoffeeRequest($table, $name, $inv);
+                } else if(array_key_exists('displayAggregationTuples', $_GET)) {
+                    handleDisplayAggregationRequest();
                 }
 
 			disconnectFromDB();
@@ -364,7 +394,7 @@ function handleDisplayRequest()
 	if (isset($_POST['updateSubmit'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayAvgCostsRequest']) ||
-               isset($_GET['displayCreamTuplesRequest']))  {
+               isset($_GET['displayAggregationRequest']))  {
                handleGetRequest();
 	} else {
 	if (connectToDB())

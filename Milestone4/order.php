@@ -299,13 +299,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         function printShoppingListResult($result)
                 	{ //prints results from a select statement
                 		echo '<br /><table class="shopping-list-table">';
-                		echo "<thead><tr><th>Name</th><th>Amount</th></tr><tbody>";
+                		echo "<thead><tr><th>Name</th><th>Amount</th><th>Price</th></tr><tbody>";
 
                 		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
 
                 			echo "<tr>";
                                 echo "<td>" . $row['ITEMNAME'] . "</td>";
                                 echo "<td>" . $row['ITEMAMOUNT'] . "</td>";
+                                echo "<td>" . $row['PRICE'] . "</td>";
                                 echo "</tr>"; //or just use "echo $row[0]"
                 		}
 
@@ -403,19 +404,19 @@ function handleDisplayShoppingListRequest()
         printSalesResult($result);
 
     $listDate = $_GET['shoppingListDate'];
-    $result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT
+    $result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT, price as PRICE
         FROM listToppings lt
         WHERE  lt.listDate=to_date('$listDate','YYYY-MM-DD')
         UNION
-        SELECT sweetName AS ITEMNAME, sweetenerQuant as ITEMAMOUNT
+        SELECT sweetName AS ITEMNAME, sweetenerQuant as ITEMAMOUNT, price as PRICE
         FROM listSweetener ls
         WHERE  ls.listDate=to_date('$listDate','YYYY-MM-DD')
         UNION
-        SELECT creamName AS ITEMNAME, creamQuant as ITEMAMOUNT
+        SELECT creamName AS ITEMNAME, creamQuant as ITEMAMOUNT, price as PRICE
         FROM listCream lc
         WHERE  lc.listDate=to_date('$listDate','YYYY-MM-DD')
         UNION
-        SELECT coffeeName AS ITEMNAME, coffeeQuant as ITEMAMOUNT
+        SELECT coffeeName AS ITEMNAME, coffeeQuant as ITEMAMOUNT, price as PRICE
         FROM listCoffee1 lcf1, listCoffee2 lcf2
         WHERE  lcf1.listDate=to_date('$listDate','YYYY-MM-DD') AND lcf1.listDate=lcf2.listDate");
     printShoppingListResult($result);

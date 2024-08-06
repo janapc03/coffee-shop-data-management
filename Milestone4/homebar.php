@@ -7,6 +7,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: #468075;
 }
 
 li {
@@ -19,12 +20,8 @@ li a {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-
   }
 
-  div {
-  float: center;
-  }
 }
 
 </style>
