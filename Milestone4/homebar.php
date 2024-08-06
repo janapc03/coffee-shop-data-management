@@ -12,6 +12,8 @@ ul {
 
 li {
   float: left;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size:17px;
 }
 
 li a {
@@ -20,6 +22,9 @@ li a {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  }
+  li a:hover {
+    background-color: #346156;
   }
 
 }
