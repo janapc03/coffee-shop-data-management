@@ -11,8 +11,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_miaodan";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a92389279";	// change to 'a' + your student number
+$config["dbuser"] = "ora_janapchi";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a87884193";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -59,7 +59,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             width: 18%;
             height: 600px;
             border: 2px solid black;
-            line-height: 10px;
+            line-height: 20px;
             }
 
         .userOptions {
@@ -111,7 +111,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                <p><input type="submit" value="Average Costs" name="displayAvgCostsTuples"></p>
 
                <input type="hidden" id="displayAggregationRequest" name="displayAggregationRequest">
-               <p><input type="submit" value="Nested Agg Query" name="displayAggregationTuples"></p>
+
+               <p>Find the number of items that were purchased at a below average price:</p>
 
                <input type="radio" id="topping" name="add" value="topping">
                <label for="topping">Toppings</label><br>
@@ -121,6 +122,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                <label for="sweet">Sweeteners</label><br>
                <input type="radio" id="coffee" name="add" value="coffee">
                <label for="coffee">Coffee</label><br>
+               <p><input type="submit" name="displayAggregationTuples"></p>
 
               </form>
           </div>
