@@ -227,6 +227,7 @@ function executeBoundSQL($cmdstr, $list)
             echo htmlentities($e['message']);
             echo "<br>";
             $success = False;
+            break;
         }
     }
 }

@@ -298,6 +298,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				echo htmlentities($e['message']);
 				echo "<br>";
 				$success = False;
+				break;
 			}
 		}
 	}
@@ -399,6 +400,22 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		//Getting the values from user and insert data into the table
 
+		if ($_POST['inCoffeeName'] == null || $_POST['inCoffeeSize'] == null || $_POST['inRoastLevel'] == null) {
+		    echo "Invalid null input, please try again";
+		    exit();
+		} else if ($table == 'caffeinated' && $_POST['inShots'] == null) {
+		    echo "Invalid null input, please try again";
+            exit();
+		}
+
+        $result = executePlainSQL("SELECT Count(*) FROM coffee WHERE coffeeName='" . $_POST['inCoffeeName']. "'AND coffeeSize = '" . $_POST['inCoffeeSize'] . "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] != 0) {
+                echo "Invalid input, recipe already exist";
+                exit();
+            }
+        }
+
 		$resultC = executePlainSQL("SELECT coffeeInv FROM " . $table ."");
 		$rowC = OCI_Fetch_Array($resultC, OCI_ASSOC);
 		if (!$rowC) {
@@ -454,6 +471,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	{
 	    global $db_conn;
 
+        $result = executePlainSQL("SELECT Count(*) FROM coffee WHERE coffeeName='" . $_POST['inCoffeeName']. "'AND coffeeSize = '" . $_POST['inSize'] . "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] == 0) {
+                echo "Invalid input, recipe does not exist";
+                exit();
+            }
+        }
+
+        $result = executePlainSQL("SELECT Count(*) FROM icedCoffee WHERE coffeeName='" . $_POST['inCoffeeName']. "'AND coffeeSize = '" . $_POST['inSize'] . "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] != 0) {
+                echo "Invalid input, recipe is already iced";
+                exit();
+            }
+        }
+
+
 	    $tuple = array(
             ":bind1" => $_POST['inCoffeeName'],
             ":bind2" => $_POST['inSize'],
@@ -474,6 +508,46 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
 
+        if (!array_key_exists('add', $_POST)) {
+            echo "Additions option not clicked";
+            exit();
+        } if ($_POST['add'] == 'topping') {
+            $table = 'addToppings';
+            $check = 'toppingName';
+        } else if ($_POST['add'] == 'cream') {
+            $table = 'addCream';
+            $check = 'creamName';
+        } else if ($_POST['add'] == 'sweet') {
+            $table = 'addSweetener';
+            $check = 'sweetName';
+        } else {
+            exit();
+        }
+
+        $result = executePlainSQL("SELECT Count(*) FROM coffee WHERE coffeeName='" . $_POST['inCoffeeName']. "'AND coffeeSize = '" . $_POST['inCoffeeSize'] . "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] == 0) {
+                echo "Invalid input, recipe does not exist";
+                exit();
+            }
+        }
+
+        $result = executePlainSQL("SELECT Count(*) FROM " . $table . " WHERE " . $check . "='" . $_POST['inAdd']. "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] == 0) {
+                echo "Invalid input, addition does not exist";
+                exit();
+            }
+        }
+
+        $result = executePlainSQL("SELECT Count(*) FROM " . $table . " WHERE coffeeName='" . $_POST['inCoffeeName']. "'AND coffeeSize = '" . $_POST['inCoffeeSize'] . "'AND " . $check . "='" . $_POST['inAdd']. "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] != 0) {
+                echo "Invalid input, recipe already has this addition";
+                exit();
+            }
+        }
+
         $tuple = array(
             ":bind1" => $_POST['inAdd'],
             ":bind2" => $_POST['inAddAm'],
@@ -484,19 +558,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         $alltuples = array(
             $tuple
         );
-
-        if (!array_key_exists('add', $_POST)) {
-            echo "Additions option not clicked";
-            exit();
-        } if ($_POST['add'] == 'topping') {
-            $table = 'addToppings';
-        } else if ($_POST['add'] == 'cream') {
-            $table = 'addCream';
-        } else if ($_POST['add'] == 'sweet') {
-            $table = 'addSweetener';
-        } else {
-            exit();
-        }
 
         executeBoundSQL("insert into " . $table . " values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
 
@@ -551,7 +612,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function handleDisplayAddRequest($table, $add, $addName, $addAmount)
     {
         global $db_conn;
-
 
         if (!array_key_exists('de_caf', $_GET)) {
             echo "Caffeine option not clicked";
@@ -610,9 +670,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             exit();
         }
 
-        $result = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $delCoffee . "' AND coffeeSize='" . $delSize . "'");
+        $buf = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $delCoffee . "' AND coffeeSize='" . $delSize . "'");
+        $result = oci_num_rows($buf);
 
-        if (oci_num_rows($result) == 0) {
+        if ($result == 0) {
             echo "Invalid input, recipe does not exist";
         } else {
             echo "Successfully deleted coffee recipe";
@@ -650,9 +711,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             exit();
         }
 
-        $result = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $name . "' AND coffeeSize='" . $size . "' AND " . $addName . "='" . $add . "'");
+        $result = executePlainSQL("SELECT Count(*) FROM coffee WHERE coffeeName='" . $name. "' AND coffeeSize = '" . $size . "'");
+        if (($row = oci_fetch_row($result)) != false ) {
+            if ($row[0] == 0) {
+                echo "Invalid input, recipe does not exist";
+                exit();
+            }
+        }
 
-        if (oci_num_rows($result) == 0) {
+        $buf = executePlainSQL("DELETE FROM " . $table . " WHERE coffeeName='" . $name . "' AND coffeeSize='" . $size . "' AND " . $addName . "='" . $add . "'");
+
+        $result = oci_num_rows($buf);
+        if ($result == 0) {
             echo "Invalid input, additions do not exist in recipe";
         } else {
             echo "Successfully removed additions from recipe";
