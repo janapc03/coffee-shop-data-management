@@ -216,6 +216,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printResult($result)
         	{ //prints results from a select statement
+        	echo "<br>Data for all past purchases:<br>";
         		echo '<br /><table class="past-purchases-table">';
         		echo "<thead><tr><th>Tracking Num.</th><th>Expected By</th><th>Supplier</th><th>Order Date</th><th>Total Cost</th></tr><tbody>";
 
@@ -235,6 +236,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printAvgResult($result)
             	{ //prints results from a select statement
+            	echo "<br>Retrieved data regarding average order cost by supplier:<br>";
             		echo '<br /><table class="avg-cost-table">';
             		echo "<thead><tr><th>Supplier</th><th>Num. of Orders</th><th>Average Order Cost</th></tr><tbody>";
 
@@ -252,6 +254,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printAggregationResult($result)
                 	{ //prints results from a select statement
+                	echo "<br>Retrieved data regarding number of purchased items below average price: <br>";
                 		echo '<br /><table class="aggregation-table">';
                 		echo "<thead><tr><th>Name</th><th>Amount</th><th>Price</th></tr><tbody>";
 
@@ -371,7 +374,9 @@ function handleDisplayAggregationRequest()
 
         $result = executePlainSQL("SELECT COUNT(*) FROM " . $table . " WHERE price < (SELECT AVG(price) FROM " . $table . ")");
         if (($row = oci_fetch_row($result)) != false) {
-            echo "<br> The number of " . $_GET['add'] . " purchases below it's average price: " . $row[0] . "<br>";
+        echo "<br>Retrieved data regarding number of purchased items below average price: <br>";
+
+            echo "<br> The number of " . $_GET['add'] . " purchases below its average price: " . $row[0] . "<br>";
         }
 
 		/*$result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT, lt.price as ITEMPRICE

@@ -296,6 +296,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         function printItemsResult($result, $name, $inv)
                 	{ //prints results from a select statement
+                	echo "<br>Retrieved item data for chosen category: <br>";
+
                 		echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
                 		echo "<tr><th>Name</th><th>Inventory (kg)</th></tr>";
 
@@ -309,6 +311,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         function printCoffeeResult($result)
         { //prints results from a select statement
+        echo "<br>Retrieved item data for chosen category: <br>";
+
             echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
             echo "<tr><th>Caffeinated Inventory (kg)</th><th>Decaffeinated Inventory (kg)</th></tr>";
 
@@ -323,6 +327,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         function printShoppingListResult($result)
                 	{ //prints results from a select statement
+                	echo "<br>Retrieved shopping list data for chosen date: <br>";
+
                 		echo '<br /><table class="shopping-list-table">';
                 		echo "<thead><tr><th>Name</th><th>Amount</th><th>Price</th></tr><tbody>";
 
