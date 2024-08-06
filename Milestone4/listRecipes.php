@@ -46,7 +46,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
             Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
             Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
-            Number of Espresso Shots: <input type="number" name="inShots"> <br /><br />
+            Number of Espresso Shots: <input type="number" name="inShots"  min="0"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCafSubmit"></p>
         </form>
@@ -459,7 +459,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             $tuple
         );
 
-        if ($_POST['add'] == 'topping') {
+        if (!array_key_exists('de_caf', $_POST)) {
+            echo "Additions option not clicked";
+            exit();
+        }else if ($_POST['add'] == 'topping') {
             $table = 'addToppings';
         } else if ($_POST['add'] == 'cream') {
             $table = 'addCream';
@@ -524,7 +527,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         global $db_conn;
 
 
-        if ($_GET['de_caf'] == 'decaf') {
+        if (!array_key_exists('de_caf', $_GET)) {
+            echo "Caffeine option not clicked";
+            exit();
+        }else if ($_GET['de_caf'] == 'decaf') {
             $coffee = 'Decaf';
         } else if ($_GET['de_caf'] == 'caf') {
             $coffee = 'Caffeinated';
@@ -576,7 +582,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     {
         global $db_conn;
 
-        if ($_POST['add'] == 'topping') {
+        if (!array_key_exists('de_caf', $_POST)) {
+            echo "Additions option not clicked";
+            exit();
+        }else if ($_POST['add'] == 'topping') {
             $table = 'addToppings';
             $addName = 'toppingName';
         } else if ($_POST['add'] == 'cream') {
