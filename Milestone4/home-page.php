@@ -39,64 +39,54 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
           }
 
         article {
-             float: right;
-             width: 80%;
-             background-color: #f1f1f1;
-             height: 600px;
-             }
-
-        .pastPurchases {
-            float: left;
-            width: 70%;
-            height: 590px;
-            border: 2px solid black;
-            padding: 0px 10px 10px 10px;
-            }
-
-        .shoppingCart {
-            float: right;
-            width: 25%;
-            height: 590px;
-            border: 2px solid black;
-            padding: 0px 10px 10px 10px;
-            }
+                     float: right;
+                     width: 80%;
+                     background-color: #f1f1f1;
+                     height: 600px;
+                     border: 2px solid black;
+                     line-height: 10px;
+                     }
+        .userInputs {
+        padding: 10px 10px 10px 10px;
+        }
 
         .items-table-container {
             width: 90%;
             }
 
         nav {
-            float: left;
-            width: 18%;
-            height: 600px;
-            }
+                    float: left;
+                    width: 18%;
+                    height: 600px;
+                    border: 2px solid black;
+                    line-height: 10px;
+                    }
 
-        .displaySales {
-             box-sizing: border-box;
-             -moz-box-sizing: border-box;
-             -webkit-box-sizing: border-box;
-             height: 360px;
-             border: 2px solid black;
-             padding: 0px 10px 10px 10px;
+        .tableNameOptions{
+             padding: 10px 10px 10px 10px;
              }
 
-        .categories {
-            box-sizing: border-box;
-             -moz-box-sizing: border-box;
-             -webkit-box-sizing: border-box;
-             height: 240px;
-             border: 2px solid black;
-             padding: 0px 10px 10px 10px;
-             }
+         p {
+                   font-family: "Trebuchet MS", sans-serif;
+                   }
+               .attrNote {
+               line-height: 20px;
+               }
 
+           .note {
+           line-height: 20px;
+              }
 
-         .sales-table-container {
-             position: absolute;
-             top: 2px;
-             left: 2px;
-             width: auto;
-             padding: 2px;
-         }
+          .allButtons {
+                     line-height: 8px;
+                        }
+
+               h2 {
+                    font-family: "Trebuchet MS", sans-serif;
+                    }
+                h3 {
+                           font-family: "Trebuchet MS", sans-serif;
+                           }
 
     </style>
 
@@ -105,8 +95,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
     <?php include("homebar.php"); ?>
 <section class="container">
-  <nav class="tableNameOptions">
-      <p> Select a table to view its attributes: </p>
+  <nav>
+      <div class="tableNameOptions">
+          <h3> <b> <u>View Attribute Names</u></b></h3>
+      <p class=attrNote> Select a table name to view its attributes:</p>
+      <p class="allButtons">
       <form method="GET" action="home-page.php" name="displayTableForm">
           <input type="submit" value="Coffee" name="displayCoffeeAtts">
           <input type="hidden" id="displayTableAttsRequest" name="displayTableAttsRequest">
@@ -133,24 +126,25 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
           <input type="submit" value="AddCoffee" name="displayAddCoffeeAtts">
           <input type="submit" value="Deliver" name="displayDeliverAtts">
       </form>
+  </p>
                  </div>
         </nav>
 
     <article>
-        <div>
-        <p>Input the table and attributes you'd like to view: </p>
-        <p>Note: Not all attribute boxes need to be filled, but put the attribute name in
+        <div class="userInputs">
+            <h2>Welcome! Input the table name and attributes you'd like to view:</h2>
+        <p class="note">Note: Not all attribute boxes need to be filled, but put the attribute name in
             the corresponding number text box (i.e. 'CREAMINV' is the 2nd attribute of 'Cream', so
             write it in the 'Attribute 2' textbox)</p>
         <p>Input attribute names in ALL CAPS</p>
         <form method="GET" action="home-page.php">
                        <input type="hidden" id="displayProjectionRequest" name="displayProjectionRequest">
-                       Table: <input type="text" name="selectedTable"> <br /><br />
-                       Attribute 1: <input type="text" name="att1"> <br /><br />
-                       Attribute 2: <input type="text" name="att2"> <br /><br />
-                       Attribute 3: <input type="text" name="att3"> <br /><br />
-                       Attribute 4: <input type="text" name="att4"> <br /><br />
-                       Attribute 5: <input type="text" name="att5"> <br /><br />
+                       <p>Table Name:</p> <input type="text" name="selectedTable"> <br /><br />
+                       <p>Attribute 1:</p> <input type="text" name="att1"> <br /><br />
+                       <p>Attribute 2:</p> <input type="text" name="att2"> <br /><br />
+                       <p>Attribute 3:</p> <input type="text" name="att3"> <br /><br />
+                      <p> Attribute 4: </p><input type="text" name="att4"> <br /><br />
+                       <p>Attribute 5: </p><input type="text" name="att5"> <br /><br />
                        <input type="submit" value="View Table" name="viewTableTuples"></p>
                       </form>
         </div>

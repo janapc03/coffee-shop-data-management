@@ -43,6 +43,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              width: 80%;
              background-color: #f1f1f1;
              height: 600px;
+             line-height: 10px;
              }
 
         .order {
@@ -74,6 +75,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             float: left;
             width: 18%;
             height: 600px;
+            line-height: 10px;
             }
 
         .displaySales {
@@ -103,6 +105,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              padding: 2px;
          }
 
+      p {
+          font-family: "Trebuchet MS", sans-serif;
+          }
+
+      h2 {
+           font-family: "Trebuchet MS", sans-serif;
+           }
+       h3 {
+                  font-family: "Trebuchet MS", sans-serif;
+                  }
+
+
     </style>
 
 </head>
@@ -112,7 +126,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <section class="container">
   <nav class="salesAndCategories">
       <div class="categories">
-           <p><b> <u>Categories</u></b> </p>
+           <h3><b> <u>Categories</u></b> </h3>
            <form method="GET" action="order.php">
                  <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
                  <input type="submit" value="Toppings" name="displayToppingsTuples"> </p>
@@ -135,7 +149,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
       <div class="displaySales">
 
-        <p><b><u>Sales</u></b> </p>
+        <h3><b><u>Sales</u></b> </h3>
         <div class="sales-table-container">
         <form method="GET" action="order.php">
             <input type="hidden" id="displaySalesTuplesRequest" name="displaySalesTuplesRequest">
@@ -144,9 +158,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <p> Add New Sales Info:</p>
             <form method="POST" action="order.php">
                        <input type="hidden" id="insertFundsQueryRequest" name="insertFundsQueryRequest">
-                       Date (YYYY-MM-DD): <input type="text" name="currDate"> <br /><br />
-                       Cafe Funds: <input type="text" name="cafeFunds"> <br /><br />
-                       Employee Pay: <input type="text" name="employeePay"> <br /><br />
+                       <p>Date (YYYY-MM-DD): </p><input type="text" name="currDate"> <br /><br />
+                       <p>Cafe Funds: </p><input type="text" name="cafeFunds"> <br /><br />
+                       <p>Employee Pay: </p><input type="text" name="employeePay"> <br /><br />
 
                        <input type="submit" value="Add" name="insertFunds"></p>
                        </form>
@@ -170,8 +184,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
                 	<form method="POST" action="order.php">
                 		<input type="hidden" id="insertCartQueryRequest" name="insertCartQueryRequest">
-                		Item Name: <input type="text" name="inItemName"> <br /><br />
-                		Quantity: <input type="text" name="inItemQty"> <br /><br />
+                		<p>Item Name:</p> <input type="text" name="inItemName"> <br /><br />
+                		<p>Quantity:</p> <input type="text" name="inItemQty"> <br /><br />
 
                 		<input type="submit" value="Add to Cart" name="addToCart"></p>
                 	</form>
@@ -179,10 +193,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             </div>
 
     <div class="shoppingCart">
-        <p><b><u>Shopping Cart</u></b> </p>
+        <h3><b><u>Shopping Cart</u></b> </h3>
         <form method="GET" action="order.php">
               <input type="hidden" id="displayShoppingListRequest" name="displayShoppingListRequest">
-              Date (YYYY-MM-DD): <input type="text" name="shoppingListDate"> <br /><br />
+              <p>Date (YYYY-MM-DD):</p> <input type="text" name="shoppingListDate"> <br /><br />
 
               <input type="submit" value="View List" name="viewListTuples"></p>
               </form>

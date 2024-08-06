@@ -43,33 +43,28 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              width: 80%;
              background-color: #f1f1f1;
              height: 600px;
+             border: 2px solid black;
+             line-height: 10px;
              }
-
-        .pastPurchases {
-            float: left;
-            width: 70%;
-            height: 590px;
-            border: 2px solid black;
-            padding: 0px 10px 10px 10px;
-            }
-
-        .shoppingCart {
-            float: right;
-            width: 25%;
-            height: 590px;
-            border: 2px solid black;
-            padding: 0px 10px 10px 10px;
-            }
 
         .items-table-container {
             width: 90%;
             }
+        .displayArea {
+        padding: 10px 10px 10px 10px
+        }
 
         nav {
             float: left;
             width: 18%;
             height: 600px;
+            border: 2px solid black;
+            line-height: 10px;
             }
+
+        .userOptions {
+        padding: 10px 10px 10px 10px
+        }
 
         .displaySales {
              box-sizing: border-box;
@@ -80,16 +75,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              padding: 0px 10px 10px 10px;
              }
 
-        .categories {
-            box-sizing: border-box;
-             -moz-box-sizing: border-box;
-             -webkit-box-sizing: border-box;
-             height: 240px;
-             border: 2px solid black;
-             padding: 0px 10px 10px 10px;
-             }
-
-
          .sales-table-container {
              position: absolute;
              top: 2px;
@@ -98,6 +83,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
              padding: 2px;
          }
 
+     p {
+     font-family: "Trebuchet MS", sans-serif;
+     }
+
+ h2 {
+      font-family: "Trebuchet MS", sans-serif;
+      }
+
+ h3 {
+      font-family: "Trebuchet MS", sans-serif;
+      }
+
     </style>
 
 </head>
@@ -105,8 +102,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
     <?php include("homebar.php"); ?>
 <section class="container">
-  <nav class="userOptions">
-      <p><u>Options</u></p>
+  <nav>
+      <div class="userOptions">
+      <h3><u><b>Options</b></u></h3>
       <div class="userButtons">
           <form method="GET" action="past-purchases.php">
                <input type="hidden" id="displayAvgCostsRequest" name="displayAvgCostsRequest">
@@ -117,16 +115,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
               </form>
           </div>
-
+</div>
         </nav>
 
     <article>
-        <div class="pastPurchases">
-        <h3>Past Purchases</h3>
+        <div class="displayArea">
+        <h2>Past Purchases</h2>
         <form method="GET" action="past-purchases.php">
             <input type="hidden" id="displayPastPurchases" name="displayPastPurchases">
             </form>
-        </div>
+</div>
         </article>
     </section>
 
