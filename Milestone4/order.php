@@ -137,11 +137,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                  <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
                  <input type="submit" value="Sweetener" name="displaySweetenerTuples"> </p>
 
-                 <input type="hidden" id="displayCafTuplesRequest" name="displayCafTuplesRequest">
-                 <input type="submit" value="Caffeinated Beans" name="displayCafTuples"> </p>
-
-                 <input type="hidden" id="displayDecafTuplesRequest" name="displayDecafTuplesRequest">
-                 <input type="submit" value="Decaffeinated Beans" name="displayDecafTuples"> </p>
+                 <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
+                 <input type="submit" value="Coffee Beans" name="displayCoffeeTuples"> </p>
                  </form>
 
 
@@ -300,7 +297,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         function printItemsResult($result, $name, $inv)
                 	{ //prints results from a select statement
                 		echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
-                		echo "<tr><th>Name</th><th>Inventory</th></tr>";
+                		echo "<tr><th>Name</th><th>Inventory (kg)</th></tr>";
 
 
                             while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
@@ -309,6 +306,20 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
                             echo "</table>";
                 	}
+
+        function printCoffeeResult($result)
+        { //prints results from a select statement
+            echo '<br /><table class="items-table" align = "center" border = "1" cellpadding = "3" cellspacing = "0">';
+            echo "<tr><th>Caffeinated Inventory (kg)</th><th>Decaffeinated Inventory (kg)</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+                echo "<td>" . $row['CAF']  ."</td>";
+                echo "<td>" . $row['DECAF']  . "</td>";
+                echo "</tr>";
+            }
+
+            echo "</table>";
+        }
 
         function printShoppingListResult($result)
                 	{ //prints results from a select statement
@@ -398,15 +409,15 @@ function handleDisplayItemsRequest($table, $name, $inv)
     oci_commit($db_conn);
 }
 
-function handleDisplayCoffeeRequest($table, $name, $inv)
+function handleDisplayCoffeeRequest()
 {
     global $db_conn;
 
     $result = executePlainSQL("SELECT * FROM Sales");
     printSalesResult($result);
 
-    $result = executePlainSQL("SELECT DISTINCT beanType, coffeeInv FROM " . $table . "");
-    printItemsResult($result, $name, $inv);
+    $result = executePlainSQL("SELECT DISTINCT c.coffeeInv as caf, d.coffeeInv as decaf FROM caffeinated c, decaf d");
+    printCoffeeResult($result);
 
     oci_commit($db_conn);
 }
@@ -472,16 +483,8 @@ function handleDisplayShoppingListRequest()
                     $name = 'SWEETNAME';
                     $inv= 'SWEETENERINV';
                     handleDisplayItemsRequest($table, $name, $inv);
-                } else if (array_key_exists('displayCafTuples', $_GET)) {
-                    $table = 'caffeinated';
-                    $name = 'BEANTYPE';
-                    $inv= 'COFFEEINV';
-                    handleDisplayCoffeeRequest($table, $name, $inv);
-                } else if (array_key_exists('displayDecafTuples', $_GET)) {
-                    $table = 'decaf';
-                    $name = 'BEANTYPE';
-                    $inv= 'COFFEEINV';
-                    handleDisplayCoffeeRequest($table, $name, $inv);
+                } else if (array_key_exists('displayCoffeeTuples', $_GET)) {
+                    handleDisplayCoffeeRequest();
                 } else if (array_key_exists('viewListTuples', $_GET)) {
                     handleDisplayShoppingListRequest();
                 }
@@ -495,8 +498,7 @@ function handleDisplayShoppingListRequest()
 	} else if (isset($_GET['displayToppingsTuplesRequest']) ||
                isset($_GET['displayCreamTuplesRequest']) ||
                isset($_GET['displaySweetenerTuplesRequest']) ||
-               isset($_GET['displayCafTuplesRequest']) ||
-               isset($_GET['displayDecafTuplesRequest']) ||
+               isset($_GET['displayCoffeeTuplesRequest']) ||
                isset($_GET['displayItemsTuplesRequest']) ||
                isset($_GET['displayShoppingListRequest'])) {
                handleGETRequest();
