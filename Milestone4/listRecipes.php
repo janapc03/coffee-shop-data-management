@@ -28,6 +28,27 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 <head>
 	<title>Recipes</title>
+	<style>
+        p {
+             font-family: "Trebuchet MS", sans-serif;
+             }
+
+         h1 {
+            font-family: "Trebuchet MS", sans-serif;
+             }
+
+         h2 {
+              font-family: "Trebuchet MS", sans-serif;
+              }
+
+         h3 {
+              font-family: "Trebuchet MS", sans-serif;
+              }
+
+          .form-control {
+            font-family: "Trebuchet MS", sans-serif;
+          }
+        </style>
 </head>
 
 <body>
@@ -39,24 +60,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <hr />
 
     <div style="width:99%; margin:auto">
-        <div style="display:inline-block; width:33%; vertical-align: top">
-        <h2>Insert New Caffeinated Coffee Recipes</h2>
+        <div style="display:inline-block; width:32%; vertical-align: top; border: 2px solid black">
+        <h2>Insert New Caffeinated Coffee Recipe</h2>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="insertCafQueryRequest" name="insertCafQueryRequest">
-            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-            Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
-            Number of Espresso Shots: <input type="number" name="inShots"> <br /><br />
+            <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+            <p>Coffee Size: </p><input type="text" name="inCoffeeSize"> <br /><br />
+            <p>Roast Level:</p> <input type="text" name="inRoastLevel"> <br /><br />
+            <p>Number of Espresso Shots:</p> <input type="number" name="inShots"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCafSubmit"></p>
         </form>
         <h3>Insert Toppings, Creams, and Sweeteners to Coffee Recipes</h3>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="insertAddQueryRequest" name="insertAddQueryRequest">
-            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-            Additions Name: <input type="text" name="inAdd"> <br /><br />
-            Additions amount: <input type="text" name="inAddAm"> <br /><br />
+            <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+            <p>Coffee Size: </p><input type="text" name="inCoffeeSize"> <br /><br />
+           <p> Additions Name:</p> <input type="text" name="inAdd"> <br /><br />
+            <p>Additions amount: </p><input type="text" name="inAddAm"> <br /><br />
 
             <input type="radio" id="topping" name="add" value="topping">
             <label for="topping">Toppings</label><br>
@@ -69,22 +90,22 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         </form>
         </div>
 
-        <div style="display:inline-block; width:33%; vertical-align: top">
-        <h2>Insert New Decaf Coffee Recipes</h2>
+        <div style="display:inline-block; width:33%; vertical-align: top; border: 2px solid black">
+        <h2>Insert New Decaf Coffee Recipe</h2>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="insertDecafQueryRequest" name="insertDecafQueryRequest">
-            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-            Roast Level: <input type="text" name="inRoastLevel"> <br /><br />
+            <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+           <p> Coffee Size:</p> <input type="text" name="inCoffeeSize"> <br /><br />
+           <p> Roast Level:</p> <input type="text" name="inRoastLevel"> <br /><br />
 
             <input type="submit" value="Insert" name="insertDecafSubmit"></p>
         </form>
         <h3>Remove Toppings, Creams, and Sweeteners From Coffee Recipes</h3>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="deleteAddQueryRequest" name="deleteAddQueryRequest">
-            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-            Coffee Size: <input type="text" name="inCoffeeSize"> <br /><br />
-            Additions Name: <input type="text" name="inAdd"> <br /><br />
+           <p> Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+           <p> Coffee Size: </p><input type="text" name="inCoffeeSize"> <br /><br />
+           <p> Additions Name:</p> <input type="text" name="inAdd"> <br /><br />
 
             <input type="radio" id="topping" name="add" value="topping">
             <label for="topping">Toppings</label><br>
@@ -99,12 +120,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
         </div>
 
-        <div style="display:inline-block; width:33%; vertical-align: top">
+        <div style="display:inline-block; width:33%; vertical-align: top; border: 2px solid black">
         <h2>Delete Coffee Recipe</h2>
         <form method="POST" action="listRecipes.php">
             <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
-            Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-            Size: <input type="text" name="inSize"> <br /><br />
+            <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+           <p> Size:</p> <input type="text" name="inSize"> <br /><br />
 
             <input type="submit" value="Delete" name="deleteSubmit"></p>
         </form>
@@ -136,42 +157,41 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     <hr />
 
-    <div style="display:inline-block; width:49%; vertical-align: top">
-    <div style="display:inline-block; width:55%; vertical-align: top">
+    <div style="display:inline-block; width:99%; vertical-align: top">
+    <div style="display:inline-block; width:32%; vertical-align: top; border: 2px solid black">
     <h2>Select Recipe to Ice</h2>
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="insertIceQueryRequest" name="insertIceQueryRequest">
-        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-        Size: <input type="text" name="inSize"> <br /><br />
-        Ice Amount: <input type="text" name="inIce"> <br /><br />
-        Method of Iced Coffee: <input type="text" name="inMethod"> <br /><br />
+        <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+        <p>Size:</p> <input type="text" name="inSize"> <br /><br />
+        <p>Ice Amount:</p> <input type="text" name="inIce"> <br /><br />
+        <p>Method of Iced Coffee:</p> <input type="text" name="inMethod"> <br /><br />
 
         <input type="submit" value="Ice" name="insertIceSubmit"></p>
     </form>
     </div>
-    <div style="display:inline-block; width:44%; vertical-align: top">
+    <div style="display:inline-block; width:33%; vertical-align: top; border: 2px solid black">
     <h2>Remove Iced Recipe</h2>
     <form method="POST" action="listRecipes.php">
         <input type="hidden" id="deleteIceQueryRequest" name="deleteIceQueryRequest">
-        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
-        Size: <input type="text" name="inSize"> <br /><br />
+        <p>Coffee Name:</p> <input type="text" name="inCoffeeName"> <br /><br />
+       <p> Size: </p><input type="text" name="inSize"> <br /><br />
 
         <input type="submit" value="Delete" name="deleteIceSubmit"></p>
     </form>
     </div>
-    </div>
-
-
-    <div style="display:inline-block; width:50%; vertical-align: top">
-    <h2>Recipes With additions</h2>
+<div style="display:inline-block; width:33%; vertical-align: top; border: 2px solid black">
+    <h2>Recipes With Additions</h2>
     <form method="GET" action="listRecipes.php">
         <input type="hidden" id="displayAddTuplesRequest" name="displayAddTuplesRequest">
-        Coffee Name: <input type="text" name="inCoffeeName"> <br /><br />
+        <p>Coffee Name: </p><input type="text" name="inCoffeeName"> <br /><br />
 
+        <div>
         <input type="radio" id="caf" name="de_caf" value="caf">
         <label for="caf">Caffeinated</label><br>
         <input type="radio" id="decaf" name="de_caf" value="decaf">
         <label for="decaf">Decaffeinated</label><br>
+        </div>
 
         <input type="submit" value="Display Addtional Toppings" name="displayAddToppingsTuples">
         <input type="submit" value="Display Addtional Creams" name="displayAddCreamTuples">
@@ -196,6 +216,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         </p>
     </form>
     </div>
+    </div>
+
+
+
 
     <hr />
 

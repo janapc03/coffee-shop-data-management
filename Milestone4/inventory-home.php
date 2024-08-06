@@ -19,24 +19,37 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 <head>
     <title>Inventory</title>
+    <style>
+    p {
+         font-family: "Trebuchet MS", sans-serif;
+         }
+
+     h2 {
+          font-family: "Trebuchet MS", sans-serif;
+          }
+
+     h3 {
+          font-family: "Trebuchet MS", sans-serif;
+          }
+      </style>
 </head>
 
 <body>
 <?php include("homebar.php"); ?>
 
 <div style="width:99%; margin:auto">
-    <div style="display:inline-block; width:24%; vertical-align: top">
-        <h2>Inventory of toppings</h2>
+    <div style="display:inline-block; width:24%; vertical-align: top; border: 2px solid black">
+        <h2>Toppings Inventory</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displayToppingsTuplesRequest" name="displayToppingsTuplesRequest">
             <input type="submit" name="displayToppingsTuples"> </p>
         </form>
 
-        <h3>Update Inventory of Toppings</h3>
+        <h3>Update Toppings Inventory</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateToppingsRequest" name="updateToppingsRequest">
-            Toppings name: <input type="text" name="name"> <br /><br />
-            Updated inventory (kg): <input type="text" name="inv"> <br /><br />
+            <p>Toppings name: </p><input type="text" name="name"> <br /><br />
+            <p>Updated inventory (kg): </p><input type="text" name="inv"> <br /><br />
 
             <input type="submit" value="Update" name="updateToppingsSubmit"></p>
         </form>
@@ -44,8 +57,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Insert New Topping</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertToppingQueryRequest" name="insertToppingQueryRequest">
-            Topping Name: <input type="text" name="inName"> <br /><br />
-            Amount in inventory (kg): <input type="text" name="inInv"> <br /><br />
+            <p>Topping Name: </p><input type="text" name="inName"> <br /><br />
+            <p>Amount in inventory (kg):</p> <input type="text" name="inInv"> <br /><br />
 
             <input type="submit" value="Insert" name="insertToppingSubmit"></p>
         </form>
@@ -53,23 +66,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Delete a Topping</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="deleteToppingQueryRequest" name="deleteToppingQueryRequest">
-            Topping Name: <input type="text" name="delName"> <br /><br />
+            <p>Topping Name:</p> <input type="text" name="delName"> <br /><br />
             <input type="submit" value="Delete" name="deleteToppingSubmit"></p>
         </form>
     </div>
 
-    <div style="display:inline-block; width:24%; vertical-align: top">
-        <h2>Inventory of creams</h2>
+    <div style="display:inline-block; width:24%; vertical-align: top; border: 2px solid black">
+        <h2>Cream Inventory</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displayCreamTuplesRequest" name="displayCreamTuplesRequest">
             <input type="submit" name="displayCreamTuples"> </p>
         </form>
 
-        <h3>Update Inventory of Creams</h3>
+        <h3>Update Cream Inventory</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateCreamRequest" name="updateCreamRequest">
-            Cream name: <input type="text" name="name"> <br /><br />
-            Updated inventory (kg): <input type="text" name="inv"> <br /><br />
+            <p>Cream name:</p> <input type="text" name="name"> <br /><br />
+           <p> Updated inventory (kg): </p><input type="text" name="inv"> <br /><br />
 
             <input type="submit" value="Update" name="updateCreamSubmit"></p>
         </form>
@@ -77,8 +90,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Insert New Cream</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertCreamQueryRequest" name="insertCreamQueryRequest">
-            Cream Name: <input type="text" name="inName"> <br /><br />
-            Amount in inventory (kg): <input type="text" name="inInv"> <br /><br />
+            <p>Cream Name: </p><input type="text" name="inName"> <br /><br />
+            <p>Amount in inventory (kg): </p><input type="text" name="inInv"> <br /><br />
 
             <input type="submit" value="Insert" name="insertCreamSubmit"></p>
         </form>
@@ -86,24 +99,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Delete a Cream</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="deleteCreamQueryRequest" name="deleteCreamQueryRequest">
-            Cream Name: <input type="text" name="delName"> <br /><br />
+            <p>Cream Name:</p> <input type="text" name="delName"> <br /><br />
             <input type="submit" value="Delete" name="deleteCreamSubmit"></p>
         </form>
 
     </div>
 
-    <div style="display:inline-block; width:24%; vertical-align: top">
-        <h2>Inventory of sweeteners</h2>
+    <div style="display:inline-block; width:24%; vertical-align: top; border: 2px solid black">
+        <h2>Sweetener Inventory</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displaySweetenerTuplesRequest" name="displaySweetenerTuplesRequest">
             <input type="submit" name="displaySweetenerTuples"> </p>
         </form>
 
-        <h3>Update Inventory of Sweeteners</h3>
+        <h3>Update Sweetener Inventory</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateSweetenerRequest" name="updateSweetenerRequest">
-            Sweetener name: <input type="text" name="name"> <br /><br />
-            Updated inventory (kg): <input type="text" name="inv"> <br /><br />
+            <p>Sweetener name: </p><input type="text" name="name"> <br /><br />
+            <p>Updated inventory (kg): </p><input type="text" name="inv"> <br /><br />
 
             <input type="submit" value="Update" name="updateSweetenerSubmit"></p>
         </form>
@@ -111,32 +124,32 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         <h3>Insert New Sweetener</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="insertSweetenerQueryRequest" name="insertSweetenerQueryRequest">
-            Sweetener Name: <input type="text" name="inName"> <br /><br />
-            Amount in inventory (kg): <input type="text" name="inInv"> <br /><br />
+            <p>Sweetener Name:</p> <input type="text" name="inName"> <br /><br />
+           <p> Amount in inventory (kg):</p> <input type="text" name="inInv"> <br /><br />
             <input type="submit" value="Insert" name="insertSweetenerSubmit"></p>
         </form>
 
         <h3>Delete a Sweetener</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="deleteSweetenerQueryRequest" name="deleteSweetenerQueryRequest">
-            Sweetener Name: <input type="text" name="delName"> <br /><br />
+            <p>Sweetener Name:</p> <input type="text" name="delName"> <br /><br />
             <input type="submit" value="Delete" name="deleteSweetenerSubmit"></p>
         </form>
 
     </div>
 
-    <div style="display:inline-block; width:24%; vertical-align: top">
-        <h2>Inventory of Coffee Beans</h2>
+    <div style="display:inline-block; width:24%; vertical-align: top; border: 2px solid black">
+        <h2>Coffee Bean Inventory</h2>
         <form method="GET" action="inventory-home.php">
             <input type="hidden" id="displayCoffeeTuplesRequest" name="displayCoffeeTuplesRequest">
             <input type="submit" name="displayCoffeeTuples"> </p>
         </form>
 
-        <h3>Update Inventory of Coffee Beans</h3>
+        <h3>Update Coffee Bean Inventory</h3>
         <form method="POST" action="inventory-home.php">
             <input type="hidden" id="updateCoffeeRequest" name="updateCoffeeRequest">
-            Updated Caffeinated inventory (kg): <input type="text" name="cafInv"> <br /><br />
-            Updated Decaffeinated inventory (kg): <input type="text" name="decafInv"> <br /><br />
+            <p>Updated Caffeinated inventory (kg): </p><input type="text" name="cafInv"> <br /><br />
+            <p>Updated Decaffeinated inventory (kg): </p><input type="text" name="decafInv"> <br /><br />
 
             <input type="submit" value="Update" name="updateCoffeeSubmit"></p>
         </form>
