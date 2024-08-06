@@ -352,7 +352,10 @@ function handleDisplayAggregationRequest()
         		 AND p.listDate=sl.listDate");
         		printResult($result);
 
-        if ($_GET['add'] == 'topping') {
+        if (!array_key_exists('add', $_GET)) {
+            echo "Additions option not clicked";
+            exit();
+        }else if ($_GET['add'] == 'topping') {
             $table = 'listToppings';
         } else if ($_GET['add'] == 'cream') {
             $table = 'listCream';
