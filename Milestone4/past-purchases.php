@@ -234,6 +234,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
         		echo "</tbody></table>";
         	}
 
+    function printTabResult($result, $quant)
+        	{ //prints results from a select statement
+        	echo "<br>Data for all past purchases:<br>";
+        		echo '<br /><table class="past-purchases-table">';
+        		echo "<thead><tr><th>Order Date</th><th>Quantity</th><th>Total Cost</th></tr><tbody>";
+
+        		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+
+        			echo "<tr>";
+                        echo "<td>" . $row['LISTDATE'] . "</td>";
+                        echo "<td>" . $row[$quant] . "</td>";
+                        echo "<td>" . $row['PRICE'] . "</td>";
+                        echo "</tr>"; //or just use "echo $row[0]"
+        		}
+
+        		echo "</tbody></table>";
+        	}
+
     function printAvgResult($result)
             	{ //prints results from a select statement
             	echo "<br>Retrieved data regarding average order cost by supplier:<br>";
@@ -362,14 +380,26 @@ function handleDisplayAggregationRequest()
             exit();
         }else if ($_GET['add'] == 'topping') {
             $table = 'listToppings';
+            $quant = 'TOPPINGQUANT';
         } else if ($_GET['add'] == 'cream') {
             $table = 'listCream';
+            $quant = 'CREAMQUANT';
         } else if ($_GET['add'] == 'sweet') {
             $table = 'listSweetener';
+            $quant = 'SWEETENERQUANT';
         } else if ($_GET['add'] == 'coffee') {
             $table = 'listCoffee2';
+            $quant = 'COFFEEQUANT';
         }else {
             exit();
+        }
+
+        $result = executePlainSQL("SELECT * FROM " . $table . "");
+        printTabResult($result, $quant);
+        $result = executePlainSQL("SELECT AVG(price) FROM " . $table . " ");
+        if (($row = oci_fetch_row($result)) != false) {
+
+            echo "<br> The average price of " . $_GET['add'] . " is: $" . $row[0] . "<br>";
         }
 
         $result = executePlainSQL("SELECT COUNT(*) FROM " . $table . " WHERE price < (SELECT AVG(price) FROM " . $table . ")");
