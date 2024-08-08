@@ -124,10 +124,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     <article>
         <div class="userInputs">
             <h2>Welcome! Input the table name and attributes you'd like to view:</h2>
-        <p class="note">Note: Not all attribute boxes need to be filled, but put the attribute name in
-            the corresponding number text box (i.e. 'CREAMINV' is the 2nd attribute of 'Cream', so
-            write it in the 'Attribute 2' textbox)</p>
-        <p>Input attribute names in ALL CAPS</p>
         <form method="GET" action="home-page.php">
                        <input type="hidden" id="displayProjectionRequest" name="displayProjectionRequest">
                        <p>Table Name:</p> <input type="text" name="selectedTable"> <br /><br />
@@ -326,14 +322,43 @@ function handleDisplaySelectedTableRequest($currentTable, $attributes)
 	{
 		global $db_conn;
 
-		$nonEmptyAttrs = array_filter($attributes); // Filter out empty attributes
-            if (!empty($nonEmptyAttrs)) {
-                $attrs = implode(", ", $nonEmptyAttrs);
-                $query = "SELECT $attrs FROM $currentTable";
-                $result = executePlainSQL($query);
-                printSelectedTableResult($result, $nonEmptyAttrs);
-                oci_commit($db_conn);
-	}
+		if($currentTable==null) {
+		echo "<br>Invalid input, no table name given.<br>";
+           exit();
+		}
+
+        $tableExistsResult = executePlainSQL("SELECT table_name FROM all_tables WHERE table_name = '$currentTable'");
+
+            if ($row = oci_fetch_array($tableExistsResult, OCI_ASSOC)) {
+                $columnsResult = executePlainSQL("SELECT column_name FROM all_tab_columns WHERE table_name = '$currentTable'");
+
+                $columns = [];
+                while ($colRow = oci_fetch_array($columnsResult, OCI_ASSOC)) {
+                       $columns[] = $colRow['COLUMN_NAME'];
+                }
+
+                $nonEmptyAttrs = array_filter($attributes);
+                $invalidAttrs = array_diff($nonEmptyAttrs, $columns);
+
+                if (!empty($invalidAttrs)) {
+                    echo "<br>Invalid input, the following attribute(s) do not exist in the table: " . implode(", ", $invalidAttrs) . "<br>";
+                    exit();
+                }
+
+                if (!empty($nonEmptyAttrs)) {
+                    $attrs = implode(", ", $nonEmptyAttrs);
+                    $query = "SELECT $attrs FROM $currentTable";
+                    $result = executePlainSQL($query);
+                    printSelectedTableResult($result, $nonEmptyAttrs);
+                    oci_commit($db_conn);
+                } else {
+                    echo "<br>Invalid input, no attribute names given.<br>";
+                    exit();
+                }
+            } else {
+                echo "<br>Invalid input, table name does not exist.<br>";
+                exit();
+            }
 }
 
 
@@ -422,13 +447,13 @@ function handleDisplaySelectedTableRequest($currentTable, $attributes)
                        $currentTable = 'DELIVER';
                        handleDisplayAttsRequest($currentTable);
                 } else if (array_key_exists('viewTableTuples', $_GET)) {
-                        $currentTable = $_GET['selectedTable'];
+                        $currentTable = strtoupper($_GET['selectedTable']);
                         $attributes = [
-                            $_GET['att1'],
-                            $_GET['att2'],
-                            $_GET['att3'],
-                            $_GET['att4'],
-                            $_GET['att5']
+                            strtoupper($_GET['att1']),
+                            strtoupper($_GET['att2']),
+                            strtoupper($_GET['att3']),
+                            strtoupper($_GET['att4']),
+                            strtoupper($_GET['att5'])
                             ];
                         handleDisplaySelectedTableRequest($currentTable, $attributes);
                 }
