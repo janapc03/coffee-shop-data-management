@@ -492,8 +492,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	    $tuple = array(
             ":bind1" => $_POST['inCoffeeName'],
             ":bind2" => $_POST['inSize'],
-            ":bind3" => $_POST['inIce'],
-            ":bind4" => $_POST['inMethod']
+            ":bind3" => $_POST['inMethod'],
+            ":bind4" => $_POST['inIce']
         );
 
         $alltuples = array(
