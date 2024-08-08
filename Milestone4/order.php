@@ -29,7 +29,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <html>
 
 <head>
-	<title>Coffee Shop</title>
+	<title>Order</title>
 
 	<style>
         section::after {
@@ -60,6 +60,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             height: 590px;
             border: 2px solid black;
             padding: 0px 10px 10px 10px;
+            line-height: 20px;
             }
 
         .items-table-container {
@@ -70,6 +71,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             float: right;
             width: 25%;
         }
+
+    .dates-table {
+        float: right;
+    }
 
         nav {
             float: left;
@@ -174,26 +179,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
                         <input type="hidden" id="displayItemsTuplesRequest" name="displayItemsTuplesRequest">
                         </form>
                     </div>
-
-
-            <div class="addToCart">
-                <p>The values are case sensitive.</p>
-
-                	<form method="POST" action="order.php">
-                		<input type="hidden" id="insertCartQueryRequest" name="insertCartQueryRequest">
-                		<p>Item Name:</p> <input type="text" name="inItemName"> <br /><br />
-                		<p>Quantity:</p> <input type="text" name="inItemQty"> <br /><br />
-
-                		<input type="submit" value="Add to Cart" name="addToCart"></p>
-                	</form>
-                </div>
             </div>
 
     <div class="shoppingCart">
         <h3><b><u>Shopping Cart</u></b> </h3>
+        <p> View shopping list dates: </p>
+        <form method="GET" action="order.php">
+                      <input type="hidden" id="displaySlDatesRequest" name="displaySlDatesRequest">
+                      <input type="submit" value="View Dates" name="viewSlDatesTuples"></p>
+                      </form>
+        <p> Input a date to view items ordered on that day. </p>
         <form method="GET" action="order.php">
               <input type="hidden" id="displayShoppingListRequest" name="displayShoppingListRequest">
-              <p>Date (YYYY-MM-DD):</p> <input type="text" name="shoppingListDate"> <br /><br />
+              <p>Date:</p> <input type="date" name="shoppingListDate"> <br /><br />
 
               <input type="submit" value="View List" name="viewListTuples"></p>
               </form>
@@ -325,9 +323,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
             echo "</table>";
         }
 
+    function printDatesResult($result)
+            	{ //prints results from a select statement
+            	echo "<br>Retrieved shopping list dates: <br>";
+            		echo '<br /><table class="dates-table">';
+            		echo "<thead><tr><th>Shopping List Date</th></tr><tbody>";
+
+            		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+
+            			echo "<tr>";
+                            echo "<td>" . $row['LISTDATE'] . "</td>";
+                            echo "</tr>"; //or just use "echo $row[0]"
+            		}
+
+            		echo "</tbody></table>";
+            	}
+
         function printShoppingListResult($result)
                 	{ //prints results from a select statement
-                	echo "<br>Retrieved shopping list data for chosen date: <br>";
 
                 		echo '<br /><table class="shopping-list-table">';
                 		echo "<thead><tr><th>Name</th><th>Amount</th><th>Price</th></tr><tbody>";
@@ -428,6 +441,19 @@ function handleDisplayCoffeeRequest()
     oci_commit($db_conn);
 }
 
+function handleDisplayDatesRequest()
+	{
+		global $db_conn;
+
+		$result = executePlainSQL("SELECT * FROM Sales");
+                printSalesResult($result);
+
+		$result = executePlainSQL("SELECT listDate FROM ShoppingList");
+		printDatesResult($result);
+
+		oci_commit($db_conn);
+	}
+
 function handleDisplayShoppingListRequest()
 {
     global $db_conn;
@@ -450,6 +476,12 @@ function handleDisplayShoppingListRequest()
         SELECT coffeeName AS ITEMNAME, coffeeQuant as ITEMAMOUNT, price as PRICE
         FROM listCoffee1 lcf1, listCoffee2 lcf2
         WHERE  lcf1.listDate=to_date('$listDate','YYYY-MM-DD') AND lcf1.listDate=lcf2.listDate");
+
+        if (oci_num_rows($result) == 0) {
+                echo "<br>Invalid input, shopping list for that date does not exist.<br>";
+            } else {
+                echo "<br style='float:right;'>Retrieved shopping list data for chosen date: <br>";
+            }
     printShoppingListResult($result);
 
     oci_commit($db_conn);
@@ -493,6 +525,8 @@ function handleDisplayShoppingListRequest()
                     handleDisplayCoffeeRequest();
                 } else if (array_key_exists('viewListTuples', $_GET)) {
                     handleDisplayShoppingListRequest();
+                } else if (array_key_exists('viewSlDatesTuples', $_GET)) {
+                    handleDisplayDatesRequest();
                 }
 
 			disconnectFromDB();
@@ -506,7 +540,9 @@ function handleDisplayShoppingListRequest()
                isset($_GET['displaySweetenerTuplesRequest']) ||
                isset($_GET['displayCoffeeTuplesRequest']) ||
                isset($_GET['displayItemsTuplesRequest']) ||
-               isset($_GET['displayShoppingListRequest'])) {
+               isset($_GET['displayShoppingListRequest']) ||
+               isset($_GET['displaySlDatesRequest']))
+               {
                handleGETRequest();
 	} else {
 	if (connectToDB())
