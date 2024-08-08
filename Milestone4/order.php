@@ -457,10 +457,25 @@ function handleDisplayDatesRequest()
 function handleDisplayShoppingListRequest()
 {
     global $db_conn;
+
+    $listDate = $_GET['shoppingListDate'];
+
+    if ($listDate == null) {
+        echo "<br>Invalid null input, please try again with an input date.<br>";
+        exit();
+    }
+
+    $result = executePlainSQL("SELECT Count(*) FROM shoppingList WHERE listDate=to_date('$listDate','YYYY-MM-DD')");
+    if (($row = oci_fetch_row($result)) != false ) {
+        if ($row[0] == 0) {
+            echo "Invalid input, date does not exist";
+            exit();
+        }
+    }
+
     $result = executePlainSQL("SELECT * FROM Sales");
         printSalesResult($result);
 
-    $listDate = $_GET['shoppingListDate'];
     $result = executePlainSQL("SELECT toppingName AS ITEMNAME, toppingQuant as ITEMAMOUNT, price as PRICE
         FROM listToppings lt
         WHERE  lt.listDate=to_date('$listDate','YYYY-MM-DD')
@@ -477,11 +492,11 @@ function handleDisplayShoppingListRequest()
         FROM listCoffee1 lcf1, listCoffee2 lcf2
         WHERE  lcf1.listDate=to_date('$listDate','YYYY-MM-DD') AND lcf1.listDate=lcf2.listDate");
 
-        if (oci_num_rows($result) == 0) {
+        /*if (oci_num_rows($result) == 0) {
                 echo "<br>Invalid input, shopping list for that date does not exist.<br>";
             } else {
                 echo "<br style='float:right;'>Retrieved shopping list data for chosen date: <br>";
-            }
+            }*/
     printShoppingListResult($result);
 
     oci_commit($db_conn);
