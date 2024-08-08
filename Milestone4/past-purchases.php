@@ -106,6 +106,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
       <div class="userOptions">
       <h3><u><b>Options</b></u></h3>
       <div class="userButtons">
+          <p> Find the average amount spent at each supplier: </p>
           <form method="GET" action="past-purchases.php">
                <input type="hidden" id="displayAvgCostsRequest" name="displayAvgCostsRequest">
                <p><input type="submit" value="Average Costs" name="displayAvgCostsTuples"></p>
