@@ -123,7 +123,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
           <input type="submit" value="AddToppings" name="displayAddToppingsAtts">
           <input type="submit" value="AddCream" name="displayAddCreamAtts">
           <input type="submit" value="AddSweetener" name="displayAddSweetenerAtts">
-          <input type="submit" value="AddCoffee" name="displayAddCoffeeAtts">
           <input type="submit" value="Deliver" name="displayDeliverAtts">
       </form>
   </p>
@@ -228,6 +227,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
     function printResult($result)
         	{ //prints results from a select statement
+        	echo "<br>Retrieved attribute names from selected table:<br>";
         		echo '<br /><table class="attributes-table">';
         		echo "<thead><tr><th>Attribute Num.</th><th>Attribute Name</th></tr><tbody>";
 
@@ -246,6 +246,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
        function printSelectedTableResult($result, $attributes)
             	{ //prints results from a select statement
+            	echo "<br>Retrieved data with selected attributes from chosen table:<br>";
             		echo '<br /><table class="selected-table">';
             		echo "<thead><tr>";
 
@@ -424,9 +425,6 @@ function handleDisplaySelectedTableRequest($currentTable, $attributes)
                        handleDisplayAttsRequest($currentTable);
                 } else if (array_key_exists('displayAddSweetenerAtts', $_GET)) {
                        $currentTable = 'ADDSWEETENER';
-                       handleDisplayAttsRequest($currentTable);
-                } else if (array_key_exists('displayAddCoffeeAtts', $_GET)) {
-                       $currentTable = 'ADDCOFFEE';
                        handleDisplayAttsRequest($currentTable);
                 } else if (array_key_exists('displayDeliverAtts', $_GET)) {
                        $currentTable = 'DELIVER';
