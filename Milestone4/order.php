@@ -11,7 +11,7 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_janapchi";			// change "cwl" to your own CWL
+$config["dbuser"] = "ora_janapchi";	
 $config["dbpassword"] = "a87884193";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
