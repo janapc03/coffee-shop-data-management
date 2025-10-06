@@ -56,7 +56,7 @@ CREATE TABLE Purchase (
 CREATE TABLE Sales (
     salesDate DATE PRIMARY KEY,
     employeePay INT NOT NULL,
-    cafeFunds INT NOT NULL,
+    cafeFunds INT NOT NULL
 );
 
 CREATE TABLE Fund (
