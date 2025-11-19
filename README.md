@@ -1,10 +1,15 @@
 # Coffee Shop Management Site
 ---
 ## Application Description
+
 This application is for cafes and coffee shops, focusing on inventory management and recipe directions for drinks. Specifically, the database shows how the cafe’s sales are used in this process and the various details in purchasing these ingredients, such as the supplier’s location, their available coffee bean types, and delivery options.
+
 Users are able to view the recipes for each drink, including the type, toppings, and other additions, as well as the required amounts of each. Moreover, users are able to see where they can purchase each ingredient and add ingredients to a shopping list. Depending on the shop’s funds, these items can then be ordered and "delivered" to the cafe.
+
 ---
+
 ## Query Functionalities
+
 The site includes basic insert, delete, and update functionalities based on user input. Some examples of more complex queries can be seen below.
 
 Find the average order cost for each supplier:
@@ -29,6 +34,7 @@ Output:
 <img width="164" height="71" alt="Screenshot 2025-11-19 at 9 54 31 AM" src="https://github.com/user-attachments/assets/899ad983-ad1e-4b83-a0d8-ac0e710bd0a8" />
 ---
 ## Database Design
+
 This data is synthetic and was created specifically to be used for this site. 
 The database was designed using the following Entity Relationship Diagram:
 
