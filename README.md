@@ -17,7 +17,7 @@ The site includes basic insert, delete, and update functionalities based on user
 SELECT d.supName AS SUPNAME, COUNT(d.supName) AS COUNT_SUPNAME, AVG(p.price) AS AVG_PRICE
 		 FROM Deliver d, Delivery dy, Purchase p, ShoppingList sl
 		 WHERE d.trackingNum=dy.trackingNum AND dy.trackingNum=p.trackingNum AND p.listDate=sl.listDate
-		 GROUP BY d.supName;C
+		 GROUP BY d.supName;
 ```
 Output:
 
