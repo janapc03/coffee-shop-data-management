@@ -10,7 +10,7 @@ Users are able to view the recipes for each drink, including the type, toppings,
 
 ## Query Functionalities
 
-The site includes basic insert, delete, and update functionalities based on user input. Some examples of more complex queries can be seen below.
+The site includes basic insert, delete, join, and update functionalities based on user input. Some examples of more complex queries in the application can be seen below.
 
 **Find the average order cost for each supplier:**
 ```
